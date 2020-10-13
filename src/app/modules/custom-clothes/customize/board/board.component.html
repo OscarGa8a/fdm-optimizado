@@ -1,0 +1,46 @@
+<div class="board-container">
+    <div class="left-controls">
+        <div class="group-container">
+            <button
+                *ngFor="let side of product; let i = index"
+            >
+                <img src="" alt="">
+                <span>{{side.name}}</span>
+            </button>
+        </div>
+    </div>
+    <div class="right-controls">
+
+    </div>
+    <div class="canvas" #container>
+        <div class="img-container">
+            <!-- Imagen que contiene la vista actual del prodcuto en el canvas -->
+            <!-- <img data-src="https://fueradelmolde.gumlet.com/error-image-cdn/prueba/camiseta-blanca-frente.png" alt="Gumlet Logo" #imgBackground> -->
+            <img [src]="product[productSide].url" alt="" #imgBackground>
+            <div
+                class="canvas-aux"
+                [ngStyle]="{
+                'top.px': heightImgBackground * top,
+                'left.px': widthImgBackground * left,
+                'paddingLeft.px': imgOffset
+                }"
+            >
+                <!-- Canvas en donde se renderizaran los objetos -->
+                <canvas id="canvas" #canvas></canvas>
+                <canvas id="canvasHidden" #canvasHidden></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- <button (click)="addCapas()">Agregar Capas</button>
+<button (click)="createCanvasHidden(756)">Agregar JSON Original</button>
+<button (click)="createCanvasHidden(1200)">Agregar JSON Grande</button>
+<button (click)="getImageCDNOverlayText()">Imagen CDN</button> -->
+<button (click)="addImageCDN('image4')">Agregar Imagen4</button>
+<button (click)="addImageCDN('image2')">Agregar Imagen2</button>
+<button (click)="addImageCDN('image3')">Agregar Imagen3</button>
+<button (click)="createCanvasHidden(756)">Agregar JSON 756</button>
+<button (click)="createCanvasHidden(1200)">Agregar JSON 1200</button>
+<button (click)="downloadImages()">Descargar imagenes</button>
+
+<br><br><br><br><br>

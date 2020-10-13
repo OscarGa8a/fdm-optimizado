@@ -1,0 +1,43 @@
+/*Estilos para el contenedor del panel completo del editor*/
+.panel-container {
+    /*Asigna color al fondo del editor*/
+    background: #fcfcfc;
+    /*Asigna display tipo flex*/
+    display: flex;
+    /*Centra el contenido del display*/
+    justify-content: center;
+    /*El contenido se moverá hacia arriba y abajo*/
+    flex-direction: column;
+    /*Asigna la altura del contenedor del panel completo*/
+    height: calc(100vh - var(--header-height));
+}
+/*Estilos para el panel del editor*/
+.panel {
+    /*Asigna la altura del panel del editor*/
+    height: calc(100vh - var(--height-available));
+    /*Asigna altura minima del panel del editor*/
+    min-height: 490px;
+    /*Asigna display tipo grid*/
+    display: grid;
+    /*Crea dos columnas, una para el visor y la otra para las opciones*/
+    grid-template-columns: 8fr 6fr;
+    /*Crea un fila al maximo*/
+    grid-template-rows: auto;
+    /*Asigna espacio entre las columnas*/
+    row-gap: 18px;
+    /*Asiga ancho maximo del panel*/
+    max-width: 1400px;
+    /*Asigna dos areas al grid*/
+    grid-template-areas: "board selection";
+    /* margin-top: 12px; */
+    /* border: 1px solid lightgray; */
+}
+/*Estilos para el contenedor del visor*/
+.board-container {
+    /*Asigna el nombre del area del grid*/
+    grid-area: board;
+    /*Asigna color de fondo del area*/
+    background: white;
+    /*Asigna tamaño del borde del area*/
+    border-radius: 4px;
+}

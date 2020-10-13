@@ -1,0 +1,43 @@
+/*Estilos para el contenedor del editor*/
+.board-container {
+    /*Asigna display tipo grid*/
+    display: grid;
+    /*Crea tres columnas*/
+    grid-template-columns: minmax(40px, 85px) 1fr minmax(40px, 75px);
+    /*Asigna tres areas al grid*/
+    grid-template-areas: "left   canvas  right";
+    /*Asigna color de fondo al fondo del visor*/
+    background: #f3f3f3;
+    /*Asigna altura al máximo*/
+    height: 100%;
+}
+/*Estilos para el contenedor de la imagen del fondo del visor y del canvas*/
+.canvas {
+    /*Asigna el nombre del area del grid*/
+    grid-area: canvas;
+    /*Asigna display tipo flex*/
+    display: flex;
+    /*Centra el contenido del display*/
+    justify-content: center;
+    /*El desbordamiento se recorta y el resto del contenido se oculta*/
+    overflow: hidden;
+}
+/*Estilos para el contenedor de la imagen de fondo del visor*/
+.img-container {
+    /*Asigna posición relatica al contenedor de la imagen*/
+    position: relative;
+    /*Asigna margen 0px vertical y margen de 12px horizontal*/
+    margin: 0 12px;
+}
+/*Estilos para la imagen de fondo del visor*/
+.img-container img {
+    /*Asina ancho máximo a la imagen como el ancho del contenedor*/
+    max-width: 100%;
+    /*Asigna alruta máxima a la imagen*/
+    max-height: calc(100vh - var(--height-available));
+}
+/*Estilos para el elemento canvas*/
+.canvas-aux {
+    /*Asigna la canvas una posición absoluta para que se para encima de la imagen */
+    position: absolute;
+}

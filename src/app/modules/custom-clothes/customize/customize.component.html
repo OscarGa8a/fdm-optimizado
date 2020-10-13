@@ -1,0 +1,24 @@
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/nano.min.css"
+/>
+<div class="panel-container">
+  <div class="panel">
+    <div class="board-container">
+      <!-- Componente hijo que permite la visualizacion del canvas y sus opciones -->
+      <app-board
+        [product]="
+            productsPerCategory[currentIndexes.category]
+            .products[currentIndexes.product]
+            .sizes[currentIndexes.size]
+            .colors[currentIndexes.color].sides
+        "
+        [productSide]="currentIndexes.side"
+        [canvasSides]="canvasSides"
+        >
+  
+      </app-board>
+    </div>
+  </div>
+</div>
+

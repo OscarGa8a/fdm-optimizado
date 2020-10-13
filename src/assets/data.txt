@@ -1,0 +1,15 @@
+link imagenes
+
+https://fdm-dev.s3.us-east-2.amazonaws.com/media/error-image-cdn/prueba/astronauta.jpg
+
+https://fdm-dev.s3.us-east-2.amazonaws.com/media/error-image-cdn/prueba/camiseta-blanca-frente.png
+
+https://fdm-dev.s3.us-east-2.amazonaws.com/media/error-image-cdn/prueba/cicla.jpg
+
+https://fdm-dev.s3.us-east-2.amazonaws.com/media/error-image-cdn/prueba/circulos.jpg
+
+https://fdm-dev.s3.us-east-2.amazonaws.com/media/error-image-cdn/prueba/jake.jpg
+
+Link de prueba cdn
+
+https://fueradelmolde.gumlet.com/error-image-cdn/prueba/

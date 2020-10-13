@@ -1,0 +1,7 @@
+{
+    "/media/error-image-cdn/prueba/*": {
+        "target": "https://fdm-dev.s3.us-east-2.amazonaws.com",
+        "secure": false,
+        "logLevel": "debug"
+    }
+}
