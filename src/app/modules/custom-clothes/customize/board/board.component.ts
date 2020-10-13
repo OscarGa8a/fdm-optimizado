@@ -620,7 +620,7 @@ export class BoardComponent implements OnInit, AfterViewInit {
       const difHeight = heigth - (img['height'] / 2);
       // Centra en ancho y alto la imagen en el canvas
       img.set({left: (difWidth / 2), top: (difHeight / 2)});
-      // img['_element'].crossOrigin = 'anonymous';
+      img['_element'].crossOrigin = 'anonymous';
       dataImage.widthCDN = img['width'];
       dataImage.heightCDN = img['height'];
       this.addedImages.push(dataImage);
