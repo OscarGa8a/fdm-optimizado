@@ -126,7 +126,6 @@ export class BoardComponent implements OnInit, AfterViewInit {
    * Decorador que obtiene la instancia de la imagen de fondo del visor
    */
   @ViewChild('imgBackground', { static: true }) imgBackground: ElementRef;
-  id = 1;
   /**
    * Valor de factor de tamaño entre el canvas que se muestra y el canvas oculto
    */
@@ -161,9 +160,17 @@ export class BoardComponent implements OnInit, AfterViewInit {
     'https://fueradelmolde.gumlet.net/error-image-cdn/prueba/circulos.jpg',
     'https://fueradelmolde.gumlet.net/error-image-cdn/prueba/jake.jpg'
   ];
+  /**
+   * Arreglo que almacena los links de las imágenes en Amazon
+   */
   dataImagesAmazon: Array<any> = [];
+  /**
+   * Arreglo que almacena los links de Amazon y de la CDN
+   */
   dataLinks: Array<any> = [];
-  layerImage = 0;
+  /**
+   * Arreglo que almacena las imágenes que han sido cargadas en el fabric
+   */
   addedImages: any[] = [];
 
   constructor(private FileSaver: FileSaverService,
@@ -177,11 +184,11 @@ export class BoardComponent implements OnInit, AfterViewInit {
       this.product[this.productSide].izquierda /
       this.product[this.productSide].anchoReal; // necesitamos el valor de 0 a 1, para multiplicar con el ancho del contenedor
     console.log('onInit');
-
+    // Obtiene las urls de las imágenes en Amazon
     this.http.getImagesAmazon().subscribe((images: any) => {
       this.dataImagesAmazon = images;
     });
-
+    // Obtiene las urls de Amazon y de la CDN
     this.http.getLinks().subscribe((links: any) => {
       this.dataLinks = links;
     });
@@ -546,31 +553,29 @@ export class BoardComponent implements OnInit, AfterViewInit {
    * que se renderizaron en el canvas que se muestra
    */
   downloadImages() {
-    // const c = this.canvas;
-    // console.log('-------------------------');
-    // console.log('Img ', 'H: ', this.heightImgBackground, ' - ', 'W: ', this.widthImgBackground);
-    // console.log('Canvas ', 'H: ', c.getHeight(), ' - ', 'W: ', c.getWidth());
-    // const clip = this.canvas.getObjects()[0];
-    // console.log('Clip ', 'H: ', clip.getScaledHeight(), ' - ', 'W: ', clip.getScaledWidth());
-    // console.log('Px to Canvas ', 'H: ', this.topPixelesCanvas, ' - ', 'W: ', this.leftPixelesCanvas);
-    // const pxToptoClip = this.topPixelesCanvas + CONTROL_OFFSET;
-    // const pxLefttoClip = this.leftPixelesCanvas + CONTROL_OFFSET;
-    // console.log('Px to Clip ', 'H: ', pxToptoClip, ' - ', 'W: ', pxLefttoClip);
-
     // Obtiene la imagen del canvas que se muestra y la descarga
-    // this.canvasHTML.toBlob((blob) => {
-    //   this.FileSaver.save(blob, 'image.jpg');
-    // });
-
-    // Recorre los objetos del canvas oculto
-    // this.canvasHidden.getObjects().forEach((img: any, index: number) => {
-    //   img['_element'].crossOrigin = 'anonymous';
-    //   console.log(img);
-    // });
+    this.canvasHTML.toBlob((blob) => {
+      this.FileSaver.save(blob, 'image.jpg');
+    });
     // Obtiene la imagen del canvas que se oculta y la descarga
     this.canvasHTMLHidden.toBlob((blob => {
       this.FileSaver.save(blob, 'imageFHD.jpg');
     }));
+  }
+  /**
+   * Función que obtiene los datos para enviar al Backend
+   */
+  getData() {
+    const c = this.canvas;
+    console.log('-------------------------');
+    console.log('Img ', 'H: ', this.heightImgBackground, ' - ', 'W: ', this.widthImgBackground);
+    console.log('Canvas ', 'H: ', c.getHeight(), ' - ', 'W: ', c.getWidth());
+    const clip = this.canvas.getObjects()[0];
+    console.log('Clip ', 'H: ', clip.getScaledHeight(), ' - ', 'W: ', clip.getScaledWidth());
+    console.log('Px to Canvas ', 'H: ', this.topPixelesCanvas, ' - ', 'W: ', this.leftPixelesCanvas);
+    const pxToptoClip = this.topPixelesCanvas + CONTROL_OFFSET;
+    const pxLefttoClip = this.leftPixelesCanvas + CONTROL_OFFSET;
+    console.log('Px to Clip ', 'H: ', pxToptoClip, ' - ', 'W: ', pxLefttoClip);
   }
   /**
    * Función que asigna ancho y alto al canvas oculto y después le renderiza
@@ -600,8 +605,13 @@ export class BoardComponent implements OnInit, AfterViewInit {
   sleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
-
+  /**
+   * Función que agrega una imagen desde la CDN al canvas
+   * @param nameImage Cadena con el nombre de la imagen que se quiere agregar al canvas
+   */
   async addImageCDN(nameImage: string) {
+    // Obtiene la información de la imagen en Amazon, que contiene
+    // el amcho y alto de la imagen original
     const dataImage = this.dataImagesAmazon[nameImage];
     // Reemplaza el link con la parte de Amazon por la parte de la CDN
     const linkImage1: string = this.replaceLink(dataImage.link);
@@ -620,15 +630,20 @@ export class BoardComponent implements OnInit, AfterViewInit {
       const difHeight = heigth - (img['height'] / 2);
       // Centra en ancho y alto la imagen en el canvas
       img.set({left: (difWidth / 2), top: (difHeight / 2)});
-      img['_element'].crossOrigin = 'anonymous';
+      // Almacena el ancho y alto de la imagen de la CDN
       dataImage.widthCDN = img['width'];
       dataImage.heightCDN = img['height'];
+      // Almacena la imagen que se va a agregar al canvas
       this.addedImages.push(dataImage);
       this.canvas.add(img);
-      // this.canvas.renderAll();
+    }, {
+      // Es necesario para que el canvas no quede contaminado y permita la descarga
+      crossOrigin: 'anonymous',
     });
   }
-
+  /**
+   * Función que agregar las imágenes en el canvas que se muestra al canvas oculto
+   */
   addImageCanvasHidden() {
     // Obtiene la información del canvas que se muestra
     const json = JSON.stringify(this.canvas.toJSON());
@@ -636,18 +651,24 @@ export class BoardComponent implements OnInit, AfterViewInit {
     const canvas = JSON.parse(json);
     // Recorre los objetos del canvas oculto
     canvas['objects'].forEach((img: any, index: number) => {
+      // Obtiene la imagen agregada al canvas
       const image = this.addedImages[index];
+      // Además de cambiar la url de la CDN a la url de Amazon es necesario
+      // cambiar al ancho y alto de la imagen de la url de Amazon
       img['width'] = image.width;
       img['height'] = image.height;
       img['src'] = image.link;
+      // El factor de ancho entre la imagen original y la imagen de la CDN
       const factorWidthImg = image.width / image.widthCDN;
+      // El factor de ancho entre la imagen original y la imagen de la CDN
       const factorHeightImg = image.height / image.heightCDN;
+      // El factor de canvas y el factor de ancho me dan la nueva escala
+      // X, Y de la imagen en el canvas oculto
       img['scaleX'] = img['scaleX'] * (this.factorCanvas / factorWidthImg);
       img['scaleY'] = img['scaleY'] * (this.factorCanvas / factorHeightImg);
+      // El factor de canvas me da la nueva posición X Y de la imagen en el canvas oculto
       img['left'] = img['left'] * this.factorCanvas;
       img['top'] = img['top'] * this.factorCanvas;
-      // img.crossOrigin = 'anonymous';
-      // console.log(img);
     });
 
     // Carga el canvas oculto en el elemento canvas html

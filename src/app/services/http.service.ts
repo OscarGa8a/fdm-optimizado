@@ -7,7 +7,8 @@ import { map } from 'rxjs/operators';
 })
 export class HttpService {
 
-  url = 'https://grupocato.github.io/dataTestCDN/data.json';
+  // url = 'https://grupocato.github.io/dataTestCDN/data.json';
+  url = 'https://server-amazon.herokuapp.com/public/media/error-image-cdn/prueba/json/data.json';
 
   constructor(private http: HttpClient) {
   }
