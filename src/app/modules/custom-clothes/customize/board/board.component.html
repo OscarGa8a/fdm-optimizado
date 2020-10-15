@@ -1,22 +1,34 @@
 <div class="board-container">
     <div class="left-controls">
         <div class="group-container">
+            <!-- Crea un boton por cada vista de producto -->
+            <!-- En la vista actual activa el borde -->
             <button
+                [class.active]="productSide == i"
                 *ngFor="let side of product; let i = index"
+                (click)="changeProductSide(i)"
             >
-                <img src="" alt="">
+                <!-- Asigna la imagen de la vista del producto -->
+                <img [src]="canvasSidesPreview[i]" alt="">
+                <!-- Asigna el nombre de la vista del producto -->
                 <span>{{side.name}}</span>
             </button>
         </div>
     </div>
     <div class="right-controls">
-
+        <div class="group-container undo-redo">
+            <div class="sub-group">
+                <button (click)="test()" [class.disabled]="historyIndex === 0">
+                    <i class="fa fa-history"></i>
+                </button>
+            </div>
+        </div>
     </div>
     <div class="canvas" #container>
         <div class="img-container">
             <!-- Imagen que contiene la vista actual del prodcuto en el canvas -->
-            <!-- <img data-src="https://fueradelmolde.gumlet.com/error-image-cdn/prueba/camiseta-blanca-frente.png" alt="Gumlet Logo" #imgBackground> -->
             <img [src]="product[productSide].url" alt="" #imgBackground>
+            <!-- Asigna alto y ancho al canvas de acuerdo al ancho y alto de la imagen -->
             <div
                 class="canvas-aux"
                 [ngStyle]="{
@@ -36,11 +48,11 @@
 <button (click)="createCanvasHidden(756)">Agregar JSON Original</button>
 <button (click)="createCanvasHidden(1200)">Agregar JSON Grande</button>
 <button (click)="getImageCDNOverlayText()">Imagen CDN</button> -->
-<button (click)="addImageCDN('image4')">Agregar Imagen4</button>
+<!-- <button (click)="addImageCDN('image4')">Agregar Imagen4</button>
 <button (click)="addImageCDN('image2')">Agregar Imagen2</button>
 <button (click)="addImageCDN('image3')">Agregar Imagen3</button>
 <button (click)="createCanvasHidden(756)">Agregar JSON 756</button>
 <button (click)="createCanvasHidden(1200)">Agregar JSON 1200</button>
-<button (click)="downloadImages()">Descargar imagenes</button>
+<button (click)="downloadImages()">Descargar imagenes</button> -->
 
 <br><br><br><br><br>

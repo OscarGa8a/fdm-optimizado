@@ -4,13 +4,18 @@ import {
   ElementRef,
   OnInit,
   Input,
+  Output,
+  EventEmitter,
   ViewChild,
+  HostListener
 } from '@angular/core';
 
 import { fabric } from 'fabric';
 import { FileSaverService } from 'ngx-filesaver';
 
 import { CONTROL_OFFSET } from './constants';
+import { loadImageFromUrl } from './utils';
+
 import { HttpService } from '../../../../services/http.service';
 
 import {
@@ -47,17 +52,42 @@ export class BoardComponent implements OnInit, AfterViewInit {
    */
   private canvasHTMLHidden: HTMLCanvasElement;
   /**
-   * Contiene la información de la vistas del producto y sus imágenes correspondientes
+   * Almacena el índice de la vista actual en el visor
+   */
+  @Output() updateProductSideEvent = new EventEmitter<number>();
+  /**
+   * Almacena la información de la vista actual en el canvas para ser renderizada
+   * en la nueva vista que se desea mostrar
+   */
+  @Output() updateCanvasSidesEvent = new EventEmitter<TUpdateCanvas>();
+  /**
+   * Almacena la url de la imagen de previsualización del canvas
+   */
+  @Output() previewImageEvent = new EventEmitter<string>();
+  /**
+   * Almacena la información de la vistas del producto y sus imágenes correspondientes
    */
   @Input() product: any;
   /**
-   * Indice de la vista actual del producto en el canvas
+   * Almacena el ID de la variante del producto
+   */
+  @Input() productVariant: any;
+  /**
+   * Almacena el índice de la vista actual del producto en el canvas
    */
   @Input() productSide: number;
   /**
    * Arreglo que almancena los borradores de los canvas con los objetos que fueron renderizados
    */
   @Input() canvasSides: TCanvas[];
+  /**
+   * Cadena con la url del logo de CATO
+   */
+  urlMarca = '/assets/images/icon/logo.png';
+  /**
+   * Arreglo de cadenas con la url del canvas de previsualizacion
+   */
+  canvasSidesPreview: string[] = [];
   /**
    * Valor del top del elemento que contiene el canvas
    */
@@ -110,6 +140,10 @@ export class BoardComponent implements OnInit, AfterViewInit {
    * Es true si no se ha cambaido el tamaño del elemento canvas
    */
   state = true;
+  /**
+   * Valor del ancho inicial de la ventana de windows
+   */
+  windowWidth = window.innerWidth;
   /**
    * Decorador que obtiene la instancia del canvas en el HTML
    */
@@ -193,17 +227,20 @@ export class BoardComponent implements OnInit, AfterViewInit {
       this.dataLinks = links;
     });
   }
-
-  // @HostListener("window:resize", ["$event"])
-  // onResize(): void {
-  //   // if (this.windowWidth === window.innerWidth) {
-  //   //   this.windowWidth = window.innerWidth;
-  //   //   return null;
-  //   // }
-  //   // // this.changeProductSide(this.productSide);
-  //   // this.resizeCanvas();
-  //   // this.windowWidth = window.innerWidth;
-  // }
+  /**
+   * Decorador que declara evento cuando se cambia el tamaño de la ventana del navegador
+   * para cambiar el tamaño del canvas
+   */
+  @HostListener('window:resize', ['$event'])
+  onResize(): void {
+    if (this.windowWidth === window.innerWidth) {
+      this.windowWidth = window.innerWidth;
+      return null;
+    }
+    // this.changeProductSide(this.productSide);
+    this.resizeCanvas();
+    this.windowWidth = window.innerWidth;
+  }
 
   ngAfterViewInit(): void {
     // Cambia el tamaño del canvas cuando se termina de cargar la imagen
@@ -257,7 +294,7 @@ export class BoardComponent implements OnInit, AfterViewInit {
     // this.canvas.setHeight(100);
     this.canvas.setWidth(this.width);
     // this.canvas.setWidth(120);
-    // this.createBorder(this.canvas);
+    this.createBorder(this.canvas);
     // Se activa cuando se modifica un objeto en el canvas de fabric
     this.canvas.on('object:modified', (e: fabric.IEvent) => {
       // console.log('modified');
@@ -409,7 +446,7 @@ export class BoardComponent implements OnInit, AfterViewInit {
 
     this.changeHistory();
 
-    // this.generatePreviews();
+    this.generatePreviews();
   }
   /**
    * Función que crea el objeto de recorte y el objeto de bordes punteados y los agrega al canvas de fabric
@@ -442,13 +479,36 @@ export class BoardComponent implements OnInit, AfterViewInit {
       width: this.canvas.getWidth() - CONTROL_OFFSET * 2 + 1,
       height: this.canvas.getHeight() - CONTROL_OFFSET * 2 + 1,
       fill: 'transparent',
-      stroke: 'black',
+      stroke: 'transparent',
       strokeDashArray: [3, 3],
       selectable: false,
       hoverCursor: 'default',
     });
     border['isBorderAux'] = true;
     canvas.add(border);
+  }
+  changeProductSide = (index: number): void => {
+    this.changeCanvasSides(this.generateJSON());
+    this.updateProductSideEvent.emit(index);
+  }
+  /**
+   * Función que actualiza la información de la vista actual y la almacena en local storage
+   * @param json Canvas con la información actual del visor del editor
+   */
+  changeCanvasSides = (json: TCanvas): void => {
+    this.updateCanvasSidesEvent.emit({
+      index: this.productSide,
+      canvas: json,
+      widthArea: this.width,
+      heightArea: this.height,
+    });
+    const store = {
+      productVariant: this.productVariant,
+      sides: this.canvasSides,
+    };
+    const storeString = JSON.stringify(store);
+    // Almacena en local storage la información de la nueva vista del editor
+    localStorage.setItem('DRAFT_FDM', storeString);
   }
   /**
    * Función que almacena la información de la modificación actual en el canvas y asigna el número de la modificación
@@ -457,6 +517,100 @@ export class BoardComponent implements OnInit, AfterViewInit {
     this.history = this.history.slice(0, this.historyIndex + 1);
     this.history.push(this.generateJSON());
     this.historyIndex = this.history.length - 1;
+  }
+  /**
+   * Función que obtiene una cadena con la información del canvas para la previsualización
+   * @param canvas Canvas del editor con la información para la previsualización
+   * @returns Retorna url con la previsualización del canvas
+   */
+  generateDesign = (canvas: TFabricCanvas): string => {
+    // Filtra los objetos en el canvas con la propiedad isBorderAux
+    // para obtener el objecto que sirve de borde del canvas
+    const border = canvas._objects.filter(({ isBorderAux }) => isBorderAux)[0];
+    // Quita el borde al canvas
+    if (border) {
+      border.set({
+        strokeWidth: 0,
+      });
+    }
+    // Obtiene url con información del canvas
+    const urlDesign = canvas.toDataURL({
+      format: 'png',
+      quality: 1,
+    });
+    // Agrega el borde al canvas
+    if (border) {
+      border.set({
+        strokeWidth: 1,
+      });
+    }
+    canvas.renderAll();
+    return urlDesign;
+  }
+  /**
+   * Función que genera las previsualizaciones para mostrar en las vistas laterales
+   */
+  generatePreviews = (): void => {
+    this.canvasSides.forEach((side, index) => {
+      const canvas = new fabric.Canvas('c6') as TFabricCanvas;
+      this.createBorder(canvas);
+      canvas.setWidth(side.widthArea);
+      canvas.setHeight(side.heightArea);
+      this.readFromJSON(canvas, side);
+      canvas.renderAll();
+      this.generatePreview(canvas, index);
+    });
+  }
+  /**
+   * Función que genera una previsualización del canvas del editor
+   * @param canvas Canvas del editor con la información para la previsualización
+   * @param index Indice del canvas de previsualización
+   */
+  generatePreview = async (canvas: TFabricCanvas, index: number) => {
+    const canvasAux = new fabric.Canvas('c4');
+    const productImg = document.querySelector('.img-container img');
+    canvasAux.setWidth(productImg.clientWidth);
+    canvasAux.setHeight(productImg.clientHeight);
+    // Obtiene la url con la información del canvas
+    const urlDesign = this.generateDesign(canvas);
+    const background = await loadImageFromUrl(this.product[index].url);
+    // Calcula el factor de escala ancho entre el canvas y la imagen de fondo
+    const scaleFactor = canvasAux.getWidth() / background.width;
+    // Asigna imagen de fondo y escalas al canvas
+    canvasAux.setBackgroundImage(background, () => {}, {
+      scaleX: scaleFactor,
+      scaleY: scaleFactor,
+    });
+    // Obtiene imagen del diseño en el canvas
+    const design = await loadImageFromUrl(urlDesign);
+    // Asigna posicion X Y al diseño
+    design.set({
+      top: (productImg.clientHeight * this.top),
+      left: productImg.clientWidth * this.left,
+    });
+    // Obtiene el logo de CATO
+    const waterMark = await loadImageFromUrl(this.urlMarca);
+    // Aisgna posiciones y escalas al logo de CATO
+    waterMark.set({
+      top: canvasAux.getHeight() - waterMark.height * 0.3 - 20,
+      left: canvasAux.getWidth() - waterMark.width * 0.3 - 20,
+      scaleX: 0.3,
+      scaleY: 0.3,
+    });
+
+    canvasAux.add(design);
+    canvasAux.setOverlayImage(waterMark, null);
+    canvasAux.renderAll();
+    // Obtiene la url del canvas de previsualización
+    const urlPreview = canvasAux.toDataURL({
+      format: 'png',
+      quality: 1,
+    });
+    this.canvasSidesPreview[index] = urlPreview;
+    if (index === 0) {
+      // Emite la url de previsualización para ser usada por el componente padre
+      this.previewImageEvent.emit(urlPreview);
+    }
   }
   /**
    * Función que permite generar un canvas de fabric con la información actual
@@ -486,6 +640,52 @@ export class BoardComponent implements OnInit, AfterViewInit {
       )
     );
     return canvas;
+  }
+  /**
+   * Función que obtiene la información de data para agregarla al canvas
+   * @param canvas Canvas al que se le quiere agregar la información
+   * @param data Canvas con la información que se quiere agregar al otro canvas
+   */
+  readFromJSON = (canvas: any, data: TCanvas): void => {
+    // this.resetCanvas();
+    if (!data?.objects || data?.objects.length === 0) { return null; }
+
+    /**
+     * Reescribimos cordenadas y escalas para ajustar según tamaño de pantalla
+     */
+    // data.objects = data.objects.map(
+    //   (el): FabricObject => {
+    //     console.log(
+    //       "Debería dar 1 entre mismo producto",
+    //       el.left,
+    //       el.left * (this.width / data.widthArea)
+    //     );
+    //     //@ts-ignore
+    //     return {
+    //       ...el,
+    //       left: el.left * (this.width / data.widthArea),
+    //       top: el.top * (this.height / data.heightArea),
+    //       scaleX: el.scaleX * (this.width / data.widthArea),
+    //       scaleY: el.scaleY * (this.width / data.widthArea),
+    //     };
+    //   }
+    // );
+    // data.objects.forEach(async (obj) => {
+    //   if (obj.text) {
+    //     restoreTextElement(obj, canvas, this.variableControlAction);
+    //   }
+    //   if (obj.type === "group") {
+    //     await restoreMultiDesign(obj, canvas, this.variableControlAction);
+    //   }
+    //   if (
+    //     obj.type === "polygon" ||
+    //     obj.type === "circle" ||
+    //     obj.type === "triangle" ||
+    //     obj.type === "line"
+    //   ) {
+    //     restoreShape(obj, canvas, this.variableControlAction);
+    //   }
+    // });
   }
   /**
    * Función que agrega un color a los filtros de fabric para cambiarle el
@@ -611,7 +811,7 @@ export class BoardComponent implements OnInit, AfterViewInit {
    */
   async addImageCDN(nameImage: string) {
     // Obtiene la información de la imagen en Amazon, que contiene
-    // el amcho y alto de la imagen original
+    // el ancho y alto de la imagen original
     const dataImage = this.dataImagesAmazon[nameImage];
     // Reemplaza el link con la parte de Amazon por la parte de la CDN
     const linkImage1: string = this.replaceLink(dataImage.link);
@@ -683,7 +883,6 @@ export class BoardComponent implements OnInit, AfterViewInit {
   replaceLink(linkImage: string): string {
     return linkImage.replace(this.dataLinks['linkAmazon'], this.dataLinks['linkCDN']);
   }
-
   /**
    * Función que obtiene una imagen de la CDN produciendo cambios en su tamaño
    */
@@ -884,5 +1083,9 @@ export class BoardComponent implements OnInit, AfterViewInit {
     fabric.Image.fromURL(`${this.urlsCDN[2]}?w=200&h=200&text=holamundo nuevo&text_wrap=true`, (img: any) => {
       this.canvas.add(img);
     });
+  }
+
+  test() {
+    console.log(this.historyIndex);
   }
 }

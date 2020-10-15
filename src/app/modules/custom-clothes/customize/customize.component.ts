@@ -180,6 +180,10 @@ export class CustomizeComponent implements OnInit {
     side: 0,
   };
   /**
+   * Cadena con la url del producto de previsualización
+   */
+  productPreview: string;
+  /**
    * ID del borrador del canas con los objetos que se desean renderizar
    */
   draftId: number;
@@ -216,10 +220,10 @@ export class CustomizeComponent implements OnInit {
       }
     } else {
       // Obtiene el borrador del canvas del local storage
-      // const draftStored = JSON.parse(localStorage.getItem('DRAFT_FDM'));
+      const draftStored = JSON.parse(localStorage.getItem('DRAFT_FDM'));
       // Asigna los borradores de los canvas
-      // this.canvasSides = draftStored.sides;
-      // this.getIndexesFromProductVariant(draftStored.productVariant);
+      this.canvasSides = draftStored.sides;
+      this.getIndexesFromProductVariant(draftStored.productVariant);
     }
   }
   /**
@@ -264,8 +268,38 @@ export class CustomizeComponent implements OnInit {
   getDraft = (id: number): any => {
     return drafts.filter(({ draftId }) => id === draftId)[0];
   }
-
+  /**
+   * Función que actualiza el índice de la vista actual en el canvas
+   * @param index Indice de la vista actual en el visor del editor
+   */
+  updateProductSide = (index: number): void => {
+    this.currentIndexes.side = index;
+  }
+  /**
+   * Función que actualiza la información de los canvas de previsualización
+   * @param param0 Objeto de tipo TUpdateCanvas con la información del canvas actual
+   */
+  updateCanvasSides = ({
+    index,
+    canvas,
+    heightArea,
+    widthArea,
+  }: TUpdateCanvas): void => {
+    this.canvasSides[index] = canvas;
+    this.canvasSides[index].heightArea = heightArea;
+    this.canvasSides[index].widthArea = widthArea;
+  }
+  /**
+   * Función que asigna la url del canvas de previsualización
+   * @param $event Cadena con la url del canvas de previsualización
+   */
+  updatePreviewImg = ($event: string): void => {
+    // console.log("Que se envia desde el evento?", $event);
+    this.productPreview = $event;
+  }
 }
+
+
 /**
  * Interfaz que almacena los indices actuales de categoria, producto,
  * tallas, color y vista

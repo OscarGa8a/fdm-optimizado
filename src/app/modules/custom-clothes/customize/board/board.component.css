@@ -10,7 +10,91 @@
     background: #f3f3f3;
     /*Asigna altura al máximo*/
     height: 100%;
-}
+  }
+  /* Estilos para el contenedor de los controles de la izquierda del editor */
+  .left-controls {
+    grid-area: left;
+  }
+  /* Estilos para los botones de los controles de la izquierda del editor */
+  .left-controls button {
+    /* Asigna color al boton */
+    color: #4a4a4a;
+    /* Sin color de fondo */
+    background: none;
+    /* Sin bordes */
+    border: none;
+    /*Asigna display tipo flex*/
+    display: flex;
+    /*El contenido se moverá hacia arriba y abajo*/
+    flex-direction: column;
+    /* Centra el cotenido */
+    align-items: center;
+    /* Asigna tamaño a la fuente del botón */
+    font-size: 0.9em;
+    /* Asigna el espacio de relleno entre el contenido y el borde, 6px arriba, 6px abajo y no hay relleno a los lados*/
+    padding: 6px 0 6px;
+    /* El ancho del botón es el máximo del area */
+    width: 100%;
+    /* Asigna 10px de borde a los botones */
+    border-radius: 10px;
+    /* El usuario no puede seleccionar el texto */
+    user-select: none;
+  }
+  /* Estilos para las imagenes en los controles de la izquierda del editor */
+  .left-controls button img {
+    /* Asigna ancho a la imagen */
+    width: 44px;
+    /* Asigna una altura máxima a la imagen */
+    max-height: 55px;
+    /* Asigna el espacio de relleno entre el boton y la imagen, 0px arriba-abajo y 7px en izquierda y derecha */
+    padding: 0px 7px;
+    /* Indica como la imagen reemplazada debe redimensionarse para ajustarse al contenedor */
+    -o-object-fit: contain;
+    /* Indica como la imagen reemplazada debe redimensionarse para ajustarse al contenedor */
+    object-fit: contain;
+    /* Asigna color de fondo */
+    background: white;
+    /* Asigna color de fondo */
+    background: #f3f3f3;
+    /* Asigna 11px de borde a las imágenes */
+    border-radius: 11px;
+    /* Sin borde redondo a la izquierda */
+    border-bottom-left-radius: 0;
+    /* Sin borde redondo a la derecha */
+    border-bottom-right-radius: 0;
+    /* Asigna 5px de espacio en la parte inferior */
+    margin-bottom: 5px;
+  }
+  /* Estilos para la clase active para la vista actual en el editor */
+  .left-controls button.active {
+    /* background: #e8e8e8; */
+    /* Asigna ancho de la fuente del botón */
+    font-weight: 600;
+  }
+  /* Estilos para la imagen en el bóton */
+  .left-controls button.active img {
+    /* Asigna tamaño y color al borde inferior */
+    border-bottom: 4px solid #c3351a;
+  }
+  /* Estilos para el contenedor de los botones de previsualización */
+  .left-controls .group-container {
+    /* Asigna color de fondo al contenedor */
+    background: white;
+  }
+  /* Estilos para el contenedor de de los botones */
+  .group-container {
+    /* background: #f6f6f6; */
+    /* Asigna color de fondo */
+    background: #c9c9c9;
+    /* Asigna ancho al contenedor */
+    width: 64px;
+    /* Asigna margen superior */
+    margin-top: 15px;
+    /* Asigna borde redondo */
+    border-radius: 10px;
+    /* Asigna margenes */
+    margin: 15px 0 0 auto;
+  }
 /*Estilos para el contenedor de la imagen del fondo del visor y del canvas*/
 .canvas {
     /*Asigna el nombre del area del grid*/

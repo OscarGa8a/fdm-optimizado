@@ -7,11 +7,19 @@
     <div class="board-container">
       <!-- Componente hijo que permite la visualizacion del canvas y sus opciones -->
       <app-board
+        (updateProductSideEvent)="updateProductSide($event)"
+        (updateCanvasSidesEvent)="updateCanvasSides($event)"
+        (previewImageEvent)="updatePreviewImg($event)"
         [product]="
             productsPerCategory[currentIndexes.category]
             .products[currentIndexes.product]
             .sizes[currentIndexes.size]
             .colors[currentIndexes.color].sides
+        "
+        [productVariant]="
+          productsPerCategory[currentIndexes.category].products[
+            currentIndexes.product
+          ].sizes[currentIndexes.size].colors[currentIndexes.color].id
         "
         [productSide]="currentIndexes.side"
         [canvasSides]="canvasSides"
