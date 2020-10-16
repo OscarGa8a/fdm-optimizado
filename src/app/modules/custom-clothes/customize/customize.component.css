@@ -23,7 +23,7 @@
     grid-template-columns: 8fr 6fr;
     /*Crea un fila al maximo*/
     grid-template-rows: auto;
-    /*Asigna espacio entre las columnas*/
+    /*Asigna espacio entre las filas*/
     row-gap: 18px;
     /*Asiga ancho maximo del panel*/
     max-width: 1400px;
@@ -40,4 +40,60 @@
     background: white;
     /*Asigna tamaño del borde del area*/
     border-radius: 4px;
+}
+/* En pantallas de 960 px o menos */
+@media screen and (max-width: 960px) {
+    /*Estilos para el panel del editor*/
+    .panel {
+        /* Aisgna ancho al máximo */
+        width: 100%;
+        /* Crea una columna */
+        grid-template-columns: 1fr;
+        /* Crea una fila al máximo */
+        grid-template-rows: auto;
+        /*Asigna espacio entre las filas*/
+        column-gap: 0;
+        /*Asigna espacio entre las filas*/
+        row-gap: 18px;
+        /* Sin margen en los cuatro lados */
+        margin: 0;
+        /* Asigna un area al grid */
+        grid-template-areas: "board";
+        /* Sin espacio de relleno superior */
+        padding-top: 0;
+        /* Sin bordes */
+        border: none;
+    }
+    /*Estilos para el contenedor del visor*/
+    .board-container {
+        /* Sin margen en los cuatro lados */
+        margin: 0;
+    }
+    /*Estilos para el contenedor del panel completo del editor*/
+    .panel-container {
+        /* Sin espacio de relleno en los cuatro lados */
+        padding: 0;
+        /*Asigna color al fondo del editor*/
+        background: white;
+        /*Asigna la altura del contenedor del panel completo*/
+        height: calc(100vh - var(--height-available));
+    }
+}
+/* En pantallas de 720 px o menos */
+@media screen and (max-width: 720px) {
+    /*Estilos para el panel del editor*/
+    .panel {
+        /* Asigna tamaño de fuente */
+        font-size: 12px;
+        /* Asigna altura minima */
+        min-height: initial;
+    }
+}
+/* En pantallas de 500px o menos */
+@media screen and (max-width: 500px) {
+    /*Estilos para el panel del editor*/
+    .panel {
+        /* Sin margen superior */
+        margin-top: 0;
+    }
 }

@@ -1,127 +1,405 @@
 /*Estilos para el contenedor del editor*/
 .board-container {
-    /*Asigna display tipo grid*/
-    display: grid;
-    /*Crea tres columnas*/
-    grid-template-columns: minmax(40px, 85px) 1fr minmax(40px, 75px);
-    /*Asigna tres areas al grid*/
-    grid-template-areas: "left   canvas  right";
-    /*Asigna color de fondo al fondo del visor*/
-    background: #f3f3f3;
-    /*Asigna altura al máximo*/
-    height: 100%;
-  }
-  /* Estilos para el contenedor de los controles de la izquierda del editor */
-  .left-controls {
-    grid-area: left;
-  }
-  /* Estilos para los botones de los controles de la izquierda del editor */
-  .left-controls button {
-    /* Asigna color al boton */
-    color: #4a4a4a;
-    /* Sin color de fondo */
-    background: none;
-    /* Sin bordes */
-    border: none;
-    /*Asigna display tipo flex*/
-    display: flex;
-    /*El contenido se moverá hacia arriba y abajo*/
-    flex-direction: column;
-    /* Centra el cotenido */
-    align-items: center;
-    /* Asigna tamaño a la fuente del botón */
-    font-size: 0.9em;
-    /* Asigna el espacio de relleno entre el contenido y el borde, 6px arriba, 6px abajo y no hay relleno a los lados*/
-    padding: 6px 0 6px;
-    /* El ancho del botón es el máximo del area */
-    width: 100%;
-    /* Asigna 10px de borde a los botones */
-    border-radius: 10px;
-    /* El usuario no puede seleccionar el texto */
-    user-select: none;
-  }
-  /* Estilos para las imagenes en los controles de la izquierda del editor */
-  .left-controls button img {
-    /* Asigna ancho a la imagen */
-    width: 44px;
-    /* Asigna una altura máxima a la imagen */
-    max-height: 55px;
-    /* Asigna el espacio de relleno entre el boton y la imagen, 0px arriba-abajo y 7px en izquierda y derecha */
-    padding: 0px 7px;
-    /* Indica como la imagen reemplazada debe redimensionarse para ajustarse al contenedor */
-    -o-object-fit: contain;
-    /* Indica como la imagen reemplazada debe redimensionarse para ajustarse al contenedor */
-    object-fit: contain;
-    /* Asigna color de fondo */
-    background: white;
-    /* Asigna color de fondo */
-    background: #f3f3f3;
-    /* Asigna 11px de borde a las imágenes */
-    border-radius: 11px;
-    /* Sin borde redondo a la izquierda */
-    border-bottom-left-radius: 0;
-    /* Sin borde redondo a la derecha */
-    border-bottom-right-radius: 0;
-    /* Asigna 5px de espacio en la parte inferior */
-    margin-bottom: 5px;
-  }
-  /* Estilos para la clase active para la vista actual en el editor */
-  .left-controls button.active {
-    /* background: #e8e8e8; */
-    /* Asigna ancho de la fuente del botón */
-    font-weight: 600;
-  }
-  /* Estilos para la imagen en el bóton */
-  .left-controls button.active img {
-    /* Asigna tamaño y color al borde inferior */
-    border-bottom: 4px solid #c3351a;
-  }
-  /* Estilos para el contenedor de los botones de previsualización */
-  .left-controls .group-container {
-    /* Asigna color de fondo al contenedor */
-    background: white;
-  }
-  /* Estilos para el contenedor de de los botones */
-  .group-container {
-    /* background: #f6f6f6; */
-    /* Asigna color de fondo */
-    background: #c9c9c9;
-    /* Asigna ancho al contenedor */
-    width: 64px;
-    /* Asigna margen superior */
-    margin-top: 15px;
-    /* Asigna borde redondo */
-    border-radius: 10px;
-    /* Asigna margenes */
-    margin: 15px 0 0 auto;
-  }
+  /*Asigna display tipo grid*/
+  display: grid;
+  /*Crea tres columnas*/
+  grid-template-columns: minmax(40px, 85px) 1fr minmax(40px, 75px);
+  /*Asigna tres areas al grid*/
+  grid-template-areas: "left   canvas  right";
+  /*Asigna color de fondo al fondo del visor*/
+  background: #f3f3f3;
+  /*Asigna altura al máximo*/
+  height: 100%;
+}
+/* Estilos para el contenedor de los controles de la izquierda del editor */
+.left-controls {
+  grid-area: left;
+}
+/* Estilos para los botones de los controles de la izquierda del editor */
+.left-controls button {
+  /* Asigna color al boton */
+  color: #4a4a4a;
+  /* Sin color de fondo */
+  background: none;
+  /* Sin bordes */
+  border: none;
+  /*Asigna display tipo flex*/
+  display: flex;
+  /*El contenido se moverá hacia arriba y abajo*/
+  flex-direction: column;
+  /* Centra el cotenido */
+  align-items: center;
+  /* Asigna tamaño a la fuente del botón */
+  font-size: 0.9em;
+  /* Asigna el espacio de relleno entre el contenido y el borde, 6px arriba, 6px abajo y no hay relleno a los lados*/
+  padding: 6px 0 6px;
+  /* El ancho del botón es el máximo del area */
+  width: 100%;
+  /* Asigna 10px de borde a los botones */
+  border-radius: 10px;
+  /* El usuario no puede seleccionar el texto */
+  user-select: none;
+}
+/* Estilos para las imagenes en los controles de la izquierda del editor */
+.left-controls button img {
+  /* Asigna ancho a la imagen */
+  width: 44px;
+  /* Asigna una altura máxima a la imagen */
+  max-height: 55px;
+  /* Asigna el espacio de relleno entre el boton y la imagen, 0px arriba-abajo y 7px en izquierda y derecha */
+  padding: 0px 7px;
+  /* Indica como la imagen reemplazada debe redimensionarse para ajustarse al contenedor */
+  -o-object-fit: contain;
+  /* Indica como la imagen reemplazada debe redimensionarse para ajustarse al contenedor */
+  object-fit: contain;
+  /* Asigna color de fondo */
+  background: white;
+  /* Asigna color de fondo */
+  background: #f3f3f3;
+  /* Asigna 11px de borde a las imágenes */
+  border-radius: 11px;
+  /* Sin borde redondo a la izquierda */
+  border-bottom-left-radius: 0;
+  /* Sin borde redondo a la derecha */
+  border-bottom-right-radius: 0;
+  /* Asigna 5px de espacio en la parte inferior */
+  margin-bottom: 5px;
+}
+/* Estilos para la clase active para la vista actual en el editor */
+.left-controls button.active {
+  /* background: #e8e8e8; */
+  /* Asigna ancho de la fuente del botón */
+  font-weight: 600;
+}
+/* Estilos para la imagen en el bóton */
+.left-controls button.active img {
+  /* Asigna tamaño y color al borde inferior */
+  border-bottom: 4px solid #c3351a;
+}
+/* Estilos para el contenedor de cada grupo de botones de los controles de la izquierda */
+.left-controls .group-container {
+  /* Asigna color de fondo al contenedor */
+  background: white;
+}
+/* Estilos para el contenedor de cada grupo de botones */
+.group-container {
+  /* background: #f6f6f6; */
+  /* Asigna color de fondo */
+  background: #c9c9c9;
+  /* Asigna ancho al contenedor */
+  width: 64px;
+  /* Asigna margen superior */
+  margin-top: 15px;
+  /* Asigna borde redondo */
+  border-radius: 10px;
+  /* Asigna margenes */
+  margin: 15px 0 0 auto;
+}
+/* Estilos para el contenedor de cada grupo de botones de los controles de la derecha */
+.right-controls .group-container {
+  /* Asigna ancho del contenedor */
+  width: 60px;
+}
 /*Estilos para el contenedor de la imagen del fondo del visor y del canvas*/
 .canvas {
-    /*Asigna el nombre del area del grid*/
-    grid-area: canvas;
-    /*Asigna display tipo flex*/
-    display: flex;
-    /*Centra el contenido del display*/
-    justify-content: center;
-    /*El desbordamiento se recorta y el resto del contenido se oculta*/
-    overflow: hidden;
+  /*Asigna el nombre del area del grid*/
+  grid-area: canvas;
+  /*Asigna display tipo flex*/
+  display: flex;
+  /*Centra el contenido del display*/
+  justify-content: center;
+  /*El desbordamiento se recorta y el resto del contenido se oculta*/
+  overflow: hidden;
 }
 /*Estilos para el contenedor de la imagen de fondo del visor*/
 .img-container {
-    /*Asigna posición relatica al contenedor de la imagen*/
-    position: relative;
-    /*Asigna margen 0px vertical y margen de 12px horizontal*/
-    margin: 0 12px;
+  /*Asigna posición relatica al contenedor de la imagen*/
+  position: relative;
+  /*Asigna margen 0px vertical y margen de 12px horizontal*/
+  margin: 0 12px;
 }
 /*Estilos para la imagen de fondo del visor*/
 .img-container img {
-    /*Asina ancho máximo a la imagen como el ancho del contenedor*/
-    max-width: 100%;
-    /*Asigna alruta máxima a la imagen*/
-    max-height: calc(100vh - var(--height-available));
+  /*Asina ancho máximo a la imagen como el ancho del contenedor*/
+  max-width: 100%;
+  /*Asigna alruta máxima a la imagen*/
+  max-height: calc(100vh - var(--height-available));
 }
 /*Estilos para el elemento canvas*/
 .canvas-aux {
-    /*Asigna la canvas una posición absoluta para que se para encima de la imagen */
+  /*Asigna la canvas una posición absoluta para que se para encima de la imagen */
+  position: absolute;
+}
+/* Estilos para el contenedor de los controles de la derecha del editor */
+.right-controls {
+  /* Asigna el nombre del area del grid */
+  grid-area: right;
+  /* Asigna espacio de relleno a la derecha */
+  padding-right: 16px;
+  /* Asigna tamaño de fuente */
+  font-size: 24px;
+  /* El usuario no puede seleccionar el boton */
+  user-select: none;
+}
+/* Estilos para los botones de los controles de la derecha */
+.right-controls button {
+  /* Asigna alto de línea entre cada botón */
+  line-height: 0;
+}
+/* Estilos para los botones con la clase active */
+.right-controls button.active {
+  /* Asigna color del icono del botón */
+  color: #c3351a;
+}
+/* Estilos para los botones de la derecha con la clase disabled */
+.right-controls button.disabled {
+  /* Asigna color del icono del botón */
+  color: #4a4a4a;
+}
+/* Estilos para los iconos y los span de los botones de la derecha */
+.right-controls button i,
+.right-controls button span {
+  /* Asigna tamaño */
+  font-size: 20.5px;
+}
+/* Estilos para el botón de alineación de los controles de la derecha */
+.align-button {
+  /* Asigna posición relativa */
+  position: relative;
+}
+/* Selecciona cualquier elemento que no están en la clase '.disabled' */
+.align-button:not(.disabled):hover .align-container {
+  /* Asigna display tipo flex */
+  display: flex;
+}
+/* Estilos para el icono de alineación con la clase more */
+.right-controls button.align-button i.more {
+  /* Asigna posición absoluta */
+  position: absolute;
+  /* Asigna tamaño al icono */
+  font-size: 0.7em;
+  /* Realiza rotación al icono */
+  transform: rotate(270deg);
+  /* Asigna posición desde la izquierda */
+  left: 10px;
+  /* Asigna posición desde la parte inferior */
+  bottom: 4px;
+}
+/* Estilos para los spans y los botones de alineación */
+.align-container span,
+.align-container button {
+  /* Sin borde */
+  border: none;
+  /* Sin color de fondo */
+  background: none;
+  /* Asigna a los iconos de los botones y span */
+  color: #4a4a4a;
+  /* Asigna display tipo flex */
+  display: flex;
+  /* Centra los botones y span */
+  justify-content: center;
+  /* Centra los iconos en cada boton y span */
+  align-items: center;
+  /* Asigna tamaño de borde */
+  border-radius: 4px;
+  /* Sin margen vertical y 3px de margen horizontal */
+  margin: 0 3px;
+  /* Asigna ancho */
+  width: 38px;
+  /* Asigna altura */
+  height: 38px;
+  /* Asigna cursor de tipo puntero */
+  cursor: pointer;
+  /* Asigna cursor de tipo puntero */
+  padding: 0 6.25px;
+}
+/* Estilos para el botón con el icono de format_shapes */
+.scaling {
+  /* Asigna altura */
+  height: 47px;
+}
+/* Estilos para el contenedor de los botones de alineación */
+.align-container {
+  /* Asigna display tipo flex para que se muevan horizontal respecto al botón de alineación */
+  display: flex;
+  /* Alinea los elementos del contenedor en el centro */
+  align-items: center;
+  /* Sin margen vertical y margen horizontal automatico */
+  margin: 0 auto;
+  /* Asigna fondo del contenedor */
+  background: #f6f6f6;
+  /* Asigna bordes al contenedor */
+  border-radius: 8px;
+  /* Sin espacio de relleno vertical y con 15px horizontal */
+  padding: 0 15px;
+  /* Asigna altura al contenedor */
+  height: 55px;
+  /* Asigna posición absoluta */
+  position: absolute;
+  /* Asigna posición desde la parte inferior */
+  bottom: -55px;
+  /* Asigna posición desde la derecha */
+  right: 0;
+  /* Asigna el nivel de pila para que los botones queden por encima de los demás elementos */
+  z-index: 99;
+  /* Oculta los elementos del contenedor */
+  /* display: none; */
+}
+/* Estilos para los botones de los controles de la derecha */
+.right-controls button {
+  /* Botones sin borde */
+  border: none;
+  /* Asigna display tipo flex */
+  display: flex;
+  /* Ancho de los botones al máximo */
+  width: 100%;
+  /* Texto alineado al centro */
+  text-align: center;
+  /* Asigna tamaño de fuente */
+  font-size: 18px;
+  /* Alinea los elementos en los botones en el centro */
+  align-items: center;
+  /* Alinea los botones en el centro */
+  justify-content: center;
+  /* Asigna color de fondo */
+  background: transparent;
+  /* Asigna color a los iconos en los botones */
+  color: #4a4a4a;
+  /* Asigna espacio de relleno de 9px arriba y abajo */
+  padding: 9px 0;
+  /* El cursor se pone en modo puntero al pasar por encima de los botones */
+  cursor: pointer;
+}
+/* Estilos para la paleta de los controles de la derecha */
+.right-controls button.palette {
+  /* Oculta la paleta */
+  display: none;
+}
+/* Estilos para la clase disabled de la paleta de los controles de la derecha */
+.right-controls button.palette:disabled {
+  /* Asigna opaco a la paleta */
+  opacity: 0.7;
+}
+/* En pantallas de 960 px o menos */
+@media screen and (max-width: 960px) {
+  /*Estilos para el contenedor del editor*/
+  .board-container {
+    /*Crea una columna*/
+    grid-template-columns: 1fr;
+    /*Asigna un area al grid*/
+    grid-template-areas: "canvas";
+    /* Asigna posición relativa */
+    position: relative;
+  }
+  /* Estilos para el contenedor de cada grupo de botones */
+  .group-container,
+  .align-container {
+    /* Asigna color de fondo */
+    background: #e4e4e4c2;
+  }
+  /* Estilos para los botones de rehacer y deshacer */
+  .group-container.undo-redo {
+    /* Sin color de fondo */
+    background: none;
+  }
+  /* Estilos para el contenedor de los controles de la izquierda del editor */
+  .left-controls {
+    /* No visualiza los controles de la izquierda */
+    display: none;
+  }
+  /* Estilos para el contenedor de los controles de la derecha del editor */
+  .right-controls {
+    /* Asigna nombre del área del grid */
+    grid-area: initial;
+    /* Sin espacio de relleno inferior */
+    padding-bottom: 0;
+  }
+  /* Estilos para el contenedor de cada grupo de botones de los controles de la derecha */
+  .right-controls .group-container {
+    /* Asigna posición absoluta a los controles de la derecha */
     position: absolute;
+    /* Asigna posición desde la parte superior */
+    top: 0;
+    /* Asigna posición desde la derecha */
+    right: 10px;
+    /* Asigna el nivel de pila para que los botones queden por encima de los demás elementos */
+    z-index: 5;
+    /* Asigna ancho */
+    width: 55px;
+  }
+  /* Estilos para el grupo de botones de herramienta de los controles de la derecha */
+  .right-controls .group-container.tools {
+    /* Asigna posición desde la parte superior */
+    top: 56px;
+  }
+  /* Estilos para el contenedor de los botones rehacer y deshacer de los controles de la derecha */
+  .right-controls .group-container.undo-redo {
+    /* Asigna posición absoluta */
+    position: absolute;
+    /* Asigna posición desde la izquierda */
+    left: 8px;
+    /* Asigna posición desde la derecha */
+    right: initial;
+    /* Asigna el nivel de pila para que los botones queden por encima de los demás elementos */
+    z-index: 99;
+  }
+  /* Estilos para los botones rehacer y deshacer de los controles de la derecha */
+  .right-controls .group-container.undo-redo button {
+    /* Asigna color de fondo */
+    background: #e4e4e4c2;
+    /* Asigna borde redondo */
+    border-radius: 50%;
+    /* Asigna ancho */
+    width: 47px;
+    /* Asigna margen desde la parte inferior */
+    margin-bottom: 5px;
+  }
+  /* Estilos para la paleta de los controles de la derecha */
+  .right-controls button.palette {
+    /* Asigna display tipo flex */
+    display: flex;
+  }
+  /* Estilos para el contenedor de los controles de la izquierda */
+  .left-controls .group-container {
+    /* Asigna ancho al contenedor */
+    width: 55px;
+  }
+  /*Estilos para el contenedor de la imagen de fondo del visor*/
+  .img-container {
+    /* Sin margen en los cuatro lados */
+    margin: 0;
+    /* Sin espacio de relleno en la izquierda */
+    padding-left: 0;
+    /* Sin espacio de relleno en la derecha */
+    padding-right: 0;
+    /* Agrega una transformación que dura 0.2s con un movimiento fácil */
+    transition: transform 0.2s ease;
+  }
+  /* Estilos para la clase up dentro del contenedor de la imagen de fondo */
+  .img-container.up {
+    /* Traslada la imagen un 28% hacia arriba */
+    transform: translateY(-28%);
+  }
+  /* Estilos para la imagen de fondo del visor */
+  .img-container img {
+    /* Asigna altura máxima a la imagen */
+    max-height: calc(100vh - var(--height-available));
+    /* Sin margen vertical y margen horizontal automática */
+    margin: 0 auto;
+    /* Indica como la imagen reemplazada debe redimensionarse para ajustarse al contenedor */
+    object-fit: contain;
+    display: block;
+  }
+}
+/* En pantallas de 500 px o menos */
+@media screen and (max-width: 500px) {
+  /* Estilos para el contenedor de los botones de alineación */
+  .align-container {
+    /* Asigna posición desde la parte inferior */
+    bottom: initial;
+    /* Asigna posición desde la parte derecha */
+    right: 100%;
+    /* Sin espacio de relleno en los cuatro lados */
+    padding: 0;
+  }
 }

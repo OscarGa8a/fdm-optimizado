@@ -129,6 +129,26 @@ export class BoardComponent implements OnInit, AfterViewInit {
    */
   imgOffset: number;
   /**
+   * Valor del número de columnas para el gird en el visor
+   */
+  gridColumn: number;
+  /**
+   * Valor del número de filas para el grid en el visor
+   */
+  gridRow: number;
+  /**
+   * Arreglo con el total de columnas*filas para el grid en el visor
+   */
+  grid: number[];
+  /**
+   * Indica si se esta usando el grid en el visor del editor
+   */
+  guideLines = false;
+  /**
+   * Indica si hay un objeto seleccionado en el visor del editor
+   */
+  objectActive = false;
+  /**
    * Arreglo con la información de cada modificación en el visor
    */
   history: TCanvas[] = [];
@@ -276,9 +296,12 @@ export class BoardComponent implements OnInit, AfterViewInit {
       (this.product[this.productSide].anchoAreaReal /
         this.product[this.productSide].anchoReal) *
       width;
-    // this.gridColumn = Math.floor(this.width / 15 / 2);
-    // this.gridRow = Math.floor(this.height / 15 / 2);
-    // this.grid = Array(this.gridColumn * this.gridRow).fill(0);
+    // Calcula el número de columnas para el grid
+    this.gridColumn = Math.floor(this.width / 15 / 2);
+    // Calcula el número de filas para el grid
+    this.gridRow = Math.floor(this.height / 15 / 2);
+    // Crea un arreglo del tamaño de columnas * filas y lo llena de ceros
+    this.grid = Array(this.gridColumn * this.gridRow).fill(0);
     // Crea el canvas de fabric y lo configura para que mantenga la posicion de los objetos
     // renderizados al ser seleccionado alguno de esos objetos en el canvas
     this.canvas = new fabric.Canvas('canvas', {
@@ -487,6 +510,9 @@ export class BoardComponent implements OnInit, AfterViewInit {
     border['isBorderAux'] = true;
     canvas.add(border);
   }
+  /**
+   * Función que cambia la vista actual en el visor del canvas y actualiza el index de la vista
+   */
   changeProductSide = (index: number): void => {
     this.changeCanvasSides(this.generateJSON());
     this.updateProductSideEvent.emit(index);
@@ -509,14 +535,6 @@ export class BoardComponent implements OnInit, AfterViewInit {
     const storeString = JSON.stringify(store);
     // Almacena en local storage la información de la nueva vista del editor
     localStorage.setItem('DRAFT_FDM', storeString);
-  }
-  /**
-   * Función que almacena la información de la modificación actual en el canvas y asigna el número de la modificación
-   */
-  changeHistory = (): void => {
-    this.history = this.history.slice(0, this.historyIndex + 1);
-    this.history.push(this.generateJSON());
-    this.historyIndex = this.history.length - 1;
   }
   /**
    * Función que obtiene una cadena con la información del canvas para la previsualización
@@ -613,6 +631,38 @@ export class BoardComponent implements OnInit, AfterViewInit {
     }
   }
   /**
+   * Función que deshace la última modificación realizada en el visor del editor
+   */
+  undo = (): void => {
+    // Si no hay modificaciones anteriores retorne
+    if (this.historyIndex === 0) { return; }
+    this.historyIndex = this.historyIndex - 1;
+    // Resta uno al índice de modificaciones
+    this.resetCanvas();
+    // Carga al canvas la penúltima modificación realizada
+    this.readFromJSON(this.canvas, this.history[this.historyIndex]);
+  }
+  /**
+   * Función que rehace la última modificación realizada en el visor del editor
+   */
+  redo = (): void => {
+    // Si no hay modificaciones nuevas
+    if (this.historyIndex === this.history.length - 1) {
+      return;
+    }
+    // Aumente uno al índice de modificaciones
+    this.historyIndex = this.historyIndex + 1;
+    this.resetCanvas();
+    // Carga al canvas la última modificación realizada
+    this.readFromJSON(this.canvas, this.history[this.historyIndex]);
+  }
+  /**
+   * Función que cambia el estado del grid en el visor
+   */
+  showGuideLines = (): void => {
+    this.guideLines = !this.guideLines;
+  }
+  /**
    * Función que permite generar un canvas de fabric con la información actual
    * y con atributos que no contiene por defecto los objetos renderizados en ese canvas
    * @returns Devuelve un canvas de fabric con la información actual y lo nuevos atributos
@@ -686,6 +736,32 @@ export class BoardComponent implements OnInit, AfterViewInit {
     //     restoreShape(obj, canvas, this.variableControlAction);
     //   }
     // });
+  }
+  /**
+   * Función que reestablece el canvas, desactivando todos los objetos seleccionados
+   * y renderizando los objetos que no son controles
+   */
+  resetCanvas = (): void => {
+    // Obtiene los objetos en el canvas que no sean controles
+    const aux = this.canvas._objects.filter(
+      (obj: TFabricObject) => obj.isControl === undefined
+    ) as TFabricObject[];
+    // Asigna los objetos que no son controles al canvas actual
+    this.canvas._objects = aux;
+    // Asigna los objetos que no son controles al canvas actual
+    this.canvas.discardActiveObject();
+    this.canvas.renderAll();
+  }
+  /**
+   * Función que almacena la información de la modificación actual en el canvas y asigna el número de la modificación
+   */
+  changeHistory = (): void => {
+    // Almacena la información de las modificaciones anteriores
+    this.history = this.history.slice(0, this.historyIndex + 1);
+    // Agrega la última modificación realizada
+    this.history.push(this.generateJSON());
+    // Asigna el número de la modificación actual
+    this.historyIndex = this.history.length - 1;
   }
   /**
    * Función que agrega un color a los filtros de fabric para cambiarle el
@@ -1083,9 +1159,5 @@ export class BoardComponent implements OnInit, AfterViewInit {
     fabric.Image.fromURL(`${this.urlsCDN[2]}?w=200&h=200&text=holamundo nuevo&text_wrap=true`, (img: any) => {
       this.canvas.add(img);
     });
-  }
-
-  test() {
-    console.log(this.historyIndex);
   }
 }

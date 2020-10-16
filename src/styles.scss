@@ -1,4 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
+// Importa librería de material icons para traer iconos por nombre
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+// Importa librería con iconos usados en el editor
+@import url("./assets/fonts/icomoon/style.css");
 :root {
     --header-height: 59px;
     --bottom-menu: 81px;

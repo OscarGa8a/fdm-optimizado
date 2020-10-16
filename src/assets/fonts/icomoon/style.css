@@ -1,0 +1,101 @@
+@font-face {
+  font-family: "icomoon";
+  src: url("src/assets/fonts/icomoon/icomoon.eot?j58mn3");
+  src: url("src/assets/fonts/icomoon/icomoon.eot?j58mn3#iefix")
+      format("embedded-opentype"),
+    url("src/assets/fonts/icomoon/icomoon.ttf?j58mn3") format("truetype"),
+    url("src/assets/fonts/icomoon/icomoon.woff?j58mn3") format("woff"),
+    url("src/assets/fonts/icomoon/icomoon.svg?j58mn3#icomoon") format("svg");
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^="icomoon-"],
+[class*=" icomoon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: "icomoon" !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icomoon-palette:before {
+  content: "\e90a";
+}
+.icomoon-layer-down:before {
+  content: "\e909";
+}
+.icomoon-layer-up:before {
+  content: "\e908";
+}
+.icomoon-multi-size:before {
+  content: "\e906";
+}
+.icomoon-product:before {
+  content: "\e907";
+}
+.icomoon-mayorista:before {
+  content: "\e904";
+}
+.icomoon-heart:before {
+  content: "\e905";
+}
+.icomoon-love:before {
+  content: "\e905";
+}
+.icomoon-like:before {
+  content: "\e905";
+}
+.icomoon-palette2:before {
+  content: "\e903";
+}
+.icomoon-save-disk:before {
+  content: "\e902";
+}
+.icomoon-arrow-back-outline:before {
+  content: "\e900";
+}
+.icomoon-arrow-back:before {
+  content: "\e901";
+}
+.icomoon-image:before {
+  content: "\e90d";
+}
+.icomoon-price-tags:before {
+  content: "\e936";
+}
+.icomoon-credit-card:before {
+  content: "\e93f";
+}
+.icomoon-search:before {
+  content: "\e986";
+}
+.icomoon-zoom-in:before {
+  content: "\e987";
+}
+.icomoon-cloud-upload:before {
+  content: "\e9c3";
+}
+.icomoon-cloud-check:before {
+  content: "\e9c4";
+}
+.icomoon-plus:before {
+  content: "\ea0a";
+}
+.icomoon-minus:before {
+  content: "\ea0b";
+}
+.icomoon-share:before {
+  content: "\ea7d";
+}
+.icomoon-share2:before {
+  content: "\ea82";
+}

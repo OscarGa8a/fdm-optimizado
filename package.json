@@ -23,6 +23,7 @@
     "@types/fabric": "^3.6.8",
     "angular-font-awesome": "^3.1.2",
     "fabric": "^4.2.0",
+    "feather-icons": "^4.28.0",
     "file-saver": "^2.0.2",
     "font-awesome": "^4.7.0",
     "ngx-filesaver": "^10.0.1",

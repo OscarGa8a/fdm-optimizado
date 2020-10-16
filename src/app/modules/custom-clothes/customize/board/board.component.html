@@ -18,10 +18,115 @@
     <div class="right-controls">
         <div class="group-container undo-redo">
             <div class="sub-group">
-                <button (click)="test()" [class.disabled]="historyIndex === 0">
+                <button (click)="undo()" [class.disabled]="historyIndex === 0">
                     <i class="fa fa-history"></i>
                 </button>
+                <button
+                    (click)="redo()"
+                    [class.disabled]="
+                        historyIndex == history.length - 1 || history.length == 0
+                    "
+                >
+                    <i class="fa fa-history rotated"></i>
+                </button>
             </div>
+        </div>
+        <div class="group-container">
+            <button>
+              <span class="material-icons notranslate">
+                settings
+              </span>
+            </button>
+        </div>
+        <div class="group-container tools">
+            <button (click)="showGuideLines()" [class.active]="guideLines">
+                <span *ngIf="!guideLines" class="material-icons notranslate">
+                    grid_off
+                </span>
+                <span *ngIf="guideLines" class="material-icons notranslate">
+                    grid_on
+                </span>
+            </button>
+            <button
+                [class.disabled]="!objectActive"
+                [disabled]="!objectActive"
+            >
+                <i class="icomoon-layer-up"></i>
+            </button>
+            <button
+                [class.disabled]="!objectActive"
+                [disabled]="!objectActive"
+            >
+                <i class="icomoon-layer-down"></i>
+            </button>
+            <button
+                [class.disabled]="!objectActive"
+                [disabled]="!objectActive"
+            >
+                <span class="material-icons notranslate">content_copy</span>
+            </button>
+            <button
+                class="scaling"
+                [class.disabled]="!objectActive"
+                [disabled]="!objectActive"
+            >
+                <span class="material-icons notranslate">
+                format_shapes
+                </span>
+            </button>
+            <button
+                class="align-button"
+                [class.disabled]="!objectActive"
+                [disabled]="!objectActive"
+            >
+                <i class="fa fa-crosshairs"></i>
+                <i class="fa fa-caret-up more"></i>
+
+                <div class="align-container">
+                    <span class="material-icons notranslate">
+                        vertical_align_top
+                    </span>
+                    <span
+                        class="material-icons notranslate"
+                    >
+                        vertical_align_center
+                    </span>
+                    <span class="material-icons notranslate">
+                        vertical_align_bottom
+                    </span>
+                    <button>
+                        <app-feather-icons icon="crosshair"></app-feather-icons>
+                    </button>
+                    <span
+                        class="material-icons notranslate rotate"
+                    >
+                        vertical_align_bottom
+                    </span>
+                    <span
+                        class="material-icons notranslate rotate"
+                    >
+                        vertical_align_center
+                    </span>
+                    <span
+                        class="material-icons notranslate rotate"
+                    >
+                        vertical_align_top
+                    </span>
+                </div>
+            </button>
+            <button
+                [class.disabled]="!objectActive"
+                [disabled]="!objectActive"
+            >
+                <span class="material-icons notranslate">
+                delete_forever
+                </span>
+            </button>
+            <button>
+                <span class="material-icons notranslate">
+                  zoom_in
+                </span>
+            </button>
         </div>
     </div>
     <div class="canvas" #container>
@@ -54,5 +159,3 @@
 <button (click)="createCanvasHidden(756)">Agregar JSON 756</button>
 <button (click)="createCanvasHidden(1200)">Agregar JSON 1200</button>
 <button (click)="downloadImages()">Descargar imagenes</button> -->
-
-<br><br><br><br><br>
