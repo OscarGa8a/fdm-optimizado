@@ -1,0 +1,162 @@
+/* Estilos para el contenedor de las opciones en el editor */
+.selection-container {
+  /* Asigna display tipo flex */
+  display: flex;
+  /* Los botones se apilan por columna */
+  flex-direction: column;
+  /* Los items se distribuyen uniformemente, primer item al inicio y el último al final */
+  justify-content: space-between;
+  /* Asigna altura */
+  height: 100%;
+}
+/* Estilos para los botones de las opciones del editor */
+.selection-container button {
+  /* Sin color de fondo */
+  background: none;
+  /* Asigna ancho */
+  width: 100%;
+  /* Asigna altura */
+  height: 52px;
+  /* Asigna display tipo flex */
+  display: flex;
+  /* Asigna alineación de los elementos dentro del bloque */
+  align-items: center;
+  /* Los items se distribuyen uniformemente, primer item al inicio y el último al final */
+  justify-content: space-between;
+  /* Asigna color a los elementos dentro del botón */
+  color: #222222;
+  /* Asigna fuente */
+  font-family: Lato, sans-serif, "Segoe UI";
+  /* Sin bordes */
+  border: none;
+  /* Asigna ancho de la fuente */
+  font-weight: 600;
+  /* Asigna cursor tipo puntero */
+  cursor: pointer;
+  /* Asigna espacio de relleno en la izquierda */
+  padding-left: 17px;
+  /* Asigna espacio de relleno en la derecha */
+  padding-right: 15px;
+  /* Asigna borde a la izquierda trasparente */
+  border-left: 8px solid transparent;
+  /* Sin contorno */
+  outline: none;
+  /* Agrega una transicion a todas las propiedades que dura 0.2s con un movimiento fácil */
+  transition: all 0.2s ease;
+}
+/* Estilos para los botones de las opciones del editor cuando se pasa el mouse encima de ellos */
+.selection-container button:hover {
+  /* Asigna color de fondo */
+  background: #eee;
+  /* Asigna borde a la izquierda con el color específico */
+  border-left: 8px solid #c3351a;
+  /* Asigna color a los elementos dentro del botón */
+  color: #c3351a;
+}
+/* Estilos para los iconos en los botones */
+.container-icon {
+  /* Asigna display tipo flex */
+  display: flex;
+  /* Asigna ancho */
+  width: 26px;
+  /* Asigna tamaño de fuente */
+  font-size: 20px;
+  /* Asigna margen a la derecha */
+  margin-right: 8px;
+}
+/* Estilos para el contenedor del icono y el título de cada botón */
+.container-title {
+  /* Asigna display tipo flex */
+  display: flex;
+  /* Asigna alineación de los elementos dentro del bloque */
+  align-items: center;
+  /* Asigna ancho de la fuente */
+  font-weight: normal;
+}
+/* Estilos para todos los elementos que son hijos directos del contenedor */
+.container-title > strong {
+  /* Asigna margena la derecha */
+  margin-right: 6px;
+}
+/* Estilos para la información inferior en las opciones del editor */
+.warning {
+  /* Sin espacio de relleno vertical y con espacio de relleno horizontal */
+  padding: 0px 20px;
+  /* Asigna tamaño de fuente */
+  font-size: 14px;
+}
+/* Estilos para los enlaces en la información inferior */
+.warning a {
+  /* Asigna cursor tipo puntero */
+  cursor: pointer;
+}
+/* Estilos para la caja de la información inferior */
+.warning-box {
+  /* Asigna display tipo flex */
+  display: flex;
+  /* Asigna color de fondo */
+  background: #eeeeee;
+  /* Asigna espacio de relleno vertical y horizontal */
+  padding: 10px 20px;
+  /* Asigna margen superior */
+  margin-top: 20px;
+  /* Asigna margen inferior */
+  margin-bottom: 15px;
+}
+/* Estilos para los párrafos de la caja de la información */
+.warning-box p {
+  /* Sin margen en los cuatro lados */
+  margin: 0;
+  /* Asigna tamaño de fuente */
+  font-size: 1em;
+  /* Asigna espacio entre las letras */
+  letter-spacing: initial;
+  /* Asigna display tipo flex */
+  display: flex;
+  /* Asigna alineación de los elementos dentro del bloque */
+  align-items: center;
+}
+/* Estilos para los enlaces dentro de los párrafos */
+.warning-box p a {
+  /* Asigna texto subrayado */
+  text-decoration: underline;
+  /* Asigna color */
+  color: black;
+}
+/* Estilos para el primer párrafo en la caja de información */
+.warning-box p:first-child {
+  /* Asigna color */
+  color: #222;
+  /* Asigna margen inferior */
+  margin-bottom: 4px;
+}
+/* Estilos para los párrafos con los iconos de la información inferior */
+.warning-box .separator {
+  /* Asigna margen superior */
+  margin-top: 8px;
+}
+/* Estilos para los iconos de la información inferior */
+.strong {
+  /* Asigna margen a la derecha */
+  margin-right: 8px;
+  /* Asigna color al icono */
+  color: black;
+}
+/* Para pantallas de 560px o menos */
+@media screen and (max-width: 560px) {
+  /* Estilos para el contenedor del icono y el título de cada botón */
+  .container-title {
+    /* Asigna tamaño de fuente */
+    font-size: 13px;
+  }
+  /* Estilos para la información inferior en las opciones del editor */
+  .warning {
+    /* Asigna tamaño de fuente */
+    font-size: 12px;
+  }
+  /* Estilos para la caja de la información inferior */
+  .warning-box {
+    /* Asigna espacio de relleno en todos los lados */
+    padding: 15px;
+  }
+}

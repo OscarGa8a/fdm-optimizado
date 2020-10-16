@@ -184,6 +184,14 @@ export class CustomizeComponent implements OnInit {
    */
   productPreview: string;
   /**
+   * Indica si se ha abierto alguna de las opciones del editor
+   */
+  optionsIsOpen = false;
+  /**
+   * Cadena con el nombre de la opción escogida en el editor
+   */
+  whatIsOpen = 'product';
+  /**
    * ID del borrador del canas con los objetos que se desean renderizar
    */
   draftId: number;

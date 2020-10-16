@@ -149,6 +149,10 @@ export class BoardComponent implements OnInit, AfterViewInit {
    */
   objectActive = false;
   /**
+   * Indica si se debe mostrar la imagen de previsualización
+   */
+  showPreviewImg = false;
+  /**
    * Arreglo con la información de cada modificación en el visor
    */
   history: TCanvas[] = [];
@@ -535,6 +539,12 @@ export class BoardComponent implements OnInit, AfterViewInit {
     const storeString = JSON.stringify(store);
     // Almacena en local storage la información de la nueva vista del editor
     localStorage.setItem('DRAFT_FDM', storeString);
+  }
+  /**
+   * Función que permite ocultar o mostrar la imagen de previsualización
+   */
+  togglePreview = (): void => {
+    this.showPreviewImg = !this.showPreviewImg;
   }
   /**
    * Función que obtiene una cadena con la información del canvas para la previsualización

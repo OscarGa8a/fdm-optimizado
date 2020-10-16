@@ -27,7 +27,7 @@
   display: flex;
   /*El contenido se moverá hacia arriba y abajo*/
   flex-direction: column;
-  /* Centra el cotenido */
+  /* Asigna alineación de los elementos dentro del bloque */
   align-items: center;
   /* Asigna tamaño a la fuente del botón */
   font-size: 0.9em;
@@ -113,7 +113,7 @@
 }
 /*Estilos para el contenedor de la imagen de fondo del visor*/
 .img-container {
-  /*Asigna posición relatica al contenedor de la imagen*/
+  /* Asigna tipo de posicionamiento  */
   position: relative;
   /*Asigna margen 0px vertical y margen de 12px horizontal*/
   margin: 0 12px;
@@ -127,8 +127,154 @@
 }
 /*Estilos para el elemento canvas*/
 .canvas-aux {
-  /*Asigna la canvas una posición absoluta para que se para encima de la imagen */
+  /* Asigna tipo de posicionamiento al canvas para que se pare encima de la imagen */
   position: absolute;
+}
+/* Estilos para los contenedores de los elementos del grid del canvas*/
+.top-left,
+.top-right,
+.bottom-left,
+.bottom-right {
+  /* Asigna el tipo de posicionamiento */
+  position: absolute;
+  /* Asigna display tipo grid */
+  display: grid;
+}
+/* Estilos para todos los elementos que son hijos directos de los cuatro contenedores*/
+.top-left > div,
+.top-right > div,
+.bottom-left > div,
+.bottom-right > div {
+  /* Crea un borde a la derecha con un tamaño y color especificos */
+  border-right: 0.0625px dashed lightgray;
+  /* Crea un borde inferior con un tamaño y color especificos */
+  border-bottom: 0.0625px dashed lightgray;
+}
+/* Estilos para todos los elementos que son hijos directos de los dos contenedores*/
+.top-left > div.noTop,
+.bottom-left > div.noTop {
+  /* Sin bordes superiores */
+  border-top: none;
+  /* Crea un borde a la izquierda con un tamaño y color especificos */
+  border-left: 0.25px dashed lightgray;
+}
+/* Estilos para todos los elementos que son hijos directos de los dos contenedores*/
+.top-left > div.noTop.noLeft,
+.bottom-left > div.noTop.noLeft {
+  /* Sin bordes superiores */
+  border-top: none;
+  /* Sin bordes inferiores */
+  border-left: none;
+}
+/* Estilos para todos los elementos que son hijos directos de los dos contenedores*/
+.top-left > div.noLeft,
+.bottom-left > div.noLeft {
+  /* Sin bordes a la izquierda */
+  border-left: none;
+  /* Crea un borde inferior con un tamaño y color especificos */
+  border-bottom: 0.55px dashed lightgray;
+}
+/* Estilos para todos los elementos que son hijos directos de los dos contenedores*/
+.bottom-right > div.noBottom,
+.bottom-left > div.noBottom {
+  /* Sin bordes inferiores */
+  border-bottom: none;
+  /* Crea un borde a la derecha con un tamaño y color especificos */
+  border-right: 0.5px dashed lightgray;
+}
+/* Estilos para todos los elementos que son hijos directos del contenedor */
+.bottom-left > div.noBottom.noLeft {
+  /* Sin bordes inferiores */
+  border-bottom: none;
+  /* Sin bordes a la izquierda */
+  border-left: none;
+}
+/* Estilos para todos los elementos que son hijos directos del contenedor */
+.top-right > div.noTop {
+  /* Sin bordes superiores */
+  border-top: none;
+  /* Crea un borde a la izquierda con un tamaño y color especificos */
+  border-left: 0.25px dashed lightgray;
+}
+/* Estilos para todos los elementos que son hijos directos del contenedor */
+.top-right > div.noRight {
+  /* Sin bordes a la derecha */
+  border-right: none;
+  /* Crea un borde inferior con un tamaño y color especificos */
+  border-bottom: 0.5px dashed lightgray;
+}
+/* Estilos para todos los elementos que son hijos directos del contenedor */
+.top-right > div.noTop.noRight {
+  /* Sin bordes superiores */
+  border-top: none;
+  /* Sin bordes a la derecha */
+  border-right: none;
+}
+/* Estilos para todos los elementos que son hijos directos del contenedor */
+.bottom-right > div.noRight {
+  /* Sin bordes a la derecha */
+  border-right: none;
+  /* Crea un borde inferior con un tamaño y color especificos */
+  border-bottom: 0.5px dashed lightgray;
+}
+/* Estilos para todos los elementos que son hijos directos del contenedor */
+.bottom-right > div.noRight.noBottom {
+  /* Sin bordes a la derecha */
+  border-right: none;
+  /* Crea un borde inferior con un tamaño y color especificos */
+  border-bottom: none;
+}
+/* Estilos para el contenedor del grid superior izquierdo */
+.top-left {
+  /* Asigna posición desde la izquierda */
+  left: 0;
+  /* Asigna posición desde la derecha */
+  right: 50%;
+  /* Asigna posición desde la parte superior */
+  top: 0;
+  /* Asigna posición desde la parte inferior */
+  bottom: 50%;
+  /* Crea un borde a la derecha con un tamaño y color especificos */
+  border-right: 0.5px solid gray;
+  /* Crea un borde inferior con un tamaño y color especificos */
+  border-bottom: 0.5px solid gray;
+}
+/* Estilos para el contenedor del grid superior derecho */
+.top-right {
+  /* Asigna posición desde la izquierda */
+  left: 50%;
+  /* Asigna posición desde la derecha */
+  right: 0;
+  /* Asigna posición desde la parte superior */
+  top: 0;
+  /* Asigna posición desde la parte inferior */
+  bottom: 50%;
+  /* Crea un borde inferior con un tamaño y color especificos */
+  border-bottom: 0.5px solid gray;
+}
+/* Estilos para el contenedor del grid inferior izquierdo */
+.bottom-left {
+  /* Asigna posición desde la izquierda */
+  left: 0;
+  /* Asigna posición desde la derecha */
+  right: 50%;
+  /* Asigna posición desde la parte superior */
+  top: 50%;
+  /* Asigna posición desde la parte inferior */
+  bottom: 0;
+  /* Crea un borde a la derecha con un tamaño y color especificos */
+  border-right: 0.5px solid gray;
+}
+/* Estilos para el contenedor del grid inferior derecho */
+.bottom-right {
+  /* Asigna posición desde la izquierda */
+  left: 50%;
+  /* Asigna posición desde la derecha */
+  right: 0;
+  /* Asigna posición desde la parte superior */
+  top: 50%;
+  /* Asigna posición desde la parte inferior */
+  bottom: 0;
 }
 /* Estilos para el contenedor de los controles de la derecha del editor */
 .right-controls {
@@ -155,6 +301,7 @@
 .right-controls button.disabled {
   /* Asigna color del icono del botón */
   color: #4a4a4a;
+  opacity: 0.6;
 }
 /* Estilos para los iconos y los span de los botones de la derecha */
 .right-controls button i,
@@ -164,7 +311,7 @@
 }
 /* Estilos para el botón de alineación de los controles de la derecha */
 .align-button {
-  /* Asigna posición relativa */
+  /* Asigna tipo de posicionamiento  */
   position: relative;
 }
 /* Selecciona cualquier elemento que no están en la clase '.disabled' */
@@ -174,7 +321,7 @@
 }
 /* Estilos para el icono de alineación con la clase more */
 .right-controls button.align-button i.more {
-  /* Asigna posición absoluta */
+  /* Asigna tipo de posicionamiento  */
   position: absolute;
   /* Asigna tamaño al icono */
   font-size: 0.7em;
@@ -198,7 +345,7 @@
   display: flex;
   /* Centra los botones y span */
   justify-content: center;
-  /* Centra los iconos en cada boton y span */
+  /* Asigna alineación de los elementos dentro del bloque */
   align-items: center;
   /* Asigna tamaño de borde */
   border-radius: 4px;
@@ -222,7 +369,7 @@
 .align-container {
   /* Asigna display tipo flex para que se muevan horizontal respecto al botón de alineación */
   display: flex;
-  /* Alinea los elementos del contenedor en el centro */
+  /* Asigna alineación de los elementos dentro del bloque */
   align-items: center;
   /* Sin margen vertical y margen horizontal automatico */
   margin: 0 auto;
@@ -234,7 +381,7 @@
   padding: 0 15px;
   /* Asigna altura al contenedor */
   height: 55px;
-  /* Asigna posición absoluta */
+  /* Asigna tipo de posicionamiento  */
   position: absolute;
   /* Asigna posición desde la parte inferior */
   bottom: -55px;
@@ -243,7 +390,7 @@
   /* Asigna el nivel de pila para que los botones queden por encima de los demás elementos */
   z-index: 99;
   /* Oculta los elementos del contenedor */
-  /* display: none; */
+  display: none;
 }
 /* Estilos para los botones de los controles de la derecha */
 .right-controls button {
@@ -257,7 +404,7 @@
   text-align: center;
   /* Asigna tamaño de fuente */
   font-size: 18px;
-  /* Alinea los elementos en los botones en el centro */
+  /* Asigna alineación de los elementos dentro del bloque */
   align-items: center;
   /* Alinea los botones en el centro */
   justify-content: center;
@@ -280,6 +427,94 @@
   /* Asigna opaco a la paleta */
   opacity: 0.7;
 }
+/* Estilos para el icono del botón de rehacer de los controles de la derecha */
+.rotated {
+  /* Realiza la rotación del icono */
+  transform: rotateY(180deg);
+}
+/* Estilos para los iconos de alineación de los controles de la derecha */
+.rotate {
+  /* Realiza la rotación de los iconos */
+  transform: rotate(90deg);
+}
+/* Estilos para el modal de previsualización del diseño en producto */
+.modal-preview {
+  /* Asigna tipo de posicionamiento  */
+  position: fixed;
+  /* Asigna posición desde la parte superior */
+  top: 0;
+  /* Asigna posición desde la izquierda */
+  left: 0;
+  /* Asigna posición desde la derecha */
+  right: 0;
+  /* Asigna altura */
+  height: 100vh;
+  /* Asigna color de fondo */
+  background: #4a4a4aad;
+  /* Asigna el nivel de pila para que el modal quede por encima de los demás elementos */
+  z-index: 999999;
+  /* Asigna display tipo flex */
+  display: flex;
+  /* Alinea los items en el centro */
+  justify-content: center;
+  /* Asigna alineación de los elementos dentro del bloque */
+  align-items: center;
+  /* Crea animación llamada show que dura 0.3s, movimiento fácil, una espera de 1s, iteración normal y dirección hacia adelante */
+  animation: show 0.3s ease 0s 1 normal forwards;
+  /* opacity: 0; */
+}
+/* Estilos para el contenedor de la imagen de previsualización */
+.img-preview-container {
+  /* El cotenido es recortado y no se muestran barras de posición */
+  overflow: hidden;
+  /* Asigna color de fondo */
+  background: white;
+  /* Asigna espacio de relleno en los cuatro lados */
+  padding: 15px;
+  /* Asigna tamaño de los bordes */
+  border-radius: 12px;
+  /* Crea borde de tamaño y color específicos */
+  border: 2px solid #c3351a;
+  /* Asigna tipo de posicionamiento */
+  position: relative;
+  /* Asigna ancho al 40% el ancho del viewport */
+  width: 40vw;
+}
+/* Estilos para el contenedor de la imagen */
+.model-preview-imgs-container {
+  /* Asigna display tipo flex */
+  display: flex;
+  /* transform: translateX(-100%); */
+  /* Agrega una transformación que dura 0.3s con un movimiento fácil */
+  transition: transform 0.3s ease-in;
+}
+/* Estilos para la imagen en el modal */
+.model-preview-imgs-container img {
+  /* Asigna ancho mínimo */
+  min-width: 100%;
+  /* Indica como la imagen reemplazada debe redimensionarse para ajustarse al contenedor */
+  object-fit: contain;
+}
+/* Estilos para el icono para cerrar el modal */
+.img-preview-container span {
+  /* Asigna posición absoluta */
+  position: absolute;
+  /* Asigna posición desde la parte superior */
+  top: 7px;
+  /* Asigna posición desde la derecha */
+  right: 7px;
+  /* Asigna cursor tipo puntero */
+  cursor: pointer;
+}
+/* Permite controlar los pasos intermedios en una secuencia de animación */
+@keyframes show {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 /* En pantallas de 960 px o menos */
 @media screen and (max-width: 960px) {
   /*Estilos para el contenedor del editor*/
@@ -288,7 +523,7 @@
     grid-template-columns: 1fr;
     /*Asigna un area al grid*/
     grid-template-areas: "canvas";
-    /* Asigna posición relativa */
+    /* Asigna tipo de posicionamiento  */
     position: relative;
   }
   /* Estilos para el contenedor de cada grupo de botones */
@@ -316,7 +551,7 @@
   }
   /* Estilos para el contenedor de cada grupo de botones de los controles de la derecha */
   .right-controls .group-container {
-    /* Asigna posición absoluta a los controles de la derecha */
+    /* Asigna tipo de posicionamiento  */
     position: absolute;
     /* Asigna posición desde la parte superior */
     top: 0;
@@ -334,7 +569,7 @@
   }
   /* Estilos para el contenedor de los botones rehacer y deshacer de los controles de la derecha */
   .right-controls .group-container.undo-redo {
-    /* Asigna posición absoluta */
+    /* Asigna tipo de posicionamiento  */
     position: absolute;
     /* Asigna posición desde la izquierda */
     left: 8px;

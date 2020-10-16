@@ -1,3 +1,18 @@
+<div class="modal-preview" *ngIf="showPreviewImg">
+    <div class="img-preview-container">
+        <span class="material-icons notranslate" (click)="togglePreview()">
+            close
+        </span>
+        <div class="model-preview-imgs-container">
+            <img
+              [src]="previewItem"
+              alt=""
+              srcset=""
+              *ngFor="let previewItem of canvasSidesPreview; let i = index"
+            />
+        </div>
+    </div>
+</div>
 <div class="board-container">
     <div class="left-controls">
         <div class="group-container">
@@ -122,7 +137,7 @@
                 delete_forever
                 </span>
             </button>
-            <button>
+            <button (click)="togglePreview()">
                 <span class="material-icons notranslate">
                   zoom_in
                 </span>
@@ -142,6 +157,62 @@
                 'paddingLeft.px': imgOffset
                 }"
             >
+                <div
+                    *ngIf="guideLines && objectActive"
+                    class="top-left"
+                    [ngStyle]="{
+                        'grid-template-columns': 'repeat(' + gridColumn + ',1fr)',
+                        'grid-template-rows': 'repeat(' + gridRow + '1fr)'
+                    }"
+                >
+                    <div
+                        *ngFor="let item of grid; let i = index"
+                        [class.noTop]="i < gridColumn"
+                        [class.noLeft]="i % gridColumn == 0"
+                    ></div>
+                </div>
+                <div
+                    *ngIf="guideLines && objectActive"
+                    class="top-right"
+                    [ngStyle]="{
+                        'grid-template-columns': 'repeat(' + gridColumn + ',1fr)',
+                        'grid-template-rows': 'repeat(' + gridRow + '1fr)'
+                    }"
+                >
+                    <div
+                        *ngFor="let item of grid; let i = index"
+                        [class.noTop]="i < gridColumn"
+                        [class.noRight]="(i + 1) % gridColumn == 0"
+                    ></div>
+                </div>
+                <div
+                    *ngIf="guideLines && objectActive"
+                    class="bottom-left"
+                    [ngStyle]="{
+                        'grid-template-columns': 'repeat(' + gridColumn + ',1fr)',
+                        'grid-template-rows': 'repeat(' + gridRow + '1fr)'
+                    }"
+                >
+                    <div
+                        *ngFor="let item of grid; let i = index"
+                        [class.noBottom]="i >= grid.length - gridColumn"
+                        [class.noLeft]="i % gridColumn == 0"
+                    ></div>
+                </div>
+                <div
+                    *ngIf="guideLines && objectActive"
+                    class="bottom-right"
+                    [ngStyle]="{
+                        'grid-template-columns': 'repeat(' + gridColumn + ',1fr)',
+                        'grid-template-rows': 'repeat(' + gridRow + '1fr)'
+                    }"
+                >
+                    <div
+                        *ngFor="let item of grid; let i = index"
+                        [class.noBottom]="i >= grid.length - gridColumn"
+                        [class.noRight]="(i + 1) % gridColumn == 0"
+                    ></div>
+                </div>
                 <!-- Canvas en donde se renderizaran los objetos -->
                 <canvas id="canvas" #canvas></canvas>
                 <canvas id="canvasHidden" #canvasHidden></canvas>

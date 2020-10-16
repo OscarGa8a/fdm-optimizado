@@ -26,6 +26,29 @@
         >
       </app-board>
     </div>
+    <div class="options-container">
+      <div class="options-container-header">
+        <ng-container *ngIf="!optionsIsOpen; else elseTemplate">
+          <div class="options-container-default-title">
+            <p>Editar diseño personalizado</p>
+          </div>
+        </ng-container>
+        <ng-template #elseTemplate>
+          <ng-container>
+            <app-top-header>
+              
+            </app-top-header>
+          </ng-container>
+        </ng-template>
+      </div>
+      <div class="options-container-helper">
+        <div class="selection-container">
+          <app-selection>
+            
+          </app-selection>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 

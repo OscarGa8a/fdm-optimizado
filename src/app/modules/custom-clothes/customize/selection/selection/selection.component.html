@@ -1,0 +1,86 @@
+<div class="selection-container">
+  <div>
+    <button (click)="sendOpenOne('design')">
+      <div class="container-title">
+        <div class="container-icon">
+          <i class="icomoon-image"></i>
+        </div>
+        <strong>Diseño: </strong> añadir diseño para personalización
+      </div>
+      <app-feather-icons icon="chevron-right"></app-feather-icons>
+    </button>
+    <button (click)="sendOpenOne('text')">
+      <div class="container-title">
+        <div class="container-icon">
+          <i class="fa fa-font" aria-hidden="true"></i>
+        </div>
+        <strong>Texto:</strong> añadir texto personalizado.
+      </div>
+      <app-feather-icons icon="chevron-right"></app-feather-icons>
+    </button>
+    <button (click)="sendOpenOne('shape')">
+      <div class="container-title">
+        <div class="container-icon">
+          <app-feather-icons icon="hexagon"></app-feather-icons>
+        </div>
+        <strong>Figura:</strong> añadir figura personalizada
+      </div>
+      <app-feather-icons icon="chevron-right"></app-feather-icons>
+    </button>
+    <button (click)="sendOpenOne('image')">
+      <div class="container-title">
+        <div class="container-icon">
+          <span class="material-icons">
+            add_photo_alternate
+          </span>
+        </div>
+        <strong>Imagen:</strong> añadir un diseño desde un archivo.
+      </div>
+      <app-feather-icons icon="chevron-right"></app-feather-icons>
+    </button>
+    <button (click)="sendOpenOne('save')">
+      <div class="container-title">
+        <div class="container-icon">
+          <span class="material-icons">
+            save
+          </span>
+        </div>
+        <strong>Guardar:</strong> guardar y/o compartir diseño.
+      </div>
+      <app-feather-icons icon="chevron-right"></app-feather-icons>
+    </button>
+  </div>
+  
+  <div class="warning">
+    <div class="warning-box">
+      <div class="warning-text">
+        <p>
+          Mejora tu experiencia registrandote para que tus diseños serán
+          guardados de forma permamente.
+        </p>
+        <p>
+          Si no estás registrado tus diseños estarán mientras no se borren los
+          datos locales de tu navegador.
+        </p>
+        <p class="separator">
+          <span class="material-icons notranslate strong">
+            person_outline
+          </span>
+          <span>
+            Te invitamos a <a href="">Registrarme</a> ó
+            <a href="">Iniciar sesión</a>
+          </span>
+        </p>
+        <p>
+          <span class="material-icons notranslate strong">
+            business_center
+          </span>
+          <span>
+            Puedes obtener descuentos realizando
+            <a href="">Pedidos al por mayor</a></span
+          >
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

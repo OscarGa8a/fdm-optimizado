@@ -3,15 +3,4 @@
 @import url("https://fonts.googleapis.com/icon?family=Material+Icons");
 // Importa librería con iconos usados en el editor
 @import url("./assets/fonts/icomoon/style.css");
-:root {
-    --header-height: 59px;
-    --bottom-menu: 81px;
-    --height-available: calc(var(--header-height) + var(--bottom-menu));
-}
 
-@media (max-width: 960px) {
-    :root {
-      --header-height: 65px;
-      --bottom-menu: 65px;
-    }
-}
