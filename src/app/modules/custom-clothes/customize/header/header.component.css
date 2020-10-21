@@ -1,0 +1,86 @@
+/* Estilos para el contenedor principal de la cabecera de las opciones */
+div {
+  /* Asigna ancho al máximo */
+  height: 100%;
+  /* Asigna display tipo flex */
+  display: flex;
+  /* Asigna alineación de los elementos dentro del bloque */
+  align-items: center;
+  /* Los items se distribuyen uniformemente, primer item al inicio y el último al final */
+  justify-content: space-between;
+}
+/* Estilos para el botón que cierra la opción escogida */
+button {
+  /* Sin color de fondo */
+  background: none;
+  /* Sin bordes */
+  border: none;
+  /* Asigna display tipo flex */
+  display: flex;
+  /* Asigna alineación de los elementos dentro del bloque */
+  align-items: center;
+}
+/* Estilos para cuando se pasa el mouse por encima del botón */
+button:hover {
+  /* Asigna color */
+  color: red;
+}
+/* Estilos para el icono dentro del botón */
+button i,
+button span {
+  /* Asigna tamaño al icono */
+  font-size: 24px;
+}
+/* Estilos para la cabecera h1*/
+h5 {
+  /* Asigna espacio entre las letras */
+  letter-spacing: initial;
+  /* Asigna display tipo flex */
+  display: flex;
+  /* Asigna alineación de los elementos dentro del bloque */
+  align-items: center;
+  /* Sin margen en niguno de los cuatro lados */
+  margin: 0;
+  /* Asigna ancho de la fuente */
+  font-size: 14px;
+  /* Asigna ancho mínimo */
+  min-width: 75%;
+}
+/* Estilos para los hijos directos de la cabecera h5 */
+h5 > span {
+  /* Asigna ancho de la fuente */
+  font-weight: bold;
+}
+/* Asigna estilos a los objetos agregados desde el padre */
+h5::ng-deep span,
+h5::ng-deep i,
+h5::ng-deep app-feather-icons {
+  /* Asigna display tipo flex */
+  display: flex;
+  /* Asigna alineación de los elementos dentro del bloque */
+  align-items: center;
+  /* Asigna margen a la derecha */
+  margin-right: 10px;
+}
+/* Estilos para el texto de notificación de cambios realizados */
+.notification {
+  /* Asigna color */
+  color: red;
+  /* Asigna transparencia */
+  opacity: 0;
+  /* Agrega una transición de transparencia que dura 0.3s con un movimiento fácil */
+  transition: opacity 0.3s ease 0.1s;
+}
+/* Estilos para la clase dentro del texto de notificación */
+.notification.show {
+  /* Asigna transparencia */
+  opacity: 1;
+}
+/* Para pantallas menor a 960px */
+@media screen and (max-width: 960px) {
+  /* Estilos para la clase en el span dentro de la cabecera h5 */
+  h5 span.content {
+    /* Sin display */
+    display: none;
+  }
+}

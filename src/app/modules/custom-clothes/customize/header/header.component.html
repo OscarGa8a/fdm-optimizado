@@ -1,1 +1,15 @@
-<p>header works!</p>
+<div>
+  <h5>
+    <span class="content">
+      <!-- El icono ingresado desde el padre se agregará aquí -->
+      <ng-content></ng-content>
+    </span>
+    <span>Editar:</span> {{ title }}
+  </h5>
+  <div class="notification" [class.show]="showMessage">
+    ¡Hecho!
+  </div>
+  <button (click)="sendClose()">
+    <i class="fa fa-times"></i>
+  </button>
+</div>

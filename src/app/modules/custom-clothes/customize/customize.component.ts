@@ -221,6 +221,11 @@ export class CustomizeComponent implements OnInit {
    */
   productPreview: string;
   /**
+   * Indica si se debe mostrar el mensaje de cuando se realiza
+   * un cambio en la opción seleccionada
+   */
+  showMessage = false;
+  /**
    * Indica si se ha abierto alguna de las opciones del editor
    */
   optionsIsOpen = false;
@@ -348,6 +353,15 @@ export class CustomizeComponent implements OnInit {
   handleOpenSelection = ($event: string): void => {
     this.optionsIsOpen = true;
     this.whatIsOpen = $event;
+  }
+  /**
+   * Función que permite cerrar la opción abierta en el editor y limpia
+   * la selección actual en el visor
+   * @param $event Evento que indica que se ha cerrado las opciones del editor
+   */
+  handleClose = ($event: any): void => {
+    this.optionsIsOpen = false;
+    this.board.clearSelection();
   }
   /**
    * Función que actualiza el índice de la vista actual en el canvas

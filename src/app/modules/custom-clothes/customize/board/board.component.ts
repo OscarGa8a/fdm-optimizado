@@ -668,6 +668,15 @@ export class BoardComponent implements OnInit, AfterViewInit {
     }
   }
   /**
+   * Función que limpia la selección del objeto en el visor
+   */
+  clearSelection = (): void => {
+    if (this.canvas.getActiveObject()) {
+      this.canvas.discardActiveObject();
+      this.canvas.renderAll();
+    }
+  }
+  /**
    * Función que obtiene una cadena con la información del canvas para la previsualización
    * @param canvas Canvas del editor con la información para la previsualización
    * @returns Devuelve la url con la previsualización del canvas

@@ -7,6 +7,8 @@
     <div class="board-container">
       <!-- Componente hijo que permite la visualizacion del canvas y sus opciones -->
       <app-board
+        (openSelection)="handleOpenSelection($event)"
+        (updateSelectionTextEvent)="updateSelectionText($event)"
         (updateProductSideEvent)="updateProductSide($event)"
         (updateCanvasSidesEvent)="updateCanvasSides($event)"
         (previewImageEvent)="updatePreviewImg($event)"
@@ -26,6 +28,7 @@
         >
       </app-board>
     </div>
+    <!-- Permite la visulización de las opciones en el editor -->
     <div class="options-container">
       <div class="options-container-header">
         <ng-container *ngIf="!optionsIsOpen; else elseTemplate">
@@ -34,9 +37,15 @@
           </div>
         </ng-container>
         <ng-template #elseTemplate>
-          <ng-container>
-            <app-top-header>
-              
+          <ng-container [ngSwitch]="whatIsOpen">
+            <!-- Cabecera para la opción de texto -->
+            <app-top-header
+              [showMessage]="showMessage"
+              *ngSwitchCase="'text'"
+              [title]="'añadir texto personalizado'"
+              (eventClose)="handleClose()"
+            >
+              <i class="fa fa-font" aria-hidden="true"></i>
             </app-top-header>
           </ng-container>
         </ng-template>
