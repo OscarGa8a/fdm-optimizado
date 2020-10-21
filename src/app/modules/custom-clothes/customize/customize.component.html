@@ -43,9 +43,9 @@
       </div>
       <div class="options-container-helper">
         <div class="selection-container">
-          <app-selection>
-            
-          </app-selection>
+          <app-selection
+            (openOneEvent)="handleSelection($event)"
+          ></app-selection>
         </div>
       </div>
     </div>

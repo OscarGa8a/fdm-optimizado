@@ -11,7 +11,12 @@ import {
 } from '@angular/core';
 
 import { fabric } from 'fabric';
+import runConfigurations from './configurations';
 import { FileSaverService } from 'ngx-filesaver';
+
+import {
+  createTextElement
+} from './elements';
 
 import { CONTROL_OFFSET } from './constants';
 import { loadImageFromUrl } from './utils';
@@ -52,16 +57,24 @@ export class BoardComponent implements OnInit, AfterViewInit {
    */
   private canvasHTMLHidden: HTMLCanvasElement;
   /**
-   * Almacena el índice de la vista actual en el visor
+   * Emite el nombre de la opción escogida en el editor
+   */
+  @Output() openSelection = new EventEmitter<string>();
+  /**
+   * Emite la información del texto seleccionado
+   */
+  @Output() updateSelectionTextEvent = new EventEmitter<TTextSelectionEvent>();
+  /**
+   * Emite el índice de la vista actual en el visor
    */
   @Output() updateProductSideEvent = new EventEmitter<number>();
   /**
-   * Almacena la información de la vista actual en el canvas para ser renderizada
+   * Emite la información de la vista actual en el canvas para ser renderizada
    * en la nueva vista que se desea mostrar
    */
   @Output() updateCanvasSidesEvent = new EventEmitter<TUpdateCanvas>();
   /**
-   * Almacena la url de la imagen de previsualización del canvas
+   * Emite la url de la imagen de previsualización del canvas
    */
   @Output() previewImageEvent = new EventEmitter<string>();
   /**
@@ -161,13 +174,17 @@ export class BoardComponent implements OnInit, AfterViewInit {
    */
   historyIndex = 0;
   /**
-   * Es true si no se ha cambaido el tamaño del elemento canvas
+   * Indica si no se ha cambaido el tamaño del elemento canvas
    */
   state = true;
   /**
    * Valor del ancho inicial de la ventana de windows
    */
   windowWidth = window.innerWidth;
+  /**
+   * Indica si se debe desactivar el color
+   */
+  disableShowColor = true;
   /**
    * Decorador que obtiene la instancia del canvas en el HTML
    */
@@ -325,22 +342,21 @@ export class BoardComponent implements OnInit, AfterViewInit {
     // Se activa cuando se modifica un objeto en el canvas de fabric
     this.canvas.on('object:modified', (e: fabric.IEvent) => {
       // console.log('modified');
-      // this.changeHistory();
+      this.changeHistory();
       // this.changeProductSide(this.productSide);
-      // this.generatePreviews();
+      this.generatePreviews();
     });
     // Se activa cuando se agrega un objeto al canvas de fabric
     this.canvas.on('object:added', (e: fabric.IEvent) => {
       // console.log('addedCanvas');
-      // console.log(this.canvas.item(0));
       // this.changeProductSide(this.productSide);
-      // this.generatePreviews();
+      this.generatePreviews();
     });
     // Se activa cuando se elimina un objeto en el canvas de fabric
     this.canvas.on('object:removed', (e: fabric.IEvent) => {
       // console.log('removed');
       // this.changeProductSide(this.productSide);
-      // this.generatePreviews();
+      this.generatePreviews();
     });
     // Se activa mientras se esta rotando un objeto en el canvas de fabric
     this.canvas.on('object:rotating', (e: fabric.IEvent) => {
@@ -369,7 +385,7 @@ export class BoardComponent implements OnInit, AfterViewInit {
     // Se activa cuando se termina de mover un objeto en el canvas de fabric
     this.canvas.on('object:moved', (e: fabric.IEvent): void => {
       // console.log('moved');
-      // this.calculateMaxWidthOfTextbox();
+      this.calculateMaxWidthOfTextbox();
     });
     // Se activa mientras se esta escalando un objeto en el canvas de fabric
     this.canvas.on('object:scaling', (e: fabric.IEvent): void => {
@@ -379,7 +395,7 @@ export class BoardComponent implements OnInit, AfterViewInit {
     // Se activa cuando se termina de escalar un objeto en el canvas de fabric
     this.canvas.on('object:scaled', (e: fabric.IEvent): void => {
       // console.log('scaled');
-      // this.calculateMaxWidthOfTextbox();
+      this.calculateMaxWidthOfTextbox();
     });
     // Se activa cuando se termina de rotar un objeto en el canvas de fabric
     this.canvas.on('object:rotated', (e: fabric.IEvent): void => {
@@ -390,14 +406,12 @@ export class BoardComponent implements OnInit, AfterViewInit {
     });
     // Se activa cuando se selecciona un objeto en el canvas de fabric
     this.canvas.on('selection:created', (e: fabric.IEvent): void => {
-      // console.log('createdCanvas');
-      // console.log(this.canvas.item(0));
-      // this.selectionCreatedAndUpdated(e);
+      this.selectionCreatedAndUpdated(e);
     });
     // Se activa cuando teniendo selecciona un objeto en el canvas de fabric se selecciona otro objeto en el canvas
     this.canvas.on('selection:updated', (e: fabric.IEvent): void => {
       // console.log('updated');
-      // this.selectionCreatedAndUpdated(e);
+      this.selectionCreatedAndUpdated(e);
       // if (this.windowWidth < 960) {
       //   this.closeFromBoard.emit(true);
       // }
@@ -405,20 +419,19 @@ export class BoardComponent implements OnInit, AfterViewInit {
     // Se activa cuando se deselecciona un objeto en el canvas de fabric sin seleccionar otro objeto
     this.canvas.on('selection:cleared', (e: fabric.IEvent) => {
       // console.log('clearedCanvas');
-      // console.log(this.canvas.item(0));
-      // this.objectActive = false;
+      this.objectActive = false;
       // this.closeFromBoard.emit(true);
-      // this.disableShowColor = true;
+      this.disableShowColor = true;
       // this.textClearedEvent.emit(true);
-      // let rect = this.canvas._objects.filter(
-      //   ({ isBorderAux }) => isBorderAux
-      // )[0];
-      // rect.set({
-      //   stroke: "transparent",
-      // });
-      // this.canvas.renderAll();
+      const rect = this.canvas._objects.filter(
+        ({ isBorderAux }) => isBorderAux
+      )[0];
+      rect.set({
+        stroke: 'transparent',
+      });
+      this.canvas.renderAll();
     });
-    // runConfigurations();
+    runConfigurations();
   }
   /**
    * Función que reestablece todos los valores y objetos en el canvas
@@ -516,6 +529,7 @@ export class BoardComponent implements OnInit, AfterViewInit {
   }
   /**
    * Función que cambia la vista actual en el visor del canvas y actualiza el index de la vista
+   * @param index Indice de la vista actual en el editor
    */
   changeProductSide = (index: number): void => {
     this.changeCanvasSides(this.generateJSON());
@@ -547,9 +561,116 @@ export class BoardComponent implements OnInit, AfterViewInit {
     this.showPreviewImg = !this.showPreviewImg;
   }
   /**
+   * Función que crea un texto y su control y los renderiza en el canvas
+   * @param options Opciones por defecto para el texto de fabric
+   */
+  createText = (options: any): void => {
+    createTextElement(options, this.canvas, this.variableControlAction);
+    this.setSelectionToCreatedElement();
+    // this.changeProductSide(this.productSide);
+    this.changeHistory();
+  }
+  /**
+   * Función que obtiene el controlador seleccionado para activar la selección
+   * el objeto relacionado con el controlador
+   */
+  setSelectionToCreatedElement = (): void => {
+    const controlled = this.canvas._objects[this.canvas._objects.length - 1];
+    const selected = this.canvas._objects.filter(
+      (obj) => obj.id === controlled.idRelated
+    )[0];
+    this.canvas.setActiveObject(selected);
+  }
+  /**
+   * Función que detecta el evento ocurrido y emite la información al padre
+   * @param e Objeto con la información del evento ocurrido
+   */
+  selectionCreatedAndUpdated = (e: fabric.IEvent) => {
+    // Si el tipo es de selección activada, desactive la selección
+    if (e.target.type === 'activeSelection') {
+      this.canvas.discardActiveObject();
+    } else {
+      // Si no active la selección de un objeto del editor
+      this.objectActive = true;
+      // Obtiene el objeto de borde y activa los bordes punteados
+      const rect = this.canvas._objects.filter((obj) => obj.isBorderAux)[0];
+      rect.set({
+        stroke: 'black',
+      });
+      // Si no se selecciono un control
+      if (!e.target['isControl']) {
+        // Obtiene el objeto seleccionado
+        const controlled2 = this.canvas.getActiveObject() as TFabricObject;
+        // Busca el control con el mismo id del objeto seleccionado
+        const selected2 = this.canvas._objects.filter(
+          (obj) => obj.id === controlled2.idRelated
+        )[0];
+        // Activa el control
+        this.canvas.setActiveObject(selected2);
+      }
+      // Obtiene el control y objeto controlado
+      const { selected, controlled } = this.getControlAndObject();
+      selected.set({
+        dirty: true,
+      });
+      if (controlled.type === 'text-curved' || controlled.type === 'textbox') {
+        this.disableShowColor = true;
+        if (window.innerWidth < 960) { return null; }
+        // Emite la opción escogida en el editor
+        this.openSelection.emit('text');
+        const res = this.calculateMaxWidthOfTextbox();
+        if (!res) {
+          // Emite el texto seleccionado
+          this.updateSelectionTextEvent.emit({ element: controlled });
+        }
+      }
+    }
+  }
+  /**
+   * Función que calcula el ancho máximo del texto en el canvas
+   * y emite el texto y el ancho
+   * @returns Devuelve true si se tiene un máximo mayor a cero
+   */
+  calculateMaxWidthOfTextbox = (): boolean => {
+    const { controlled } = this.getControlAndObject();
+    // Devuelve las coordenadas del rectángulo delimitador del objeto
+    // (izquierda, arriba, ancho, alto). El cuadro está alineado con el eje del lienzo
+    const bounding = controlled.getBoundingRect(true, true);
+    const fromLeft = bounding.left - CONTROL_OFFSET;
+    const fromRight =
+      this.canvas.getWidth() - bounding.left - bounding.width - CONTROL_OFFSET;
+    // Obtiene distancia desde la izquierda y desde la derecha en píxeles
+    const max = fromLeft < fromRight ? fromLeft : fromRight;
+    // Obtiene el ancho de texto
+    const width = bounding.width;
+    // Calcula el ancho máximo del texto
+    const maxWidth = (max * 2 + width) / controlled.scaleX;
+
+    if (max > 0) {
+      this.updateSelectionTextEvent.emit({
+        element: controlled,
+        maxWidth,
+      });
+      return true;
+    } else {
+      return false;
+    }
+  }
+  /**
+   * Función que emite la opción escogida en el editor y emite el controlador
+   * del objeto seleccionado actualmente
+   */
+  variableControlAction = (): void => {
+    const { controlled } = this.getControlAndObject();
+    if (controlled.text) {
+      this.openSelection.emit('text');
+      this.updateSelectionTextEvent.emit({ element: controlled });
+    }
+  }
+  /**
    * Función que obtiene una cadena con la información del canvas para la previsualización
    * @param canvas Canvas del editor con la información para la previsualización
-   * @returns Retorna url con la previsualización del canvas
+   * @returns Devuelve la url con la previsualización del canvas
    */
   generateDesign = (canvas: TFabricCanvas): string => {
     // Filtra los objetos en el canvas con la propiedad isBorderAux
@@ -772,6 +893,24 @@ export class BoardComponent implements OnInit, AfterViewInit {
     this.history.push(this.generateJSON());
     // Asigna el número de la modificación actual
     this.historyIndex = this.history.length - 1;
+  }
+  /**
+   * Función que obtiene el objeto controlado actualmente en el canvas
+   * y retorna ese objeto y su controlador
+   * @returns Devuelve el objeto controlado y su controlador
+   */
+  getControlAndObject = (): TControlAndObject => {
+    // Obtiene el control selecionado
+    const selected = this.canvas.getActiveObject() as TFabricObject;
+    if (!selected) { return null; }
+    // Obtiene el objeto controlado
+    const controlled = this.canvas._objects.filter(
+      (obj) => obj.id === selected.idRelated
+    )[0] as TFabricObject;
+    return {
+      selected,
+      controlled,
+    };
   }
   /**
    * Función que agrega un color a los filtros de fabric para cambiarle el
@@ -1169,5 +1308,10 @@ export class BoardComponent implements OnInit, AfterViewInit {
     fabric.Image.fromURL(`${this.urlsCDN[2]}?w=200&h=200&text=holamundo nuevo&text_wrap=true`, (img: any) => {
       this.canvas.add(img);
     });
+  }
+
+  createRect(){
+    const rect = new fabric.Rect({width: 50, height: 50, fill: 'red'});
+    this.canvas.add(rect);
   }
 }

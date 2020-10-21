@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { BoardComponent } from './board/board.component';
 
 import {
   TUpdateCanvas,
@@ -16,6 +17,42 @@ import drafts from './draft.json';
   styleUrls: ['./customize.component.css']
 })
 export class CustomizeComponent implements OnInit {
+  /**
+   * Decorador que obtiene la instancia del componente board
+   */
+  @ViewChild(BoardComponent, { static: false }) board: BoardComponent;
+  /**
+   * Objeto con las opciones por defecto para el texto de fabric
+   */
+  DEFAULT_TEXT_OPTIONS = {
+    type: 'textbox',
+    text: 'edita el texto',
+    fill: '#000000',
+    flipped: false,
+    fontFamily: `'Arial'`,
+    textAlign: 'left',
+    fontSize: 14,
+    pseudoCharSpacing: 0,
+    charSpacing: 0,
+    scaleX: 1,
+    scaleY: 1,
+    width: 50,
+    shadow: {
+      color: '#FF0000',
+      blur: 0,
+      offsetX: 1,
+      offsetY: 1,
+    },
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+  } as TFabricObject;
+  /**
+   * Almacena la información del texto seleccionado en el visor
+   */
+  text = {
+    element: this.DEFAULT_TEXT_OPTIONS,
+    maxWidth: 0,
+  };
   /**
    * Almancena los borradores de los canvas con los objetos que fueron renderizados
    */
@@ -277,6 +314,42 @@ export class CustomizeComponent implements OnInit {
     return drafts.filter(({ draftId }) => id === draftId)[0];
   }
   /**
+   * Función que maneja la opción escogida en el editor
+   * @param $event Cadena con el nombre de la opción escogida en el editor
+   */
+  handleSelection = async ($event: string) => {
+    this.optionsIsOpen = true;
+    this.whatIsOpen = $event;
+    if ($event === 'text') {
+      this.board.createText(this.DEFAULT_TEXT_OPTIONS);
+    }
+    if ($event === 'shape') {
+      console.log($event);
+      // this.board.createShape({
+      //   sides: 4,
+      //   radio: 40,
+      //   fill: '#222222',
+      //   stroke: '#222222',
+      //   strokeWidth: 3,
+      //   type: 'polygon',
+      // });
+    }
+    if ($event === 'color') {
+      console.log($event);
+      // await this.board.createDesign({});
+    }
+    /** Limpia menú móvil inicial */
+    // this.menuMobileOption = '';
+  }
+  /**
+   * Función que cambia la opción escogida en el editor para ser manipulada por el padre
+   * @param $event Cadena con el nombre de la opción escogida en el editor
+   */
+  handleOpenSelection = ($event: string): void => {
+    this.optionsIsOpen = true;
+    this.whatIsOpen = $event;
+  }
+  /**
    * Función que actualiza el índice de la vista actual en el canvas
    * @param index Indice de la vista actual en el visor del editor
    */
@@ -296,6 +369,41 @@ export class CustomizeComponent implements OnInit {
     this.canvasSides[index] = canvas;
     this.canvasSides[index].heightArea = heightArea;
     this.canvasSides[index].widthArea = widthArea;
+  }
+  /**
+   * Función que actualiza en el padre la información del texto seleccionado
+   * @param param0 Objeto con la información del texto seleccionado y su ancho máximo permitido
+   */
+  updateSelectionText = ({ element, maxWidth }: TTextSelectionEvent): void => {
+    const {
+      text,
+      fontFamily,
+      fontSize,
+      fill,
+      flipped,
+      diameter,
+      type,
+      pseudoCharSpacing,
+      width,
+      textAlign,
+      shadow,
+    } = element;
+    this.text = {
+      element: {
+        width,
+        diameter,
+        text,
+        fontFamily,
+        fontSize,
+        flipped,
+        fill,
+        type,
+        pseudoCharSpacing,
+        textAlign,
+        shadow,
+      } as TFabricObject,
+      maxWidth,
+    };
   }
   /**
    * Función que asigna la url del canvas de previsualización
