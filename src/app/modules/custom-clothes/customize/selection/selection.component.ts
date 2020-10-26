@@ -20,6 +20,7 @@ export class SelectionComponent implements OnInit {
    * @param option Cadena con la opción escogida
    */
   sendOpenOne(option: string) {
+    // console.log('sendOpenOne');
     this.openOneEvent.emit(option);
   }
 

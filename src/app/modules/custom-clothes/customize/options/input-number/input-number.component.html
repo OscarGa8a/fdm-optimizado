@@ -1,0 +1,10 @@
+<div>
+  <span (click)="onStepDown()">-</span>
+  <input
+    type="number"
+    [ngModel]="value"
+    (ngModelChange)="emitChange($event)"
+    #input
+  />
+  <span (click)="onStepUp()">+</span>
+</div>

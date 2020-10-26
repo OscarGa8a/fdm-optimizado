@@ -1,0 +1,10 @@
+<div [ngSwitch]="whatIsOpen">
+  <div *ngSwitchCase="'text'">
+    <app-text
+      (eventTextChanges)="handleTextChanges($event)"
+      [text]="text.element"
+      [maxWidth]="text.maxWidth"
+    ></app-text>
+  </div>
+  <div *ngSwitchDefault></div>
+</div>

@@ -5,7 +5,8 @@ import { BoardComponent } from './customize/board/board.component';
 import { FileSaverModule } from 'ngx-filesaver';
 import { FeatherIconsModule } from '../../shared/components/feather-icons/feather-icons.module';
 import { HeaderModule } from './customize/header/header.module';
-import { SelectionComponent } from './customize/selection/selection/selection.component';
+import { SelectionComponent } from './customize/selection/selection.component';
+import { OptionsModule } from './customize/options/options.module';
 
 @NgModule({
   declarations: [CustomizeComponent, BoardComponent, SelectionComponent],
@@ -13,7 +14,8 @@ import { SelectionComponent } from './customize/selection/selection/selection.co
     CommonModule,
     FileSaverModule,
     FeatherIconsModule,
-    HeaderModule
+    HeaderModule,
+    OptionsModule
   ],
   exports: [
     CustomizeComponent

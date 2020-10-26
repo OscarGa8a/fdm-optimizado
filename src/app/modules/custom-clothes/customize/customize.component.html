@@ -8,10 +8,12 @@
       <!-- Componente hijo que permite la visualizacion del canvas y sus opciones -->
       <app-board
         (openSelection)="handleOpenSelection($event)"
+        (closeFromBoard)="handleCloseFromBoard($event)"
         (updateSelectionTextEvent)="updateSelectionText($event)"
         (updateProductSideEvent)="updateProductSide($event)"
         (updateCanvasSidesEvent)="updateCanvasSides($event)"
         (previewImageEvent)="updatePreviewImg($event)"
+        (textClearedEvent)="handleTextCleared()"
         [product]="
             productsPerCategory[currentIndexes.category]
             .products[currentIndexes.product]
@@ -55,6 +57,14 @@
           <app-selection
             (openOneEvent)="handleSelection($event)"
           ></app-selection>
+        </div>
+        <div class="option-container" [class.open]="optionsIsOpen">
+          <app-options
+            [whatIsOpen]="whatIsOpen"
+            [text]="text"
+            (eventTextChanges)="handleTextChanges($event)"
+            (eventShowMessage)="handleShowMessage($event)"
+          ></app-options>
         </div>
       </div>
     </div>

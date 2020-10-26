@@ -9,11 +9,24 @@ import { CONTROL_OFFSET } from './constants';
  * @returns Devuelve el texto creado
  */
 export const createTextElement = (options: any, canvas: fabric.Canvas, action: any) => {
+  // console.log('createTextElement');
   const id = new Date().toISOString();
   const idControl = `${id}-CONTROL`;
   const box = createTextBox(options, id, idControl, canvas);
   createControl(idControl, id, canvas, 10, action, box);
   return box;
+};
+/**
+ * Función que crea un nuevo texto con los valores sin modificar en el texto
+ * @param options Contiene la información sin modificar en el texto en el canvas
+ * @param canvas Canvas de fabric donde se renderizará el texto con la nueva información
+ * @returns Devuelve el objeto de tipo texto creado
+ */
+export const restoreTextElement = (options: any, canvas: fabric.Canvas, action: any) => {
+  // console.log('restoreTextElement');
+  // console.log("RESTORE FATHER");
+  const box = restoreTextBox(options, canvas);
+  createControl(options.idRelated, options.id, canvas, 10, action, box);
 };
 /**
  * Función que crea el objeto de control al objeto renderizado en el canvas
@@ -32,6 +45,7 @@ const createControl = (
   action: any,
   controlled: any
 ) => {
+  // console.log('createControl');
   // @ts-ignore
   const box = new fabric.Rect({
     originX: 'center',
@@ -93,6 +107,7 @@ const createTextBox = (
   idRelated: any,
   canvas: any
 ) => {
+  // console.log('createTextBox');
   let box: any;
   // Crea texto o texto curveado
   if (type === 'text-curved') {
@@ -165,6 +180,7 @@ const createTextBox = (
  * @param canvas Canvas de fabric donde se renderizará el objeto
  */
 function clipByName(box: any, ctx: any, canvas: any) {
+  console.log('clipByName');
   // Algunas acciones requieren una llamada object.setCoords()para que se vuelvan a calcular las posiciones de control
   box.setCoords();
   // Obtiene el objeto de recorte
@@ -218,12 +234,75 @@ function clipByName(box: any, ctx: any, canvas: any) {
   ctx.restore();
 }
 /**
+ * Función que crea un nuevo texto con la nueva información ingresada por el usuario
+ * @param options Contiene la nueva información para el texto en el canvas
+ * @param canvas Canvas de fabric donde se renderizará el texto con la nueva información
+ * @returns Devuelve el objeto de tipo texto creado
+ */
+const restoreTextBox = (options: any, canvas: any) => {
+  // console.log('restoreTextBox');
+  let box: any;
+  const {
+    clipTo,
+    canvas: a,
+    mouseMoveHandler,
+    shadow,
+    ...newOptions
+  } = options;
+  console.log(newOptions);
+  // console.log(shadow.blur);
+  // console.log(shadow.color);
+  // console.log(shadow.offsetX);
+  // console.log(shadow.offsetY);
+  if (options.type === 'text-curved') {
+    // @ts-ignore
+    // Crea un texto curveado
+    box = new fabric.TextCurved({
+      ...newOptions,
+      shadow: {
+        blur: 10,
+        offsetX: 2,
+        offsetY: 2,
+        color: '#FF0000',
+      },
+      clipTo: (ctx: any) => {
+        return clipByName(box, ctx, canvas);
+      },
+    });
+  } else {
+    // Crea un texto normal
+    box = new fabric.Textbox(options.text, {
+      ...newOptions,
+      shadow: {
+        blur: 10,
+        offsetX: 2,
+        offsetY: 2,
+        color: '#FF0000',
+      },
+      clipTo: (ctx: any) => {
+        return clipByName(box, ctx, canvas);
+      },
+    });
+  }
+  // console.log(box);
+  canvas.add(box);
+  // box.setShadow({
+  // blur: shadow.blur,
+  // offsetX: shadow.offsetX,
+  // offsetY: shadow.offsetY,
+  // color: shadow.color,
+  // });
+  canvas.renderAll();
+  return box;
+};
+/**
  * Función que busca el objeto de recorte en el canvas
  * @param name Cadena con el nombre del objeto que se quiere recortar
  * @param canvas Canvas de fabric donde se renderiza el elemento
  * @returns Devuelve el objeto de recorte
  */
 function findByClipName(name: any, canvas: any) {
+  // console.log('findByClipName');
   return canvas.getObjects().filter((el: any) => el.clipFor === name)[0];
 }
 /**
@@ -232,5 +311,6 @@ function findByClipName(name: any, canvas: any) {
  * @returns Devuelve los grados en radianes
  */
 function degToRad(degrees: any) {
+  // console.log('degToRad');
   return degrees * (Math.PI / 180);
 }

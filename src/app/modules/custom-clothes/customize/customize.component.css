@@ -41,6 +41,86 @@
     /*Asigna tamaño del borde del area*/
     border-radius: 4px;
 }
+/* Estilos para el contenedor de las opciones del editor */
+.options-container {
+    /*Asigna el nombre del area del grid*/
+    grid-area: selection;
+    /* Asigna display tipo flex */
+    display: flex;
+    /*El contenido se moverá hacia arriba y abajo*/
+    flex-direction: column;
+}
+/* Estilos para el contenedor de la cabecera de las opciones del editor */
+.options-container-header {
+    /* Asigna color de fondo */
+    background: #d7d7d7;
+    /* Asigna altura */
+    height: 36px;
+    /* Asigna espacio de relleno arriba, derecha, abajo e izquierda */
+    padding: 0 15px 0 25px;
+    /* Asigna ancho de fuente */
+    font-weight: bold;
+}
+/* Estilos para el párrafo en la cabecera de las opciones */
+.options-container-header p {
+    /* Sin margen en los cuatro lados */
+    margin: 0;
+    /* Asigna color al párrado */
+    color: #222;
+}
+/* Estilos para el titulo de la cabecera de las opciones */
+.options-container-default-title {
+    /* Asigna altura al máximo */
+    height: 100%;
+    /* Asigna display tipo flex */
+    display: flex;
+    /* Asigna alineación de los elementos dentro del bloque */
+    align-items: center;
+}
+/* Estilos para las opciones en el editor */
+.options-container-helper {
+    /* Asigna color de fondo */
+    background: white;
+    /* Asigna display tipo grid */
+    display: grid;
+    /* Crea una columna */
+    grid-template-columns: 1fr;
+    /* Crea una fila */
+    grid-template-rows: 1fr;
+    /*El desbordamiento se recorta y el resto del contenido se oculta*/
+    overflow: hidden;
+    /* Asigna altura al máximo */
+    height: 100%;
+}
+/* Estilos para el contenedor de las opciones seleccionada */
+.option-container {
+    /* Asigna color de fondo */
+    background: white;
+    /* Asigna altura al máximo */
+    height: 100%;
+    /* Asigna ancho al máximo */
+    width: 100%;
+    /* Asigna espacio de relleno arriba, derecha, abajo e izquierda */
+    padding: 10px 5px 0 15px;
+    /* Agrega una transformación que dura 0.25s con un movimiento fácil */
+    transition: transform 0.25s ease;
+    /* Traslada las opciones al máximo del eje X */
+    transform: translateX(100%);
+}
+/* Estilos para el contenedor de las opciones seleccionadas cuando tiene la clase open */
+.option-container.open {
+    /* Traslada las opciones al inicio del eje X */
+    transform: translateX(0);
+}
+/* Estilos para el contenedor de las selecciones del editor */
+.selection-container,
+.option-container {
+    /* Permite que el contenedor de las selecciones ocupe el mismo espacio del contenedor de las opciones */
+    /* Asigna inicio y final de la fila */
+    grid-row: 1/-1;
+    /* Asigna inicio y final de la columna */
+    grid-column: 1/-1;
+}
 /* En pantallas de 960 px o menos */
 @media screen and (max-width: 960px) {
     /*Estilos para el panel del editor*/
@@ -69,6 +149,38 @@
         /* Sin margen en los cuatro lados */
         margin: 0;
     }
+    /* Estilos para el contenedor de las opciones del editor */
+    .options-container {
+        /* Traslada las opciones al máximo del eje Y */
+        transform: translateY(100%);
+        /* Asigna ancho al máximo */
+        width: 100%;
+        /* Asigna el nivel de pila para que los botones queden por encima de los demás elementos */
+        z-index: 100;
+        /* Asigna tipo de posicionamiento */
+        position: fixed;
+        /* Asigna posición desde la parte inferior */
+        bottom: 0;
+        /* Agrega una transformación que dura 0.25s con un movimiento fácil */
+        transition: transform 0.25s ease;
+    }
+    /* Estilos para el contenedor de las selecciones del editor */
+    .selection-container {
+        /* Oculta el elemento */
+        display: none;
+    }
+    /* Estilos para el contenedor de las opciones del editor cuando tiene la clase active */
+    .options-container.active {
+        /* Traslada las opciones al principio del eje Y */
+        transform: translateY(0);
+    }
+    /* Estilos para el contenedor de las opciones seleccionada */
+    .option-container {
+        /* Traslada al inicio del eje X */
+        transform: translateX(0);
+        /* Sin espacio de relleno en los cuatro lados */
+        padding: 0;
+    }
     /*Estilos para el contenedor del panel completo del editor*/
     .panel-container {
         /* Sin espacio de relleno en los cuatro lados */
@@ -87,6 +199,11 @@
         font-size: 12px;
         /* Asigna altura minima */
         min-height: initial;
+    }
+    /* Estilos para el contenedor de las opciones del editor */
+    .options-container-header {
+        /* Asigna espacio de relleno arriba, derecha, abajo e izquierda */
+        padding: 0 10px 0 15px;
     }
 }
 /* En pantallas de 500px o menos */

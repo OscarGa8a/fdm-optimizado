@@ -7,15 +7,19 @@ import {
   Output,
   EventEmitter,
   ViewChild,
-  HostListener
+  HostListener,
+  OnChanges,
+  SimpleChanges
 } from '@angular/core';
 
 import { fabric } from 'fabric';
+import FontFaceObserver from 'fontfaceobserver';
 import runConfigurations from './configurations';
 import { FileSaverService } from 'ngx-filesaver';
 
 import {
-  createTextElement
+  createTextElement,
+  restoreTextElement
 } from './elements';
 
 import { CONTROL_OFFSET } from './constants';
@@ -39,7 +43,7 @@ import {
   templateUrl: './board.component.html',
   styleUrls: ['./board.component.css']
 })
-export class BoardComponent implements OnInit, AfterViewInit {
+export class BoardComponent implements OnInit, AfterViewInit, OnChanges {
   /**
    * Objeto con la información del canvas de fabric
    */
@@ -61,6 +65,11 @@ export class BoardComponent implements OnInit, AfterViewInit {
    */
   @Output() openSelection = new EventEmitter<string>();
   /**
+   * Indica si se debe cerrar las opción seleccionada en el editor
+   * al dar click en el visor
+   */
+  @Output() closeFromBoard = new EventEmitter<boolean>();
+  /**
    * Emite la información del texto seleccionado
    */
   @Output() updateSelectionTextEvent = new EventEmitter<TTextSelectionEvent>();
@@ -73,6 +82,10 @@ export class BoardComponent implements OnInit, AfterViewInit {
    * en la nueva vista que se desea mostrar
    */
   @Output() updateCanvasSidesEvent = new EventEmitter<TUpdateCanvas>();
+  /**
+   * Indica si se debe limpiar la información del texto seleccionado
+   */
+  @Output() textClearedEvent = new EventEmitter<any>();
   /**
    * Emite la url de la imagen de previsualización del canvas
    */
@@ -252,13 +265,13 @@ export class BoardComponent implements OnInit, AfterViewInit {
               private http: HttpService) { }
 
   ngOnInit(): void {
+    // console.log('ngOnInit');
     this.top =
       (this.product[this.productSide].arriba /
-        this.product[this.productSide].altoReal);
+        this.product[this.productSide].altoReal) ;
     this.left =
       this.product[this.productSide].izquierda /
       this.product[this.productSide].anchoReal; // necesitamos el valor de 0 a 1, para multiplicar con el ancho del contenedor
-    console.log('onInit');
     // Obtiene las urls de las imágenes en Amazon
     this.http.getImagesAmazon().subscribe((images: any) => {
       this.dataImagesAmazon = images;
@@ -268,12 +281,44 @@ export class BoardComponent implements OnInit, AfterViewInit {
       this.dataLinks = links;
     });
   }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    // console.log('ngOnChanges');
+    if ('product' in changes) {
+      this.top =
+        (this.product[this.productSide].arriba /
+          this.product[this.productSide].altoReal) *
+        100;
+      this.left =
+        this.product[this.productSide].izquierda /
+        this.product[this.productSide].anchoReal;
+    }
+  }
+  /**
+   * Función que quita la selección del objeto seleccionado actualmente
+   * @param $event Objeto con la información del evento ocurrido
+   */
+  deselect($event: any): void {
+    // console.log('deselect');
+    if ($event.target.className === 'upper-canvas ') { return null; }
+    this.objectActive = false;
+    this.closeFromBoard.emit(true);
+    this.disableShowColor = true;
+    this.textClearedEvent.emit(true);
+    this.canvas.discardActiveObject();
+    const rect = this.canvas._objects.filter(({ isBorderAux }) => isBorderAux)[0];
+    rect.set({
+      stroke: 'transparent',
+    });
+    this.canvas.renderAll();
+  }
   /**
    * Decorador que declara evento cuando se cambia el tamaño de la ventana del navegador
    * para cambiar el tamaño del canvas
    */
   @HostListener('window:resize', ['$event'])
   onResize(): void {
+    // console.log('onResize');
     if (this.windowWidth === window.innerWidth) {
       this.windowWidth = window.innerWidth;
       return null;
@@ -284,6 +329,7 @@ export class BoardComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    // console.log('ngAfterViewInit');
     // Cambia el tamaño del canvas cuando se termina de cargar la imagen
     this.imgBackground.nativeElement.onload = () => {
       this.resizeCanvas();
@@ -292,12 +338,12 @@ export class BoardComponent implements OnInit, AfterViewInit {
     this.canvasHTML = this.canvasRef!.nativeElement;
     // tslint:disable-next-line: no-non-null-assertion
     this.canvasHTMLHidden = this.canvasRefHidden!.nativeElement;
-    console.log('after view');
   }
   /**
    * Función que asigna las propiedades a un nuevo canvas y establece los eventos correspondientes
    */
   loadCanvas = async () => {
+    // console.log('loadCanvas');
     this.heightImgBackground = this.imgBackground.nativeElement.height;
     const height = this.heightImgBackground;
     this.topPixelesCanvas = this.top * this.heightImgBackground;
@@ -338,7 +384,9 @@ export class BoardComponent implements OnInit, AfterViewInit {
     // this.canvas.setHeight(100);
     this.canvas.setWidth(this.width);
     // this.canvas.setWidth(120);
+
     this.createBorder(this.canvas);
+
     // Se activa cuando se modifica un objeto en el canvas de fabric
     this.canvas.on('object:modified', (e: fabric.IEvent) => {
       // console.log('modified');
@@ -361,26 +409,10 @@ export class BoardComponent implements OnInit, AfterViewInit {
     // Se activa mientras se esta rotando un objeto en el canvas de fabric
     this.canvas.on('object:rotating', (e: fabric.IEvent) => {
       // console.log('rotating');
-      // if (!this.isRotating) {
-      //   this.isRotating = true;
-      // }
-      // let { controlled } = this.getControlAndObject();
-      // let initial = controlled.angle;
-      // let aux = Math.trunc(initial / 360);
-      // if (aux !== 0) {
-      //   initial = Math.trunc(initial / aux) - 360;
-      // }
-      // if (initial >= 180 && initial <= 360) {
-      //   this.rotationAngle = Math.trunc(360 - initial);
-      // } else {
-      //   this.rotationAngle = Math.trunc(initial);
-      // }
-      // rotating(e, this.canvas);
     });
     // Se activa mientras se esta moviendo un objeto en el canvas de fabric
     this.canvas.on('object:moving', (e: fabric.IEvent): void => {
       // console.log('moving');
-      // moving(e, this.canvas, this.variableControlAction);
     });
     // Se activa cuando se termina de mover un objeto en el canvas de fabric
     this.canvas.on('object:moved', (e: fabric.IEvent): void => {
@@ -390,7 +422,6 @@ export class BoardComponent implements OnInit, AfterViewInit {
     // Se activa mientras se esta escalando un objeto en el canvas de fabric
     this.canvas.on('object:scaling', (e: fabric.IEvent): void => {
       // console.log('scaling');
-      // scaling(e, this.canvas);
     });
     // Se activa cuando se termina de escalar un objeto en el canvas de fabric
     this.canvas.on('object:scaled', (e: fabric.IEvent): void => {
@@ -400,29 +431,28 @@ export class BoardComponent implements OnInit, AfterViewInit {
     // Se activa cuando se termina de rotar un objeto en el canvas de fabric
     this.canvas.on('object:rotated', (e: fabric.IEvent): void => {
       // console.log('rotated');
-      // this.isRotating = false;
-      // rotated(e, this.canvas);
-      // this.calculateMaxWidthOfTextbox();
+      this.calculateMaxWidthOfTextbox();
     });
     // Se activa cuando se selecciona un objeto en el canvas de fabric
     this.canvas.on('selection:created', (e: fabric.IEvent): void => {
+      // console.log('created');
       this.selectionCreatedAndUpdated(e);
     });
     // Se activa cuando teniendo selecciona un objeto en el canvas de fabric se selecciona otro objeto en el canvas
     this.canvas.on('selection:updated', (e: fabric.IEvent): void => {
       // console.log('updated');
       this.selectionCreatedAndUpdated(e);
-      // if (this.windowWidth < 960) {
-      //   this.closeFromBoard.emit(true);
-      // }
+      if (this.windowWidth < 960) {
+        this.closeFromBoard.emit(true);
+      }
     });
     // Se activa cuando se deselecciona un objeto en el canvas de fabric sin seleccionar otro objeto
     this.canvas.on('selection:cleared', (e: fabric.IEvent) => {
       // console.log('clearedCanvas');
       this.objectActive = false;
-      // this.closeFromBoard.emit(true);
+      this.closeFromBoard.emit(true);
       this.disableShowColor = true;
-      // this.textClearedEvent.emit(true);
+      this.textClearedEvent.emit(true);
       const rect = this.canvas._objects.filter(
         ({ isBorderAux }) => isBorderAux
       )[0];
@@ -431,12 +461,14 @@ export class BoardComponent implements OnInit, AfterViewInit {
       });
       this.canvas.renderAll();
     });
+
     runConfigurations();
   }
   /**
    * Función que reestablece todos los valores y objetos en el canvas
    */
   resizeCanvas = async () => {
+    // console.log('resizeCanvas');
     const c = document.querySelector('.canvas-container');
     const cAux = document.querySelector('.canvas-aux');
     // let json: any = dataJson;
@@ -448,41 +480,41 @@ export class BoardComponent implements OnInit, AfterViewInit {
       canvasElement.setAttribute('id', 'canvas');
       cAux.appendChild(canvasElement);
       c.parentNode.removeChild(c);
-    //   // json = this.canvas.toJSON();
-    //   // json.altoAreaPixeles = this.height;
-    //   // json.anchoAreaPixeles = this.width;
+      // json = this.canvas.toJSON();
+      // json.altoAreaPixeles = this.height;
+      // json.anchoAreaPixeles = this.width;
     }
     this.canvas = null;
     this.loadCanvas();
 
-    // this.readFromJSON(this.canvas, this.canvasSides[this.productSide]);
+    this.readFromJSON(this.canvas, this.canvasSides[this.productSide]);
 
     this.history = [];
     this.historyIndex = 0;
 
-    // // await createMultiDesign(
-    // //   this.designs[0].images,
-    // //   {},
-    // //   this.canvas,
-    // //   this.variableControlAction,
-    // //   1
-    // // );
+    // await createMultiDesign(
+    //   this.designs[0].images,
+    //   {},
+    //   this.canvas,
+    //   this.variableControlAction,
+    //   1
+    // );
 
-    // // createShape(
-    // //   { type: "line", radio: 60, strokeWidth: 1 },
-    // //   this.canvas,
-    // //   this.variableControlAction
-    // // );
-    // // createShape(
-    // //   { type: "polygon", sides: 6, radio: 60, fill: "#222FFF" },
-    // //   this.canvas,
-    // //   this.variableControlAction
-    // // );
-    // // createShape(
-    // //   { type: "circle", radio: 60, strokeWidth: 25, stroke: "#660000" },
-    // //   this.canvas,
-    // //   this.variableControlAction
-    // // );
+    // createShape(
+    //   { type: 'line', radio: 60, strokeWidth: 1 },
+    //   this.canvas,
+    //   this.variableControlAction
+    // );
+    // createShape(
+    //   { type: 'polygon', sides: 6, radio: 60, fill: '#222FFF' },
+    //   this.canvas,
+    //   this.variableControlAction
+    // );
+    // createShape(
+    //   { type: 'circle', radio: 60, strokeWidth: 25, stroke: '#660000' },
+    //   this.canvas,
+    //   this.variableControlAction
+    // );
 
     this.changeHistory();
 
@@ -493,6 +525,7 @@ export class BoardComponent implements OnInit, AfterViewInit {
    * @param canvas Objeto con la información del canvas de fabric
    */
   createBorder = (canvas: TFabricCanvas): void => {
+    // console.log('createBorder');
     // Se crea el objeto del borde el cual permitirá recortar los objetos en el canvas
     const clipRectangle = new fabric.Rect({
       originX: 'left',
@@ -532,6 +565,7 @@ export class BoardComponent implements OnInit, AfterViewInit {
    * @param index Indice de la vista actual en el editor
    */
   changeProductSide = (index: number): void => {
+    // console.log('changeProductSide');
     this.changeCanvasSides(this.generateJSON());
     this.updateProductSideEvent.emit(index);
   }
@@ -540,6 +574,7 @@ export class BoardComponent implements OnInit, AfterViewInit {
    * @param json Canvas con la información actual del visor del editor
    */
   changeCanvasSides = (json: TCanvas): void => {
+    // console.log('changeCanvasSides');
     this.updateCanvasSidesEvent.emit({
       index: this.productSide,
       canvas: json,
@@ -558,13 +593,147 @@ export class BoardComponent implements OnInit, AfterViewInit {
    * Función que permite ocultar o mostrar la imagen de previsualización
    */
   togglePreview = (): void => {
+    // console.log('togglePreview');
     this.showPreviewImg = !this.showPreviewImg;
+  }
+  /**
+   * Función que descarga una fuente y la carga al texto de fabric
+   * @param font Contiene la fuente para el texto
+   * @param obj Objeto tipo texto al que se cargará la fuente
+   */
+  loadAndUse = async (font: any, obj: any) => {
+    // console.log('loadAndUse');
+    const myfont = new FontFaceObserver(font.replace("'", ""));
+    try {
+      await myfont.load().then(() => {
+        obj.set('fontFamily', font.replace("'", ""));
+        this.canvas.renderAll();
+      });
+    } catch (error) {}
+  }
+  /**
+   * Función que permite actualizar los datos de texto ingresados por el usuario
+   * @param $event Contiene la información de los cambios realizados en el texto
+   */
+  changeCurveTextProperties = async ($event: any) => {
+    const selectedAndControlled = this.getControlAndObject();
+    // Obtiene el objeto controlado y su controlador
+    if (!selectedAndControlled) { return null; }
+    let { selected, controlled } = selectedAndControlled;
+    // Si el objeto controladado es un texto curveado
+    if (controlled.type === 'text-curved') {
+      // controlled.pseudoCharSpacing;
+      if ($event.type === 'textbox') {
+        // console.log("1");
+        // Curveado cambio a caja
+        restoreTextElement(
+          {
+            ...controlled,
+            charSpacing: controlled.pseudoCharSpacing * 90,
+            type: 'textbox',
+          },
+          this.canvas,
+          this.variableControlAction
+        );
+        // Elimina el controlado y su controlador para agregar un texto que ya no es curveado
+        this.canvas.remove(controlled);
+        this.canvas.remove(selected);
+        // Obtiene el último objeto controlador agregado
+        selected = this.canvas._objects[this.canvas._objects.length - 1];
+        // Obtiene el objeto controlado
+        controlled = this.canvas._objects.filter(
+          (obj) => obj.id === selected.id
+        )[0];
+        this.canvas.setActiveObject(controlled);
+        return null;
+      }
+      if ($event.text) {
+        if ($event.fontFamily) {
+          await this.loadAndUse($event.fontFamily, controlled);
+        }
+        // Texto curveado sin cambiar a caja, cambiando texto
+        const diameter = controlled.diameter * 1.0000001;
+        controlled.set({
+          ...$event,
+          diameter,
+        });
+        // Obtiene los límites del objeto
+        const box = controlled.getBoundingRect();
+        selected.set({
+          left: box.left,
+          top: box.top,
+          height: box.height,
+          width: box.width,
+        });
+      } else {
+        if ($event.fontFamily) {
+          await this.loadAndUse($event.fontFamily, controlled);
+        }
+        // Texto curveado sin cambiar a caja, ni cambiar texto
+        controlled.set({
+          ...$event,
+          charSpacing: $event.pseudoCharSpacing || controlled.charSpacing,
+        });
+        // Obtiene los límites del objeto
+        const box = controlled.getBoundingRect();
+        selected.set({
+          left: box.left + box.width / 2,
+          top: box.top + box.height / 2,
+          height: box.height,
+          width: box.width,
+        });
+      }
+    } else {
+      if ($event.type === 'text-curved') {
+        // console.log("2");
+        /// Texto cambiar a texto curveado
+        const charSpacing = Math.floor(controlled.charSpacing / 90);
+        restoreTextElement(
+          {
+            ...controlled,
+            charSpacing,
+            type: 'text-curved',
+          },
+          this.canvas,
+          this.variableControlAction
+        );
+        this.canvas.remove(controlled);
+        this.canvas.remove(selected);
+        selected = this.canvas._objects[this.canvas._objects.length - 1];
+        controlled = this.canvas._objects.filter(
+          (obj) => obj.id === selected.id
+        )[0];
+        this.canvas.setActiveObject(controlled);
+      } else {
+        // Si el objeto controlado es un texto normal y el evento tiene un texto normal
+        // Asigne al objeto controlado las propiedades del texto en el evento
+        controlled.set({
+          ...$event,
+          charSpacing: controlled.pseudoCharSpacing * 90,
+        });
+        // Obtenga las coordenadas y medidas del objeto controlado
+        const box = controlled.getBoundingRect();
+        // Asigna las propiedades del objeto controlado al controlador
+        // para que el controlador tome la posición y tamaño del texto
+        selected.set({
+          left: box.left + box.width / 2,
+          top: box.top + box.height / 2,
+          height: box.height,
+          width: box.width,
+          scaleX: 1,
+          scaleY: 1,
+        });
+      }
+    }
+    this.canvas.renderAll();
+    // this.changeProductSide(this.productSide);
   }
   /**
    * Función que crea un texto y su control y los renderiza en el canvas
    * @param options Opciones por defecto para el texto de fabric
    */
   createText = (options: any): void => {
+    // console.log('createText');
     createTextElement(options, this.canvas, this.variableControlAction);
     this.setSelectionToCreatedElement();
     // this.changeProductSide(this.productSide);
@@ -575,6 +744,7 @@ export class BoardComponent implements OnInit, AfterViewInit {
    * el objeto relacionado con el controlador
    */
   setSelectionToCreatedElement = (): void => {
+    // console.log('setSelectionToCreatedElement');
     const controlled = this.canvas._objects[this.canvas._objects.length - 1];
     const selected = this.canvas._objects.filter(
       (obj) => obj.id === controlled.idRelated
@@ -586,6 +756,7 @@ export class BoardComponent implements OnInit, AfterViewInit {
    * @param e Objeto con la información del evento ocurrido
    */
   selectionCreatedAndUpdated = (e: fabric.IEvent) => {
+    // console.log('selectionCreatedAndUpdated');
     // Si el tipo es de selección activada, desactive la selección
     if (e.target.type === 'activeSelection') {
       this.canvas.discardActiveObject();
@@ -599,9 +770,9 @@ export class BoardComponent implements OnInit, AfterViewInit {
       });
       // Si no se selecciono un control
       if (!e.target['isControl']) {
-        // Obtiene el objeto seleccionado
+        // Obtiene el objeto controlado
         const controlled2 = this.canvas.getActiveObject() as TFabricObject;
-        // Busca el control con el mismo id del objeto seleccionado
+        // Busca el control con el mismo id del objeto controlado
         const selected2 = this.canvas._objects.filter(
           (obj) => obj.id === controlled2.idRelated
         )[0];
@@ -613,6 +784,7 @@ export class BoardComponent implements OnInit, AfterViewInit {
       selected.set({
         dirty: true,
       });
+
       if (controlled.type === 'text-curved' || controlled.type === 'textbox') {
         this.disableShowColor = true;
         if (window.innerWidth < 960) { return null; }
@@ -623,7 +795,21 @@ export class BoardComponent implements OnInit, AfterViewInit {
           // Emite el texto seleccionado
           this.updateSelectionTextEvent.emit({ element: controlled });
         }
+      } else if (controlled.type === 'group') {
+        this.disableShowColor = false;
+        if (window.innerWidth < 960) { return null; }
+        this.openSelection.emit('color');
+      } else if (
+        controlled.type === 'polygon' ||
+        controlled.type === 'circle' ||
+        controlled.type === 'triangle' ||
+        controlled.type === 'line'
+      ) {
+        this.disableShowColor = true;
+        if (window.innerWidth < 960) { return null; }
+        this.openSelection.emit('shape');
       }
+      this.canvas.requestRenderAll();
     }
   }
   /**
@@ -632,6 +818,7 @@ export class BoardComponent implements OnInit, AfterViewInit {
    * @returns Devuelve true si se tiene un máximo mayor a cero
    */
   calculateMaxWidthOfTextbox = (): boolean => {
+    // console.log('calculateMaxWidthOfTextBox');
     const { controlled } = this.getControlAndObject();
     // Devuelve las coordenadas del rectángulo delimitador del objeto
     // (izquierda, arriba, ancho, alto). El cuadro está alineado con el eje del lienzo
@@ -661,16 +848,29 @@ export class BoardComponent implements OnInit, AfterViewInit {
    * del objeto seleccionado actualmente
    */
   variableControlAction = (): void => {
+    // console.log('variableControlAction');
     const { controlled } = this.getControlAndObject();
     if (controlled.text) {
       this.openSelection.emit('text');
       this.updateSelectionTextEvent.emit({ element: controlled });
+    }
+    if (controlled.type === 'group') {
+      this.openSelection.emit('color');
+    }
+    if (
+      controlled.type === 'polygon' ||
+      controlled.type === 'circle' ||
+      controlled.type === 'triangle' ||
+      controlled.type === 'line'
+    ) {
+      this.openSelection.emit('shape');
     }
   }
   /**
    * Función que limpia la selección del objeto en el visor
    */
   clearSelection = (): void => {
+    // console.log('clearSelection');
     if (this.canvas.getActiveObject()) {
       this.canvas.discardActiveObject();
       this.canvas.renderAll();
@@ -682,6 +882,7 @@ export class BoardComponent implements OnInit, AfterViewInit {
    * @returns Devuelve la url con la previsualización del canvas
    */
   generateDesign = (canvas: TFabricCanvas): string => {
+    // console.log('generateDesign');
     // Filtra los objetos en el canvas con la propiedad isBorderAux
     // para obtener el objecto que sirve de borde del canvas
     const border = canvas._objects.filter(({ isBorderAux }) => isBorderAux)[0];
@@ -709,6 +910,7 @@ export class BoardComponent implements OnInit, AfterViewInit {
    * Función que genera las previsualizaciones para mostrar en las vistas laterales
    */
   generatePreviews = (): void => {
+    // console.log('generatePreviews');
     this.canvasSides.forEach((side, index) => {
       const canvas = new fabric.Canvas('c6') as TFabricCanvas;
       this.createBorder(canvas);
@@ -725,6 +927,7 @@ export class BoardComponent implements OnInit, AfterViewInit {
    * @param index Indice del canvas de previsualización
    */
   generatePreview = async (canvas: TFabricCanvas, index: number) => {
+    // console.log('generatePreview');
     const canvasAux = new fabric.Canvas('c4');
     const productImg = document.querySelector('.img-container img');
     canvasAux.setWidth(productImg.clientWidth);
@@ -743,7 +946,7 @@ export class BoardComponent implements OnInit, AfterViewInit {
     const design = await loadImageFromUrl(urlDesign);
     // Asigna posicion X Y al diseño
     design.set({
-      top: (productImg.clientHeight * this.top),
+      top: (productImg.clientHeight * this.top) / 100,
       left: productImg.clientWidth * this.left,
     });
     // Obtiene el logo de CATO
@@ -774,10 +977,11 @@ export class BoardComponent implements OnInit, AfterViewInit {
    * Función que deshace la última modificación realizada en el visor del editor
    */
   undo = (): void => {
+    // console.log('undo');
     // Si no hay modificaciones anteriores retorne
     if (this.historyIndex === 0) { return; }
-    this.historyIndex = this.historyIndex - 1;
     // Resta uno al índice de modificaciones
+    this.historyIndex = this.historyIndex - 1;
     this.resetCanvas();
     // Carga al canvas la penúltima modificación realizada
     this.readFromJSON(this.canvas, this.history[this.historyIndex]);
@@ -786,6 +990,7 @@ export class BoardComponent implements OnInit, AfterViewInit {
    * Función que rehace la última modificación realizada en el visor del editor
    */
   redo = (): void => {
+    // console.log('redo');
     // Si no hay modificaciones nuevas
     if (this.historyIndex === this.history.length - 1) {
       return;
@@ -800,6 +1005,7 @@ export class BoardComponent implements OnInit, AfterViewInit {
    * Función que cambia el estado del grid en el visor
    */
   showGuideLines = (): void => {
+    // console.log('showGuideLines');
     this.guideLines = !this.guideLines;
   }
   /**
@@ -808,6 +1014,7 @@ export class BoardComponent implements OnInit, AfterViewInit {
    * @returns Devuelve un canvas de fabric con la información actual y lo nuevos atributos
    */
   generateJSON = (): TCanvas => {
+    // console.log('generateJSON');
     const canvas = JSON.parse(
       JSON.stringify(
         this.canvas.toJSON([
@@ -837,6 +1044,7 @@ export class BoardComponent implements OnInit, AfterViewInit {
    * @param data Canvas con la información que se quiere agregar al otro canvas
    */
   readFromJSON = (canvas: any, data: TCanvas): void => {
+    // console.log('readFromJSON');
     // this.resetCanvas();
     if (!data?.objects || data?.objects.length === 0) { return null; }
 
@@ -882,13 +1090,14 @@ export class BoardComponent implements OnInit, AfterViewInit {
    * y renderizando los objetos que no son controles
    */
   resetCanvas = (): void => {
+    // console.log('resetCanvas');
     // Obtiene los objetos en el canvas que no sean controles
     const aux = this.canvas._objects.filter(
       (obj: TFabricObject) => obj.isControl === undefined
     ) as TFabricObject[];
     // Asigna los objetos que no son controles al canvas actual
     this.canvas._objects = aux;
-    // Asigna los objetos que no son controles al canvas actual
+    // Desactivca los objetos que estén seleccionados en el canvas
     this.canvas.discardActiveObject();
     this.canvas.renderAll();
   }
@@ -896,6 +1105,7 @@ export class BoardComponent implements OnInit, AfterViewInit {
    * Función que almacena la información de la modificación actual en el canvas y asigna el número de la modificación
    */
   changeHistory = (): void => {
+    // console.log('changeHistory');
     // Almacena la información de las modificaciones anteriores
     this.history = this.history.slice(0, this.historyIndex + 1);
     // Agrega la última modificación realizada
@@ -909,6 +1119,7 @@ export class BoardComponent implements OnInit, AfterViewInit {
    * @returns Devuelve el objeto controlado y su controlador
    */
   getControlAndObject = (): TControlAndObject => {
+    // console.log('getControlAndObject');
     // Obtiene el control selecionado
     const selected = this.canvas.getActiveObject() as TFabricObject;
     if (!selected) { return null; }
@@ -979,7 +1190,7 @@ export class BoardComponent implements OnInit, AfterViewInit {
     });
     // Carga el canvas oculto en el elemento canvas html
     this.canvasHidden.loadFromJSON(canvas, () => {
-      console.log('JSON cargado');
+      // console.log('JSON cargado');
     });
   }
   /**
@@ -1001,15 +1212,15 @@ export class BoardComponent implements OnInit, AfterViewInit {
    */
   getData() {
     const c = this.canvas;
-    console.log('-------------------------');
-    console.log('Img ', 'H: ', this.heightImgBackground, ' - ', 'W: ', this.widthImgBackground);
-    console.log('Canvas ', 'H: ', c.getHeight(), ' - ', 'W: ', c.getWidth());
+    // console.log('-------------------------');
+    // console.log('Img ', 'H: ', this.heightImgBackground, ' - ', 'W: ', this.widthImgBackground);
+    // console.log('Canvas ', 'H: ', c.getHeight(), ' - ', 'W: ', c.getWidth());
     const clip = this.canvas.getObjects()[0];
-    console.log('Clip ', 'H: ', clip.getScaledHeight(), ' - ', 'W: ', clip.getScaledWidth());
-    console.log('Px to Canvas ', 'H: ', this.topPixelesCanvas, ' - ', 'W: ', this.leftPixelesCanvas);
+    // console.log('Clip ', 'H: ', clip.getScaledHeight(), ' - ', 'W: ', clip.getScaledWidth());
+    // console.log('Px to Canvas ', 'H: ', this.topPixelesCanvas, ' - ', 'W: ', this.leftPixelesCanvas);
     const pxToptoClip = this.topPixelesCanvas + CONTROL_OFFSET;
     const pxLefttoClip = this.leftPixelesCanvas + CONTROL_OFFSET;
-    console.log('Px to Clip ', 'H: ', pxToptoClip, ' - ', 'W: ', pxLefttoClip);
+    // console.log('Px to Clip ', 'H: ', pxToptoClip, ' - ', 'W: ', pxLefttoClip);
   }
   /**
    * Función que asigna ancho y alto al canvas oculto y después le renderiza
@@ -1107,7 +1318,7 @@ export class BoardComponent implements OnInit, AfterViewInit {
 
     // Carga el canvas oculto en el elemento canvas html
     this.canvasHidden.loadFromJSON(canvas, () => {
-      console.log('JSON cargado');
+      // console.log('JSON cargado');
     });
   }
   /**

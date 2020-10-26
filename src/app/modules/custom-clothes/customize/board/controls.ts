@@ -9,6 +9,7 @@ import { CONTROL_OFFSET } from './constants';
  * @param controled Objeto que fue renderizado en el canvas
  */
 export const controlsTopRight = (obj: any, action: any, controled: any) => {
+  // console.log('controlsTopRight');
   generalSetUp();
   hideControls(obj);
   // Renderiza solo tres controles de los nueve
@@ -52,6 +53,7 @@ export const controlsTopRight = (obj: any, action: any, controled: any) => {
  * @param controled Objeto que fue renderizado en el canvas
  */
 export const controlsTopLeft = (obj: any, action: any, controled: any) => {
+  // console.log('controlsTopLeft');
   generalSetUp();
   hideControls(obj);
   // Renderiza solo tres controles de los nueve
@@ -95,6 +97,7 @@ export const controlsTopLeft = (obj: any, action: any, controled: any) => {
  * @param controled Objeto que fue renderizado en el canvas
  */
 export const controlsBottomLeft = (obj: any, action: any, controled: any) => {
+  // console.log('controlsBottomLeft');
   generalSetUp();
   hideControls(obj);
   // Renderiza solo tres controles de los nueve
@@ -138,6 +141,7 @@ export const controlsBottomLeft = (obj: any, action: any, controled: any) => {
  * @param controled Objeto que fue renderizado en el canvas
  */
 export const controlsBottomRight = (obj: any, action: any, controled: any) => {
+  // console.log('controlsBottomRight');
   generalSetUp();
   hideControls(obj);
   // Renderiza solo tres controles de los nueve
@@ -182,8 +186,8 @@ export const controlsBottomRight = (obj: any, action: any, controled: any) => {
  * @param controled Objeto que fue renderizado en el canvas
  */
 export const setControlFromPosition = (position: any, obj: any, action: any, controled: any) => {
-
-  // Se colocan los controles en la dirección opuesta al borde más cercano 
+  // console.log('setControlFromPosition');
+  // Se colocan los controles en la dirección opuesta al borde más cercano
   switch (position) {
     case 'TOP_LEFT':
       controlsBottomRight(obj, action, controled);
@@ -206,6 +210,7 @@ export const setControlFromPosition = (position: any, obj: any, action: any, con
  * @param obj Objeto que servirá como controlador del objeto renderizado en el canvas
  */
 const hideControls = (obj: any) => {
+  // console.log('hideControls');
   obj.setControlVisible('tl', false);
   obj.setControlVisible('mtr', false);
   obj.setControlVisible('mt', false);
@@ -220,6 +225,7 @@ const hideControls = (obj: any) => {
  * Función que configura los controles personalizados en cada objeto del canvas
  */
 const generalSetUp = () => {
+  // console.log('generalSetup');
   // @ts-ignore
   fabric.Object.prototype.customiseCornerIcons({
     settings: {

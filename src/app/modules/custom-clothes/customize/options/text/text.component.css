@@ -1,0 +1,333 @@
+/* Estilos para el contenedor del componente texto */
+.option-container {
+  /* Define lo que debe mostrar cuando el contenido se desborda de los extremos superior e inferior, auto provee una barra de desplazamiento */
+  overflow-y: auto;
+  /* Asigna espacio de relleno desde la izquierda */
+  padding-right: 15px;
+  /* Asigna espacio de relleno desde la derecha */
+  padding-left: 5px;
+  /* Asigna la altura */
+  height: calc(100vh - 49px - var(--height-available));
+}
+/* Estilos para el párrafo de descripción de texto */
+.option-description {
+  /* Asigna margen inferior */
+  margin-bottom: 4px;
+}
+/* Estilos para el párrafo de nota de texto */
+.note {
+  /* Asigna tamaño de la fuente */
+  font-size: 0.9em;
+  /* Asigna espacio entre las letras */
+  letter-spacing: initial;
+  /* Asigna color */
+  color: #999;
+}
+/* Estilos para el elemento textarea */
+.text-content {
+  /* No se puede cambiar tamaño del elemento */
+  resize: none;
+  /* Asigna ancho al máximo */
+  width: 96%;
+  /* Asigna altura */
+  height: 80px;
+  /* Asigna espacio de relleno en los cuatro lados */
+  padding: 5px;
+  /* Asigna margen inferior */
+  margin-bottom: 10px;
+}
+/* Estilos para el placeholder del textarea */
+.text-content::placeholder {
+  /* Asigna tipo de display */
+  display: initial;
+  /* Asigna color */
+  color: #999;
+  /* Asigna tamaño de fuente */
+  font-size: 1em;
+}
+/* Estilos para el contenedor de las opciones del texto */
+.mobile-padding-container {
+  /* Asigna display tipo flex */
+  display: flex;
+  /* Indica como colocar los elementos flexibles */
+  flex-direction: column;
+}
+/* Estilos para el contenedor de color y fuente */
+.fila {
+  /* Asigna display tipo flex */
+  display: flex;
+  /* Define como los elementos flexibles se disponen a lo largo del eje principal */
+  justify-content: space-between;
+  /* Asigna margen inferior */
+  margin-bottom: 12px;
+}
+/* Estilos para el contenedor de los checbox de material */
+.fila.no-margin {
+  /* Define como los elementos flexibles se a lo largo del eje secundario*/
+  align-items: center;
+}
+/* Estilos para cada segundo elemento hermanos dentro del elemento de la clase fila */
+.fila:nth-child(2n) {
+  /* Asigna color de fondo */
+  background: #f1f1f1;
+  /* Asigna espacio de relleno vertical y horizontal */
+  padding: 9px 12px;
+}
+/* Estilos para los inpurt de tipo color */
+input[type="color"] {
+  /* Sin bordes */
+  border: none;
+  /* Sin color de fondo */
+  background: none;
+}
+/* Estilos para el picker personalizado */
+.color-picker-custom {
+  /* Asigna ancho */
+  width: 30px;
+  /* Asigna cursor tipo puntero */
+  cursor: pointer;
+  /* Asigna altura */
+  height: 28px;
+  /* Asigna ancho y color de bor */
+  border: 1px solid gray;
+}
+/* Estilos para el contenedor de los items en el texto */
+.item-container {
+  /* Asigna display tipo flex */
+  display: flex;
+  /* Establece el eje princiapl */
+  flex-direction: column;
+  /* Define como los elementos se disponen a lo largo del eje secundario */
+  align-items: center;
+}
+/* Estilos para los label en los contenedores de los items */
+.item-container label {
+  /* Asigna alto de linea */
+  line-height: 1;
+}
+/* Estilos para los input en los contenedores de los items */
+.item-container input {
+  /* Asigna altura */
+  height: 28px;
+  /* Asigna ancho */
+  width: 65px;
+}
+/* Estilos para el componente input-number en los contenedores de los items */
+.item-container app-input-number {
+  /* Asigna altura */
+  height: 28px;
+}
+/* Estilos para  los select en los contenedores de los items */
+.item-container select {
+  /* Asigna altura */
+  height: 28px;
+  /* Asigna ancho mínimo */
+  min-width: 220px;
+}
+/* Estilos para los iconos con la clase button dentro de elemento con la clase format y elemento con la clase align */
+.format span.button,
+.align span.button {
+  /* Asigna ancho de borde y color solido */
+  border: 2px solid;
+  /* Asigna bordes redondos */
+  border-radius: 4px;
+  /* Hace que los iconos sean un elemento en línea dentro del padre */
+  display: inline-flex;
+  /* Define como los elementos se disponen a lo largo del eje secundario */
+  align-items: center;
+  /* Define como los elementos se disponen a lo largo del eje principal */
+  justify-content: center;
+  /* Asigna ancho */
+  width: 28px;
+  /* Asigna alto */
+  height: 28px;
+  /* Sin margen superior e inferior y con margen a la izquierda y derecha */
+  margin: 0 3px;
+  /* Asigna tamaño de fuente */
+  font-size: 18px;
+  /* Asigna cursor tipo puntero */
+  cursor: pointer;
+  /* Asigna color */
+  color: #222;
+  /* Agrega una transformación a los iconos que dura 0.2s con un movimiento fácil */
+  transition: all 0.2s ease;
+  /* Indica que se espera cambiar algo en el cotenido del elemento en un futuro */
+  will-change: contents;
+}
+/* Estilos para los iconos de formato con la clase button */
+.format span.button {
+  /* Asigna tamaño de fuente */
+  font-size: 22px;
+}
+/* Estilos para los iconos de formato y alineación de texto cuando se pasa el cursor por encima o cuando se activan con la clase active */
+.format span.button:hover,
+.align span.button:hover,
+.format span.active,
+.align span.active {
+  /* Asigna color del borde */
+  border-color: #c3351a;
+  /* Asigna color */
+  color: #c3351a;
+}
+/* Estilos para los span en la clase format, align y fuente */
+.format span,
+.align span,
+.fuente span {
+  /* Asigna margen desde la parte inferior */
+  margin-bottom: 5px;
+  /* Hace que los span sean un elemento en línea dentro del padre */
+  display: inline-flex;
+}
+/* Estilos para los label del formato de texto */
+.format label {
+  /* Sin bordes */
+  border: none;
+  /* Sin color de fondo */
+  background: none;
+  /* Sin contorbo */
+  outline: none;
+  /* Sin espacio de relleno en los cuatro lados */
+  padding: 0;
+}
+/* Estilos para los label de formato cuando tiene la clase disabled */
+.format label.disabled {
+  /* Aisgna color */
+  color: gray;
+}
+/* Estilos para todos los span que estan precedidos por un input dentro de elemento con las clase format */
+.format input:checked ~ span {
+  /* Asigna color */
+  color: #c3351a;
+}
+/* Estilos para los elementos de alineación y formato del texto */
+.format-align {
+  /* Los items tiene el mismo espacio a su alrededor */
+  justify-content: space-around;
+}
+/* Estilos para el contenedor de los botones del texto en móvil */
+.tabs-button {
+  /* Oculta el elemento */
+  display: none;
+}
+/* Para pantallas menores a 960px */
+@media screen and (max-width: 960px) {
+  /* Estilos para el contenedor del componente texto */
+  .option-container {
+    /* Asigna altura */
+    height: initial;
+    /* Sin espacio de relleno en los cuatro lados*/
+    padding: 0;
+  }
+  /* Estilos elementos conla clase curvar y texto y elemento con la calse mobule-padding y text-area*/
+  .option-container.curvar .mobile-padding.text-area,
+  .option-container.fuente .mobile-padding.text-area {
+    /* Oculta el elemento */
+    display: none;
+  }
+  /* Estilos para elemento con la clase fuente y option-container y elemento con la clase mobile-padding y gris*/
+  .option-container.fuente .mobile-padding.gris {
+    /* Asigna display tipo flex */
+    display: flex;
+    /* Indica como colocar los elementos flexibles */
+    flex-direction: column;
+  }
+  /* Estilos para elemento con la clase fuente y option-container y elemento con la clase fila y fuente*/
+  .option-container.fuente .fila.fuente {
+    /* Indica orden para disponer los elementos en el contenedor flexible */
+    order: 2;
+  }
+  /* Estilos para el parrafo de descripción y de nota */
+  .option-description,
+  .note {
+    display: none;
+  }
+  /* Estilos para elemento con la clase fila y el elemento textarea */
+  .fila,
+  .text-content {
+    /* Oculta el elemento */
+    display: none;
+  }
+  /* Estilos para cada segundo elemento hermanos dentro del elemento de la clase fila */
+  .fila:nth-child(2n) {
+    /* Sin color de fondo */
+    background: none;
+    /* Sin espacio de relleno en los cuatro lados */
+    padding: 0;
+  }
+  /* Estilos para los elementos de alineación y formato del texto */
+  .format-align {
+    /* El primer item al inicio, el último al final */
+    justify-content: space-between;
+  }
+  /* Estilos para los span hijos directos del elemento con la clase item-container dentro del elemento con la clase  */
+  .format-align .item-container > span {
+    /* Oculta el elemento */
+    display: none;
+  }
+  /* Estilos para el elemento con la clase show*/
+  .show {
+    display: flex;
+  }
+  /* Estilos para el contenedor del textarea */
+  .mobile-padding {
+    /* Asigna espacio de relleno arriba, izquierda derecha y abajo */
+    padding: 12px 10px 5px;
+  }
+  /* Estilos para el elemento con la clase mobile padding y gris */
+  .mobile-padding.gris {
+    /* Asigna color de fondo */
+    background: #f1f1f1;
+    /* Indica orden para disponer los elementos en el contenedor flexible */
+    order: 1;
+  }
+  /* Estilos para el elemento con la clase mobile-padding y textarea */
+  .mobile-padding.text-area {
+    /* Indica orden para disponer los elementos en el contenedor flexible */
+    order: 2;
+  }
+  /* Estilos para el contenedor de los botones del texto en móvil */
+  .tabs-button {
+    /* Asigna display tipo flex */
+    display: flex;
+    /* Añade efectos de sombra (offsetX, offsetY, blur-raduis, spread-radius, color */
+    box-shadow: 0px 10px 28px -6px rgba(0, 0, 0, 0.75);
+    /* Cambia la escala */
+    transform: scale(1);
+  }
+  /* Estilos para los botones en el contenedor de botones del texto en móvil */
+  .tabs-button button {
+    /* Asign display tipo flex */
+    display: flex;
+    /* Define como los elementos flexibles se diponen a lo largo del eje secundario */
+    align-items: center;
+    /* Define como los elementos flexibles se diponen a lo largo del eje secundario */
+    justify-content: center;
+    /* Establece el eje principal */
+    flex-direction: column;
+    /* Asigna color de fondo */
+    background: #f3f3f3;
+    /* Sin bordes */
+    border: none;
+    /* Asigna borde inferior y su color */
+    border-bottom: 4px solid #f3f3f3;
+    /* Asigna ancho al máximo */
+    width: 100%;
+    /* Asigna altura */
+    height: 65px;
+    /* Asigna tamaño de fuente */
+    font-size: inherit;
+    /* Asigna espacio de relleno arriba y abajo, y sin espacio de relleno de izquierda a derecha */
+    padding: 10px 0;
+    /* Asigna tamaño de fuente */
+    font-size: 13.5px;
+    /* Asigna ancho de la fuente */
+    font-weight: 600;
+    /* Asigna color */
+    color: #222;
+  }
+  /* Estilos para los botones en el contenedor de botones del texto en móvil con la clase active*/
+  .tabs-button button.active {
+    /* Asigna borde inferior y su color */
+    border-bottom: 4px solid #c3351a;
+  }
+}

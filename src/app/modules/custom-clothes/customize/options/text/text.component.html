@@ -1,0 +1,229 @@
+<div id="links-fonts"></div>
+<div
+  class="option-container"
+  [ngClass]="{
+    texto: currentOptions == 'texto',
+    fuente: currentOptions == 'fuente',
+    curvar: currentOptions == 'curvar'
+  }"
+>
+  <p class="option-description">
+    Añade texto directamente al producto con esta sencilla herramienta.
+  </p>
+  <p class="note">
+    Nota: Puedes rotar y redimensionar el texto directamente, encima del
+    producto.
+  </p>
+  <div class="mobile-padding-container">
+    <div class="mobile-padding text-area">
+      <textarea
+        class="text-content"
+        [class.show]="currentOptions == 'texto'"
+        placeholder="Tu texto personalizado aquí"
+        [(ngModel)]="textValue"
+        (ngModelChange)="onTextChange($event)"
+        #textArea
+      ></textarea>
+    </div>
+    <div class="mobile-padding gris">
+      <div class="fila fuente" [class.show]="currentOptions == 'fuente'">
+        <div class="item-container">
+          <label for="">Color</label>
+          <input type="color" id="text-color" />
+        </div>
+        <div class="item-container">
+          <label>Fuente</label>
+          <select
+            #select
+            [(ngModel)]="text.fontFamily"
+            (change)="onFontFamilyChange($event)"
+          >
+            <option
+              value="'{{ font.font }}'"
+              *ngFor="let font of fonts; let isFirst = first"
+              [selected]="isFirst"
+            >
+              {{ font.font }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div
+        class="fila format-align"
+        [class.show]="currentOptions == 'texto' || currentOptions == 'fuente'"
+      >
+        <div class="item-container align">
+          <span> Alineación </span>
+          <div>
+            <span
+              class="material-icons button"
+              (click)="onAlignChange('left')"
+              [class.active]="text.textAlign === 'left'"
+            >
+              format_align_left
+            </span>
+            <span
+              class="material-icons button"
+              (click)="onAlignChange('center')"
+              [class.active]="text.textAlign === 'center'"
+            >
+              format_align_center
+            </span>
+            <span
+              class="material-icons button"
+              (click)="onAlignChange('right')"
+              [class.active]="text.textAlign === 'right'"
+            >
+              format_align_right
+            </span>
+            <span
+              class="material-icons button"
+              (click)="onAlignChange('justify')"
+              [class.active]="text.textAlign === 'justify'"
+            >
+              format_align_justify
+            </span>
+          </div>
+        </div>
+        <div class="item-container format">
+          <span>Formato</span>
+          <div>
+            <label for="bold" [class.disabled]="!fonts[currentIndex].bold">
+              <input
+                type="checkbox"
+                name="bold"
+                id="bold"
+                hidden
+                [(ngModel)]="bold"
+                (ngModelChange)="onWeightChange($event)"
+              />
+              <span class="material-icons button"> format_bold </span>
+            </label>
+            <label for="italic" [class.disabled]="!fonts[currentIndex].italic">
+              <input
+                type="checkbox"
+                name="italic"
+                id="italic"
+                hidden
+                [(ngModel)]="italic"
+                (ngModelChange)="onStyleChange($event)"
+              />
+              <span class="material-icons button"> format_italic </span>
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="fila" [class.show]="currentOptions == 'texto'">
+        <div class="item-container">
+          <label for="letter-spacing">Interlineado</label>
+          <app-input-number
+            [value]="text.pseudoCharSpacing"
+            (valueChange)="onKerningChange($event)"
+          ></app-input-number>
+        </div>
+        <div class="item-container">
+          <label for="size">Tamaño</label>
+          <app-input-number
+            [value]="text.fontSize"
+            (valueChange)="onFontSizeChange($event)"
+          ></app-input-number>
+        </div>
+        <div class="item-container">
+          <label for="width">Ancho</label>
+          <input
+            [disabled]="textCurved"
+            id="width"
+            type="number"
+            min="5"
+            [max]="maxWidth"
+            [(ngModel)]="text.width"
+            (ngModelChange)="onWidthChange($event)"
+          />
+        </div>
+      </div>
+      <div class="fila no-margin" [class.show]="currentOptions == 'curvar'">
+        <mat-checkbox (change)="handleTypeText($event)" [(ngModel)]="textCurved"
+          >Curvar</mat-checkbox
+        >
+        <mat-checkbox
+          (change)="handleFlip($event)"
+          [(ngModel)]="text.flipped"
+          [disabled]="!textCurved"
+          >Invertir</mat-checkbox
+        >
+        <div class="item-container">
+          <label for="">Magnitud</label>
+          <mat-slider
+            [disabled]="!textCurved"
+            min="20"
+            max="500"
+            step="10"
+            [value]="text.diameter"
+            (input)="onCurveChange($event)"
+            invert="true"
+          ></mat-slider>
+        </div>
+      </div>
+      <div class="fila" [class.show]="currentOptions == 'texto'">
+        <div class="item-container">
+          <label for="text-shadow">Sombra</label>
+          <input id="text-shadow" type="color" />
+        </div>
+        <div class="item-container">
+          <label for="shadow-blur">Difuminar</label>
+          <input
+            id="shadow-blur"
+            type="number"
+            min="0"
+            max="50"
+            [(ngModel)]="text.shadow.blur"
+            (ngModelChange)="onBlurChange($event)"
+          />
+        </div>
+        <div class="item-container">
+          <label for="shadow-x">Horizontal</label>
+          <input
+            id="shadow-x"
+            type="number"
+            min="-50"
+            max="50"
+            [(ngModel)]="text.shadow.offsetX"
+            (ngModelChange)="onOffsetXChange($event)"
+          />
+        </div>
+        <div class="item-container">
+          <label for="shadow-y">Vertical</label>
+          <input
+            id="shadow-y"
+            type="number"
+            min="-50"
+            max="50"
+            [(ngModel)]="text.shadow.offsetY"
+            (ngModelChange)="onOffsetYChange($event)"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="tabs-button">
+    <button
+      (click)="changeMobileOption('texto')"
+      [class.active]="currentOptions == 'texto'"
+    >
+      <span class="material-icons"> text_format </span>
+      Texto
+    </button>
+    <button
+      (click)="changeMobileOption('fuente')"
+      [class.active]="currentOptions == 'fuente'"
+    >
+      Fuente
+    </button>
+    <button
+      (click)="changeMobileOption('curvar')"
+      [class.active]="currentOptions == 'curvar'"
+    >
+      Curvar
+    </button>
+  </div>
+</div>

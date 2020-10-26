@@ -241,6 +241,7 @@ export class CustomizeComponent implements OnInit {
   constructor(private route: ActivatedRoute) { }
 
   ngOnInit(): void {
+    // console.log('ngOnInit');
     const length = this.productsPerCategory[this.currentIndexes.category]
       .products[this.currentIndexes.product].sizes[this.currentIndexes.size]
       .colors[this.currentIndexes.color].sides.length;
@@ -281,6 +282,7 @@ export class CustomizeComponent implements OnInit {
    * @param idVariant ID del borrador del producto a renderizar en el canvas
    */
   getIndexesFromProductVariant = (idVariant: any): void => {
+    // console.log('getIndexesFromProductVariant');
     for (let i = 0; i < this.productsPerCategory.length; i++) {
       for (let j = 0; j < this.productsPerCategory[i].products.length; j++) {
         for (
@@ -316,20 +318,29 @@ export class CustomizeComponent implements OnInit {
    * @returns Devuelve el borrador de objetos para renderizar en el canvas
    */
   getDraft = (id: number): any => {
+    // console.log('getDraft');
     return drafts.filter(({ draftId }) => id === draftId)[0];
+  }
+  /**
+   * Función que muestra un mensaje de que se ha realizado un cambio a un objeto del editor
+   * @param $event Indica si se ha realizado un cambio en un objeto del canvas
+   */
+  handleShowMessage = ($event: boolean): void => {
+    // console.log('handleShowMessage');
+    this.showMessage = $event;
   }
   /**
    * Función que maneja la opción escogida en el editor
    * @param $event Cadena con el nombre de la opción escogida en el editor
    */
   handleSelection = async ($event: string) => {
+    // console.log('handleSelection');
     this.optionsIsOpen = true;
     this.whatIsOpen = $event;
     if ($event === 'text') {
       this.board.createText(this.DEFAULT_TEXT_OPTIONS);
     }
     if ($event === 'shape') {
-      console.log($event);
       // this.board.createShape({
       //   sides: 4,
       //   radio: 40,
@@ -340,7 +351,6 @@ export class CustomizeComponent implements OnInit {
       // });
     }
     if ($event === 'color') {
-      console.log($event);
       // await this.board.createDesign({});
     }
     /** Limpia menú móvil inicial */
@@ -351,6 +361,7 @@ export class CustomizeComponent implements OnInit {
    * @param $event Cadena con el nombre de la opción escogida en el editor
    */
   handleOpenSelection = ($event: string): void => {
+    // console.log('handleOpenSelection');
     this.optionsIsOpen = true;
     this.whatIsOpen = $event;
   }
@@ -359,15 +370,25 @@ export class CustomizeComponent implements OnInit {
    * la selección actual en el visor
    * @param $event Evento que indica que se ha cerrado las opciones del editor
    */
-  handleClose = ($event: any): void => {
+  handleClose = (): void => {
+    // console.log('handleClose');
     this.optionsIsOpen = false;
     this.board.clearSelection();
+  }
+  /**
+   * Función que permite cerrar la opción abierta en el editor
+   * @param $event Indica si se deben cerrar las opciones del editor
+   */
+  handleCloseFromBoard = ($event: boolean): void => {
+    // console.log('handleCloseFromBoard');
+    this.optionsIsOpen = false;
   }
   /**
    * Función que actualiza el índice de la vista actual en el canvas
    * @param index Indice de la vista actual en el visor del editor
    */
   updateProductSide = (index: number): void => {
+    // console.log('updateProductSide');
     this.currentIndexes.side = index;
   }
   /**
@@ -380,6 +401,7 @@ export class CustomizeComponent implements OnInit {
     heightArea,
     widthArea,
   }: TUpdateCanvas): void => {
+    // console.log('updateCanvasSides');
     this.canvasSides[index] = canvas;
     this.canvasSides[index].heightArea = heightArea;
     this.canvasSides[index].widthArea = widthArea;
@@ -389,6 +411,7 @@ export class CustomizeComponent implements OnInit {
    * @param param0 Objeto con la información del texto seleccionado y su ancho máximo permitido
    */
   updateSelectionText = ({ element, maxWidth }: TTextSelectionEvent): void => {
+    // console.log('updateSelectionText');
     const {
       text,
       fontFamily,
@@ -424,8 +447,46 @@ export class CustomizeComponent implements OnInit {
    * @param $event Cadena con la url del canvas de previsualización
    */
   updatePreviewImg = ($event: string): void => {
+    // console.log('updatePreviewImg');
     // console.log("Que se envia desde el evento?", $event);
     this.productPreview = $event;
+  }
+  /**
+   * Función que maneja el cambio en la información ingresada en el texto
+   * @param $event Contiene la información actualiza del texto
+   */
+  handleTextChanges = ($event: any): void => {
+    // console.log('handleTextChanges');
+    this.board.changeCurveTextProperties($event);
+  }
+  /**
+   * Función que agrega valores por defecto al texto seleccionado
+   */
+  handleTextCleared = (): void => {
+    // console.log('handleTextCleared');
+    this.text = {
+      element: {
+        text: 'edita el texto',
+        fill: '#000000',
+        flipped: false,
+        fontFamily: `'Arial'`,
+        fontSize: 14,
+        fontStyle: 'normal',
+        fontWeight: 'normal',
+        textAlign: 'left',
+        type: 'textbox',
+        pseudoCharSpacing: 0,
+        scaleX: 1,
+        scaleY: 1,
+        shadow: {
+          color: '#000000',
+          blur: 0,
+          offsetX: 0,
+          offsetY: 0,
+        },
+      } as TFabricObject,
+      maxWidth: 0,
+    };
   }
 }
 
@@ -440,4 +501,33 @@ export interface CurrentIndexes {
   size: number;
   color: number;
   side: number;
+}
+/**
+ * Interfaz que almacena la información del texto de fabric
+ */
+export interface TextCurved {
+  text?: string;
+  fontFamily?: string;
+  fontSize?: number;
+  fill?: string;
+  diameter?: number;
+  flipped?: boolean;
+  pseudoCharSpacing?: number;
+  charSpacing?: number;
+  type?: string;
+  width?: number;
+  fontWeight?: string;
+  fontStyle?: string;
+  maxWidth?: number;
+  scaleX?: number;
+  scaleY?: number;
+  textAlign?: string;
+  shadow?: {
+    color?: string;
+    blur?: number;
+    offsetX?: number;
+    offsetY?: number;
+    opacity?: number;
+  };
+  element?: TFabricObject;
 }

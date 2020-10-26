@@ -269,6 +269,7 @@ export default function runConfiguration() {
 
   // @ts-ignore
   fabric.util.makeBoundingBoxFromPoints = (points: any) => {
+    // console.log('makeBoundigBoxFromPoints');
     const minX = fabric.util.array.min(points, 'x'),
       maxX = fabric.util.array.max(points, 'x'),
       width = Math.abs(minX - maxX),

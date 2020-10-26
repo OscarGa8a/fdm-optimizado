@@ -29,6 +29,7 @@ export class HeaderComponent implements OnInit {
    * Función que emite un evento cuando se cierra la opción seleccionada en el editor
    */
   sendClose = (): void => {
+    // console.log('sendClose');
     this.eventClose.emit(true);
   }
 

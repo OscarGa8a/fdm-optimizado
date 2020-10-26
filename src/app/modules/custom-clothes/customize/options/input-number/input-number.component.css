@@ -1,0 +1,61 @@
+/* Estilos para el contenedor del input númerico */
+div {
+  /* Asigna display tipo flex */
+  display: flex;
+  /* Asigna ancho y color de borde */
+  border: 1px solid gray;
+  /* Asigna alineación de los elementos dentro del bloque */
+  align-items: center;
+  /* Asigna borde redondo */
+  border-radius: 2px;
+  /* Asigna alto al máximo */
+  height: 100%;
+}
+/* Estilos para el primer elemento entre un grupo de elementos hermanos */
+span:first-child {
+  /* Asigna borde y color a la derecha */
+  border-right: 1px solid gray;
+}
+/* Estilos para el último elemento entre un grupo de elementos hermanos */
+span:last-child {
+  /* Asigna borde y color a la izquierda */
+  border-left: 1px solid gray;
+}
+/* Estilos para los span en el input */
+span {
+  /* Sin espacio de relleno vertical y con espacio de relleno horizontal */
+  padding: 0 5px;
+  /* Asigna alto al máximo */
+  height: 100%;
+  /* Asigna display tipo flex */
+  display: flex;
+  /* Asigna alineación de los elementos dentro del bloque */
+  align-items: center;
+  /* Alinea los items en el centro */
+  justify-content: center;
+  /* Asigna cursor tipo puntero */
+  cursor: pointer;
+  /* El usuario no puede seleccionar el span */
+  user-select: none;
+  /* Asigna ancho */
+  width: 20px;
+}
+/* Estilos para el input */
+input {
+  /* Permite mostrar el input basado en el estilo nativo de la plataforma usada */
+  -moz-appearance: textfield;
+  /* Sin borde */
+  border: none;
+  /* Asigna ancho */
+  width: 30px;
+  /* Asigna alineación de los elementos dentro del bloque */
+  text-align: center;
+}
+/* Estilos para la parte exterior e interior del input */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  /* Sin apariencia nativa */
+  -webkit-appearance: none;
+  /* Sin margen en los cuatro lados */
+  margin: 0;
+}
