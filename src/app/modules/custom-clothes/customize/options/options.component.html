@@ -6,5 +6,11 @@
       [maxWidth]="text.maxWidth"
     ></app-text>
   </div>
+  <div *ngSwitchCase="'shape'">
+    <app-shape
+      [shape]="shape"
+      (eventShapeChanges)="handleShapeChanges($event)"
+    ></app-shape>
+  </div>
   <div *ngSwitchDefault></div>
 </div>

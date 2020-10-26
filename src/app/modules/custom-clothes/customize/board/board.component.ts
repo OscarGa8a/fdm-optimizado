@@ -15,14 +15,20 @@ import {
 import { fabric } from 'fabric';
 import FontFaceObserver from 'fontfaceobserver';
 import runConfigurations from './configurations';
+import { moving } from './move';
 import { FileSaverService } from 'ngx-filesaver';
 
 import {
   createTextElement,
-  restoreTextElement
+  restoreTextElement,
+  restoreShape,
+  createShape,
+  IShapeOptions,
+  algoritmoPoly
 } from './elements';
 
 import { CONTROL_OFFSET } from './constants';
+import { rotating, rotated } from './rotate';
 import { loadImageFromUrl } from './utils';
 
 import { HttpService } from '../../../../services/http.service';
@@ -69,6 +75,10 @@ export class BoardComponent implements OnInit, AfterViewInit, OnChanges {
    * al dar click en el visor
    */
   @Output() closeFromBoard = new EventEmitter<boolean>();
+  /**
+   * Emite la información de la figura seleccionada
+   */
+  @Output() updateSelectionShapeEvent = new EventEmitter<TFabricObject>();
   /**
    * Emite la información del texto seleccionado
    */
@@ -190,6 +200,14 @@ export class BoardComponent implements OnInit, AfterViewInit, OnChanges {
    * Indica si no se ha cambaido el tamaño del elemento canvas
    */
   state = true;
+  /**
+   * Indica si el objeto en el canvas esta rotando
+   */
+  isRotating = false;
+  /**
+   * Determina el ángulo de rotación del objeto
+   */
+  rotationAngle = 0;
   /**
    * Valor del ancho inicial de la ventana de windows
    */
@@ -409,10 +427,26 @@ export class BoardComponent implements OnInit, AfterViewInit, OnChanges {
     // Se activa mientras se esta rotando un objeto en el canvas de fabric
     this.canvas.on('object:rotating', (e: fabric.IEvent) => {
       // console.log('rotating');
+      if (!this.isRotating) {
+        this.isRotating = true;
+      }
+      const { controlled } = this.getControlAndObject();
+      let initial = controlled.angle;
+      const aux = Math.trunc(initial / 360);
+      if (aux !== 0) {
+        initial = Math.trunc(initial / aux) - 360;
+      }
+      if (initial >= 180 && initial <= 360) {
+        this.rotationAngle = Math.trunc(360 - initial);
+      } else {
+        this.rotationAngle = Math.trunc(initial);
+      }
+      rotating(e, this.canvas);
     });
     // Se activa mientras se esta moviendo un objeto en el canvas de fabric
     this.canvas.on('object:moving', (e: fabric.IEvent): void => {
       // console.log('moving');
+      moving(e, this.canvas, this.variableControlAction);
     });
     // Se activa cuando se termina de mover un objeto en el canvas de fabric
     this.canvas.on('object:moved', (e: fabric.IEvent): void => {
@@ -644,6 +678,7 @@ export class BoardComponent implements OnInit, AfterViewInit, OnChanges {
         controlled = this.canvas._objects.filter(
           (obj) => obj.id === selected.id
         )[0];
+        // Activa el objeto controlado para que aparezcan los botones del controlador
         this.canvas.setActiveObject(controlled);
         return null;
       }
@@ -657,8 +692,10 @@ export class BoardComponent implements OnInit, AfterViewInit, OnChanges {
           ...$event,
           diameter,
         });
-        // Obtiene los límites del objeto
+        // Obtenga las coordenadas y medidas del objeto controlado
         const box = controlled.getBoundingRect();
+        // Asigna las propiedades del objeto controlado al controlador
+        // para que el controlador tome la posición y tamaño del texto
         selected.set({
           left: box.left,
           top: box.top,
@@ -674,8 +711,10 @@ export class BoardComponent implements OnInit, AfterViewInit, OnChanges {
           ...$event,
           charSpacing: $event.pseudoCharSpacing || controlled.charSpacing,
         });
-        // Obtiene los límites del objeto
+        // Obtenga las coordenadas y medidas del objeto controlado
         const box = controlled.getBoundingRect();
+        // Asigna las propiedades del objeto controlado al controlador
+        // para que el controlador tome la posición y tamaño del texto
         selected.set({
           left: box.left + box.width / 2,
           top: box.top + box.height / 2,
@@ -730,11 +769,22 @@ export class BoardComponent implements OnInit, AfterViewInit, OnChanges {
   }
   /**
    * Función que crea un texto y su control y los renderiza en el canvas
-   * @param options Opciones por defecto para el texto de fabric
+   * @param options Contiene las opciones por defecto para el texto de fabric
    */
   createText = (options: any): void => {
     // console.log('createText');
     createTextElement(options, this.canvas, this.variableControlAction);
+    this.setSelectionToCreatedElement();
+    // this.changeProductSide(this.productSide);
+    this.changeHistory();
+  }
+  /**
+   * Función que crea una figura y su control y los renderiza en el canvas
+   * @param options Contiene las opciones por defecto para la figura de fabric
+   */
+  createShape = (options: IShapeOptions): void => {
+    // console.log('createShape');
+    createShape(options, this.canvas, this.variableControlAction);
     this.setSelectionToCreatedElement();
     // this.changeProductSide(this.productSide);
     this.changeHistory();
@@ -864,6 +914,7 @@ export class BoardComponent implements OnInit, AfterViewInit, OnChanges {
       controlled.type === 'line'
     ) {
       this.openSelection.emit('shape');
+      this.updateSelectionShapeEvent.emit(controlled);
     }
   }
   /**
@@ -1112,6 +1163,122 @@ export class BoardComponent implements OnInit, AfterViewInit, OnChanges {
     this.history.push(this.generateJSON());
     // Asigna el número de la modificación actual
     this.historyIndex = this.history.length - 1;
+  }
+  /**
+   * Función que permite actualizar los datos de la figura ingresados por el usuario
+   * @param $event Contiene la información de los cambios realizados en la figura
+   */
+  changeShape = ($event: any) => {
+    // console.log('changeShape');
+    let { selected, controlled } = this.getControlAndObject();
+    const last = controlled.type;
+    // Si el objeto es un poligono
+    if (($event.sides || $event.radio) && controlled.type === 'polygon') {
+      // Obtiene los puntos del poligono
+      const points = algoritmoPoly(
+        $event.sides || controlled.sides,
+        $event.radio || controlled.radio
+      );
+      $event.points = points;
+      $event.radio = $event.radio || controlled.radio;
+      // Configura la información ingresada al polígono
+      controlled.set($event);
+      controlled.setCoords();
+    } else if (controlled.type === 'circle') {
+      // Configura la información ingresada al círculo
+      controlled.set({
+        ...$event,
+        radius: $event.radio || controlled.radius,
+      });
+    } else if (controlled.type === 'line') {
+      // Configura la información ingresada a la línea
+      if ($event.radio) {
+        $event.points = [0, 0, $event.radio, 0];
+        controlled.set($event);
+      } else {
+        controlled.set($event);
+      }
+    } else {
+      // Configura la información ingresada al triángulo
+      controlled.set({
+        ...$event,
+        width: $event.radio || controlled.width || controlled.radius,
+        height:
+          Math.sqrt($event.radio ** 2 - ($event.radio / 2) ** 2) ||
+          controlled.height,
+      });
+    }
+
+    if ($event.strokeWidth) {
+      // Asigna anchura del trazo
+      selected.set({
+        strokeWidth: $event.strokeWidth,
+      });
+    }
+    // Obtenga las coordenadas y medidas del objeto controlado
+    const boundingRect = controlled.getBoundingRect(true, true);
+    // Asigna las propiedades del objeto controlado al controlador
+    // para que el controlador tome la posición y tamaño de la figura
+    selected.set({
+      angle: 0,
+      width: boundingRect.width / selected.scaleX,
+      height: boundingRect.height / selected.scaleY,
+      scaleX: selected.scaleX,
+      scaleY: selected.scaleY,
+      left: boundingRect.left + boundingRect.width / 2,
+      top: boundingRect.top + boundingRect.height / 2,
+    });
+
+    if ($event.type) {
+      // Si se escogio un triangulo y el objeto anterior era una línea
+      if ($event.type === 'triangle' && last === 'line') {
+        // console.log("Entró acá");
+        const width = controlled.width;
+        // Calcula altura del triángulo
+        const height = Math.sqrt(
+          controlled.width ** 2 - (controlled.width / 2) ** 2
+        );
+        controlled.width = width;
+        controlled.height = height;
+        // Crea una nueva figura con la información del evento
+        restoreShape(
+          {
+            ...controlled,
+            radio: controlled.radio || controlled.width,
+            radius: controlled.radio || controlled.width,
+            type: $event.type,
+          },
+          this.canvas,
+          this.variableControlAction
+        );
+      } else {
+        const r = controlled.radio || controlled.width;
+        const points = algoritmoPoly(controlled.sides, r);
+        // Crea una nueva figura con la información del evento
+        restoreShape(
+          {
+            ...controlled,
+            points,
+            radio: controlled.radio || controlled.width,
+            radius: controlled.radio || controlled.width,
+            type: $event.type,
+          },
+          this.canvas,
+          this.variableControlAction
+        );
+      }
+      this.canvas.remove(controlled);
+      this.canvas.remove(selected);
+      selected = this.canvas._objects[this.canvas._objects.length - 1];
+      controlled = this.canvas._objects.filter(
+        (obj) => obj.id === selected.id
+      )[0];
+      this.canvas.setActiveObject(controlled);
+      this.variableControlAction();
+      this.canvas.renderAll();
+    }
+    // this.changeProductSide(this.productSide);
+    this.canvas.renderAll();
   }
   /**
    * Función que obtiene el objeto controlado actualmente en el canvas

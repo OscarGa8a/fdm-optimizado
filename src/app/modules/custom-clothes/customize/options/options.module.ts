@@ -8,16 +8,19 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { ShapeComponent } from './shape/shape.component';
+import { FeatherIconsModule } from '../../../../shared/components/feather-icons/feather-icons.module';
 
 @NgModule({
-  declarations: [OptionsComponent, TextComponent, InputNumberComponent],
+  declarations: [OptionsComponent, TextComponent, InputNumberComponent, ShapeComponent],
   imports: [
     CommonModule,
     FormsModule,
     MatCheckboxModule,
     MatSliderModule,
     MatInputModule,
-    MatSelectModule
+    MatSelectModule,
+    FeatherIconsModule
   ],
   exports: [OptionsComponent]
 })

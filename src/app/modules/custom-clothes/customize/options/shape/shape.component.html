@@ -1,0 +1,85 @@
+<div class="option-container">
+  <div class="option-content">
+    <div class="shape-types">
+      <p
+        class="shape-types-item"
+        [class.active]="shape.type === 'line'"
+        (click)="changeShape('line')"
+      >
+        <span>Línea</span>
+        <i class="line">|</i>
+      </p>
+      <p
+        class="shape-types-item"
+        [class.active]="shape.type === 'circle'"
+        (click)="changeShape('circle')"
+      >
+        <span>Círculo</span>
+        <app-feather-icons icon="circle"></app-feather-icons>
+      </p>
+      <p
+        class="shape-types-item"
+        [class.active]="shape.type === 'triangle'"
+        (click)="changeShape('triangle')"
+      >
+        <span>Triángulo</span>
+        <app-feather-icons icon="triangle"></app-feather-icons>
+      </p>
+      <p
+        class="shape-types-item"
+        [class.active]="shape.type === 'polygon'"
+        (click)="changeShape('polygon')"
+      >
+        <span>Polígono</span>
+        <app-feather-icons icon="hexagon"></app-feather-icons>
+      </p>
+    </div>
+    <div class="fila">
+      <div class="item-container" *ngIf="shape.type !== 'line'">
+        <label for="radio">Tamaño</label>
+        <input
+          type="number"
+          name="radio"
+          id="radio"
+          min="1"
+          max="200"
+          [(ngModel)]="shape.radio"
+          (ngModelChange)="changeRadio($event)"
+        />
+      </div>
+      <div class="item-container">
+        <label for="">Ancho borde</label>
+        <input
+          type="number"
+          min="0"
+          max="30"
+          [(ngModel)]="shape.strokeWidth"
+          (ngModelChange)="changeStrokeWidth($event)"
+        />
+      </div>
+      <div class="item-container" *ngIf="shape.type === 'polygon'">
+        <label for="">Número de lados</label>
+        <input
+          type="number"
+          name="lados"
+          id="lados"
+          min="4"
+          max="20"
+          [(ngModel)]="shape.sides"
+          (ngModelChange)="changeSides($event)"
+        />
+      </div>
+    </div>
+    <div class="fila">
+      <div class="item-container" [class.hide]="shape.type === 'line'">
+        <label for="fill-color">Color de fondo</label>
+        <input type="color" id="fill-color" #fillColor />
+      </div>
+      <div class="item-container">
+        <label for="border-color">Color borde</label>
+        <input id="border-color" type="color" #borderColor />
+      </div>
+      <div class="item-container" *ngIf="shape.type === 'polygon'"></div>
+    </div>
+  </div>
+</div>

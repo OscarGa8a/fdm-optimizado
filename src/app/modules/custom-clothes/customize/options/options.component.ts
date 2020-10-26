@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { CurrentIndexes, TextCurved } from '../customize.component';
+import { IShapeOptions } from '../board/elements';
 
 @Component({
   selector: 'app-options',
@@ -11,6 +12,14 @@ export class OptionsComponent implements OnInit {
    * Almacena la información del texto de fabric
    */
   @Input() text: TextCurved;
+  /**
+   * Almacena la información de la figura en el canvas
+   */
+  @Input() shape: IShapeOptions;
+  /**
+   * Emite los cambios realizados a la figura en el editor
+   */
+  @Output() eventShapeChanges = new EventEmitter<IShapeOptions>();
   /**
    * Emite la información del texto que ha sido cambiado
    */
@@ -34,6 +43,15 @@ export class OptionsComponent implements OnInit {
    */
   handleTextChanges = ($event: TextCurved) => {
     this.eventTextChanges.emit($event);
+    this.setShowMessage();
+  }
+  /**
+   * Función que detecta un cambio en la figura del canvas y emite el evento al padre
+   * @param $event Contiene la información de la figura
+   */
+  handleShapeChanges = ($event: any) => {
+    // console.log('handleShapeChanges');
+    this.eventShapeChanges.emit($event);
     this.setShowMessage();
   }
   /**

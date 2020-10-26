@@ -68,9 +68,9 @@ export default function runConfiguration() {
           w = canvas.width,
           h = canvas.height,
           pix = { x: [], y: [] },
-          n,
+          n: any,
           imageData = ctx.getImageData(0, 0, w, h),
-          fn = function (a, b) {
+          fn = (a, b) => {
             return a - b;
           };
 

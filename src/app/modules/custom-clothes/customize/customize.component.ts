@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BoardComponent } from './board/board.component';
+import { IShapeOptions } from './board/elements';
 
 import {
   TUpdateCanvas,
@@ -46,6 +47,17 @@ export class CustomizeComponent implements OnInit {
     fontStyle: 'normal',
     fontWeight: 'normal',
   } as TFabricObject;
+  /**
+   * Almacena la información de la figura en el canvas
+   */
+  shape: IShapeOptions = {
+    sides: 4,
+    radio: 40,
+    fill: '#222222',
+    stroke: '#222222',
+    strokeWidth: 3,
+    type: 'polygon',
+  };
   /**
    * Almacena la información del texto seleccionado en el visor
    */
@@ -341,14 +353,14 @@ export class CustomizeComponent implements OnInit {
       this.board.createText(this.DEFAULT_TEXT_OPTIONS);
     }
     if ($event === 'shape') {
-      // this.board.createShape({
-      //   sides: 4,
-      //   radio: 40,
-      //   fill: '#222222',
-      //   stroke: '#222222',
-      //   strokeWidth: 3,
-      //   type: 'polygon',
-      // });
+      this.board.createShape({
+        sides: 4,
+        radio: 40,
+        fill: '#222222',
+        stroke: '#222222',
+        strokeWidth: 3,
+        type: 'polygon',
+      });
     }
     if ($event === 'color') {
       // await this.board.createDesign({});
@@ -407,6 +419,22 @@ export class CustomizeComponent implements OnInit {
     this.canvasSides[index].widthArea = widthArea;
   }
   /**
+   * Función que actualiza en el padre la información de figura seleccionado
+   * @param $event Objeto con la información de la figura seleccionada
+   */
+  updateSelectionShape = ($event: any): void => {
+    // console.log('updateSelectionShape');
+    const shape: IShapeOptions = {
+      type: $event.type,
+      fill: $event.fill,
+      stroke: $event.stroke,
+      strokeWidth: $event.strokeWidth,
+      sides: $event.sides,
+      radio: $event.radio,
+    };
+    this.shape = shape;
+  }
+  /**
    * Función que actualiza en el padre la información del texto seleccionado
    * @param param0 Objeto con la información del texto seleccionado y su ancho máximo permitido
    */
@@ -458,6 +486,14 @@ export class CustomizeComponent implements OnInit {
   handleTextChanges = ($event: any): void => {
     // console.log('handleTextChanges');
     this.board.changeCurveTextProperties($event);
+  }
+  /**
+   * Función que maneja el cambio en la información ingresada para la figura
+   * @param $event Contiene la información de la figura
+   */
+  handleShapeChanges = ($event: any): void => {
+    // console.log('handleShapeChanges');
+    this.board.changeShape($event);
   }
   /**
    * Función que agrega valores por defecto al texto seleccionado

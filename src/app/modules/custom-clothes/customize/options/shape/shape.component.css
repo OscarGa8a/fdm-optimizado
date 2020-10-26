@@ -1,0 +1,150 @@
+/* Estilos para el contenedor de las opciones de figura */
+.option-container {
+  /* Define lo que debe mostrar cuando el contenido se desborda de los extremos superior e inferior, auto provee una barra de desplazamiento */
+  overflow-y: auto;
+  /* Asigna espacio de relleno a la derecha */
+  padding-right: 15px;
+  /* Asigna espacio de relleno a la izquierda */
+  padding-left: 5px;
+  /* Asigna altura */
+  height: calc(100vh - 49px - var(--height-available));
+}
+/* Estilos para el elemento con la clase fila */
+.fila {
+  /* Asigna tipo de display */
+  display: flex;
+  /* Los items tienen el mismo espacio a su alrededor */
+  justify-content: space-around;
+  /* Asigna borde inferior */
+  margin-bottom: 12px;
+}
+/* Estilos para el contenedor de los items de opciones de figura */
+.item-container {
+  /* Asigna tipo de display */
+  display: flex;
+  /* Asigna dirección en la que se apilan los elementos */
+  flex-direction: column;
+  /* Define como los elementos flexibles se diponen a lo largo del eje secundario */
+  align-items: center;
+  /* Asigna ancho */
+  width: 110px;
+}
+/* Estilos para los tipo de figura */
+.shape-types {
+  /* Asigna tipo de display */
+  display: flex;
+  /* Asigna margen inferior */
+  margin-bottom: 8px;
+}
+/* Estilos para los item de tipos de figura */
+.shape-types-item {
+  /* Asigna tipo de display */
+  display: flex;
+  /* Asigna dirección en la que se apilan los elementos */
+  flex-direction: column;
+  /* Define como los elementos flexibles se diponen a lo largo del eje secundario */
+  align-items: center;
+  /* Asigna cursor tipo puntero */
+  cursor: pointer;
+  /* Asigna color de fondo */
+  background: #f6f6f6;
+  /* Asigna ancho al máximo */
+  width: 100%;
+  /* Asigna espacio de relleno vertical y horizontal */
+  padding: 8px 0;
+}
+/* Estilos para los item de tipos de figura con la clase active*/
+.shape-types-item.active {
+  /* Asigna color */
+  color: #c3351a;
+  /* Asigna color de fondo */
+  background: white;
+  /* Asigna tamaño de borde superior */
+  border-top: 3px solid;
+}
+/* Estilos para los títulos de tipo de figura */
+.shape-types-item span {
+  /* Asigna margen inferior */
+  margin-bottom: 5px;
+  /* Asigna ancho de fuente */
+  font-weight: 600;
+}
+/* Estilos para los párrafos y label en el contenedor de las opciones de figura */
+.option-container p,
+.option-container label {
+  /* Sin margen en los cuatro lados */
+  margin: 0;
+}
+/* Estilos para los input en el contenedor de las opciones de figura */
+.option-container input {
+  /* Asigna ancho */
+  width: 42px;
+  /* Asigna alto */
+  height: 24px;
+}
+/* Estilos para el icono de linea */
+.line {
+  /* Sin margen en los cuatro lados */
+  margin: 0;
+  /* Asigna tipo de display */
+  display: block;
+  /* Asigna rotación al icono */
+  transform: rotate(45deg);
+  /* Asigna tamaño de fuente */
+  font-size: 1.8em;
+}
+/* Estilos para el elemento de color de fondo */
+.hide {
+  /* Oculta el elemento */
+  display: none;
+}
+/* Pantallas menores que 960px */
+@media screen and (max-width: 960px) {
+  /* Estilos para el contenedor de las opciones de figura */
+  .option-container {
+    /* Sin espacio de relleno en los cuatro lados */
+    padding: 0;
+    /* Asigna altura */
+    height: initial;
+  }
+  /* Estilos para las opciones de figura */
+  .option-content {
+    /* Asigna tipo de display */
+    display: flex;
+    /* Asigna dirección en la que se apilan los elementos */
+    flex-direction: column;
+    /* Asigna color de fondo */
+    background: #eeeeee;
+  }
+  /* Estilos para los tipo de figura */
+  .shape-types {
+    /* Indica orden para disponer los elementos en el contenedor flexible */
+    order: 3;
+    /* Añade efectos de sombra */
+    box-shadow: 0px 10px 28px -6px rgba(0, 0, 0, 0.75);
+    /* Sin margen en los cuatro lados */
+    margin-bottom: 0;
+  }
+  /* Estilos para los item de tipos de figura */
+  .shape-types-item {
+    /* Asigna color de fondo */
+    background: #f3f3f3;
+    /* Asigna dirección en la que se apilan los elementos */
+    flex-direction: column-reverse;
+    /* Asigna color */
+    color: #222;
+    /* Asigna tamaño al borde inferior */
+    border-bottom: 4px solid transparent;
+  }
+  /* Estilos para los item de tipos de figura con la clase active*/
+  .shape-types-item.active {
+    /* Asigna color */
+    color: initial;
+    /* Asigna color de fondo */
+    background: #f3f3f3;
+    /* Sin borde superior */
+    border-top: none;
+    /* Asigna tamaño y color al borde inferior */
+    border-bottom: 4px solid #c3351a;
+  }
+}

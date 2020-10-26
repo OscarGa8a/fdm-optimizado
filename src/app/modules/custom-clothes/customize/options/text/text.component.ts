@@ -427,7 +427,7 @@ export class TextComponent implements OnInit, AfterViewInit, OnChanges {
     }
   }
   /**
-   * Función que cambia el color del texto del canvas y emite ese valor
+   * Función que emite el color de la sombra del texto del canvas
    * @param $event Cadena con el color del texto del canvas
    */
   onShadowColorChange = ($event: string): void => {

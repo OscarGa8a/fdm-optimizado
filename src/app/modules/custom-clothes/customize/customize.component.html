@@ -9,6 +9,7 @@
       <app-board
         (openSelection)="handleOpenSelection($event)"
         (closeFromBoard)="handleCloseFromBoard($event)"
+        (updateSelectionShapeEvent)="updateSelectionShape($event)"
         (updateSelectionTextEvent)="updateSelectionText($event)"
         (updateProductSideEvent)="updateProductSide($event)"
         (updateCanvasSidesEvent)="updateCanvasSides($event)"
@@ -40,6 +41,15 @@
         </ng-container>
         <ng-template #elseTemplate>
           <ng-container [ngSwitch]="whatIsOpen">
+            <!-- Cabecera para la opción de figura -->
+            <app-top-header
+              [showMessage]="showMessage"
+              *ngSwitchCase="'shape'"
+              title="añadir figura personalizada"
+              (eventClose)="handleClose()"
+            >
+              <app-feather-icons icon="hexagon"></app-feather-icons>
+            </app-top-header>
             <!-- Cabecera para la opción de texto -->
             <app-top-header
               [showMessage]="showMessage"
@@ -62,7 +72,9 @@
           <app-options
             [whatIsOpen]="whatIsOpen"
             [text]="text"
+            [shape]="shape"
             (eventTextChanges)="handleTextChanges($event)"
+            (eventShapeChanges)="handleShapeChanges($event)"
             (eventShowMessage)="handleShowMessage($event)"
           ></app-options>
         </div>
