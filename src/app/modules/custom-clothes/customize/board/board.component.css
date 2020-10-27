@@ -100,6 +100,12 @@
   /* Asigna ancho del contenedor */
   width: 60px;
 }
+/* Estilos para los mat-checkbox de curvar e invertir en las opciones de texto */
+::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background,
+.mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+  /* Asigna color de fondo */
+  background-color: #c3351a;
+}
 /*Estilos para el contenedor de la imagen del fondo del visor y del canvas*/
 .canvas {
   /*Asigna el nombre del area del grid*/
@@ -127,7 +133,7 @@
 }
 /*Estilos para el elemento canvas*/
 .canvas-aux {
-  /* Asigna tipo de posicionamiento al canvas para que se pare encima de la imagen */
+  /* Asigna tipo de posicionamiento para que se pare encima de la imagen */
   position: absolute;
 }
 /* Estilos para los contenedores de los elementos del grid del canvas*/
@@ -301,7 +307,7 @@
 .right-controls button.disabled {
   /* Asigna color del icono del botón */
   color: #4a4a4a;
-  opacity: 0.6;
+  /* opacity: 0.7; */
 }
 /* Estilos para los iconos y los span de los botones de la derecha */
 .right-controls button i,
@@ -381,6 +387,8 @@
   padding: 0 15px;
   /* Asigna altura al contenedor */
   height: 55px;
+  /* Asigna ancho al contenedor */
+  width: 280px;
   /* Asigna tipo de posicionamiento  */
   position: absolute;
   /* Asigna posición desde la parte inferior */
@@ -426,6 +434,30 @@
 .right-controls button.palette:disabled {
   /* Asigna opaco a la paleta */
   opacity: 0.7;
+}
+/* Estilos para mostrar la rotación del objeto del canvas */
+.rotating-number {
+  /* Asigna tipo de posición */
+  position: absolute;
+  /* Asigna posición a la izquierda */
+  left: 0;
+  /* Asigna posición a la derecha */
+  right: 0;
+  /* Asigna margen superior */
+  margin-top: -25px;
+  /* Asigna ancho de fuente */
+  font-size: 1.2em;
+  /* Asigna altura de la fuente */
+  font-weight: 600;
+  /* Asigna alineamiento al texto */
+  text-align: center;
+  /* Oculta el elemento */
+  display: none;
+}
+/* Estilos para mostrar la rotación del objeto del canvas cuando tiene la clase show */
+.rotating-number.show {
+  /* Asigna tipo de display */
+  display: initial;
 }
 /* Estilos para el icono del botón de rehacer de los controles de la derecha */
 .rotated {
@@ -625,6 +657,8 @@
     object-fit: contain;
     display: block;
   }
+}
+@media screen and (max-width: 768px) {
 }
 /* En pantallas de 500 px o menos */
 @media screen and (max-width: 500px) {

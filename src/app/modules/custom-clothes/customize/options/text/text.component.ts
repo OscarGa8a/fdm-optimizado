@@ -33,7 +33,6 @@ export class TextComponent implements OnInit, AfterViewInit, OnChanges {
    * Emite la información del texto que ha sido cambiado
    */
   @Output() eventTextChanges = new EventEmitter<TextCurved>();
-  @Output() eventClose = new EventEmitter<boolean>();
   /**
    * Decorador que obtiene la instancia del selector de tipo fuente
    */
@@ -140,6 +139,7 @@ export class TextComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   ngAfterViewInit(): void {
+    // console.log('ngAfterViewInit');
     const fuentes = this.select.nativeElement.querySelectorAll('option');
     for (let i = 0; i < fuentes.length; i++) {
       fuentes[i].style.fontFamily = `'${this.fonts[i].font}'`;

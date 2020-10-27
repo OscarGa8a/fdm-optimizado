@@ -29,6 +29,9 @@
   /* Asigna ancho */
   width: 110px;
 }
+.option-container .color-input label {
+  margin-left: 8px;
+}
 /* Estilos para los tipo de figura */
 .shape-types {
   /* Asigna tipo de display */

@@ -43,6 +43,7 @@ export class ShapeComponent implements OnInit, OnChanges, AfterViewInit {
    * Decorador que obtiene la instancia del picker de borde de color
    */
   @ViewChild('borderColor', { static: true }) inputBorderColor: ElementRef;
+
   constructor() { }
 
   ngOnInit(): void {

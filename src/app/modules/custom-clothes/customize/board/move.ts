@@ -36,7 +36,7 @@ export const moving = (e: any, canvas: any, action: any) => {
   chooseLimitBorders(newPosition, boundingRect, selected, controlled, canvas);
 };
 /**
- * Función que calcula la posición de los botones del controlador
+ * Función que calcula la posición para los botones del controlador
  * @param bounding Contiene las coordenadas y medidas del objeto controlado
  * @param canvas Canvas de fabric donde se renderizan los objetos
  * @param lastPosition Última posición de los botones del controlador
@@ -89,7 +89,7 @@ const calculatePosition = (bounding: any, canvas: any, lastPosition: any) => {
   return `${vertical}_${horizontal}`;
 };
 /**
- * Función que asigna las posiciones a los botones del controlador
+ * Función que asigna los límites del objeto controlado y su controlador
  * @param position Posición de los botones del controlador
  * @param bounding Contiene las coordenadas y medidas del objeto controlado
  * @param selected Controlador del objeto seleccionado
@@ -122,7 +122,7 @@ const chooseLimitBorders = (
   }
 };
 /**
- * Función que asigna la posición top-left a los botones del controlador
+ * Función que asigna la posición límite top-left al objeto controlado y su controlador
  * @param bounding Contiene las coordenadas y medidas del objeto controlado
  * @param selected Controlador del objeto seleccionado
  * @param controlled Objeto controlado en el canvas
@@ -175,7 +175,7 @@ const limitTopLeft = (bounding: any, selected: any, controlled: any, canvas: any
   controlled.setCoords();
 };
 /**
- * Función que asigna la posición top-right a los botones del controlador
+ * Función que asigna la posición límite top-right al objeto controlado y su controlador
  * @param bounding Contiene las coordenadas y medidas del objeto controlado
  * @param selected Controlador del objeto seleccionado
  * @param controlled Objeto controlado en el canvas
@@ -229,7 +229,7 @@ const limitTopRight = (bounding: any, selected: any, controlled: any, canvas: an
   controlled.setCoords();
 };
 /**
- * Función que asigna la posición bottom-left a los botones del controlador
+ * Función que asigna la posición límite bottom-left al objeto controlado y su controlador
  * @param bounding Contiene las coordenadas y medidas del objeto controlado
  * @param selected Controlador del objeto seleccionado
  * @param controlled Objeto controlado en el canvas
@@ -282,7 +282,7 @@ const limitBottomLeft = (bounding: any, selected: any, controlled: any, canvas: 
   controlled.setCoords();
 };
 /**
- * Función que asigna la posición bottom-right a los botones del controlador
+ * Función que asigna la posición límite bottom-right al objeto controlado y su controlador
  * @param bounding Contiene las coordenadas y medidas del objeto controlado
  * @param selected Controlador del objeto seleccionado
  * @param controlled Objeto controlado en el canvas

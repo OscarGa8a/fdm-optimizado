@@ -334,6 +334,7 @@ const createTextBox = (
   box['flipped'] = flipped;
   box['id'] = id;
   box['idRelated'] = idRelated;
+  box['clipName'] = 'layer';
   box['isControl'] = false;
   box['position'] = 'TOP_LEFT';
   box['pseudoCharSpacing'] = 0;
@@ -449,7 +450,7 @@ const restoreShapeElement = (options: any, canvas: any) => {
       });
       break;
     case 'line':
-      const newPoints = [0, 0, options.radio | options.radius, 0];
+      const newPoints = [0, 0, options.radio || options.radius, 0];
       box = new fabric.Line(newPoints, {
         ...newOptions,
         padding: CONTROL_OFFSET * 2,
@@ -472,7 +473,6 @@ const restoreShapeElement = (options: any, canvas: any) => {
  * @param canvas Canvas de fabric donde se renderizará el objeto
  */
 function clipByName(box: any, ctx: any, canvas: any) {
-  // console.log('clipByName');
   // Algunas acciones requieren una llamada object.setCoords()para que se vuelvan a calcular las posiciones de control
   box.setCoords();
   // Obtiene el objeto de recorte

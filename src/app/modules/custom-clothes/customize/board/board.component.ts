@@ -2,19 +2,20 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
-  OnInit,
-  Input,
-  Output,
   EventEmitter,
-  ViewChild,
   HostListener,
+  Input,
   OnChanges,
-  SimpleChanges
+  OnInit,
+  Output,
+  SimpleChanges,
+  ViewChild
 } from '@angular/core';
 
 import { fabric } from 'fabric';
 import FontFaceObserver from 'fontfaceobserver';
 import runConfigurations from './configurations';
+
 import { moving } from './move';
 import { FileSaverService } from 'ngx-filesaver';
 
@@ -29,6 +30,7 @@ import {
 
 import { CONTROL_OFFSET } from './constants';
 import { rotating, rotated } from './rotate';
+import { scaling } from './scale';
 import { loadImageFromUrl } from './utils';
 
 import { HttpService } from '../../../../services/http.service';
@@ -185,6 +187,10 @@ export class BoardComponent implements OnInit, AfterViewInit, OnChanges {
    */
   objectActive = false;
   /**
+   * Indica si la escala del objeto es uniforme en todos los lados
+   */
+  uniScaleTransform = false;
+  /**
    * Indica si se debe mostrar la imagen de previsualización
    */
   showPreviewImg = false;
@@ -197,7 +203,7 @@ export class BoardComponent implements OnInit, AfterViewInit, OnChanges {
    */
   historyIndex = 0;
   /**
-   * Indica si no se ha cambaido el tamaño del elemento canvas
+   * Indica si no se ha cambiado el tamaño del elemento canvas
    */
   state = true;
   /**
@@ -305,8 +311,7 @@ export class BoardComponent implements OnInit, AfterViewInit, OnChanges {
     if ('product' in changes) {
       this.top =
         (this.product[this.productSide].arriba /
-          this.product[this.productSide].altoReal) *
-        100;
+          this.product[this.productSide].altoReal);
       this.left =
         this.product[this.productSide].izquierda /
         this.product[this.productSide].anchoReal;
@@ -363,11 +368,10 @@ export class BoardComponent implements OnInit, AfterViewInit, OnChanges {
   loadCanvas = async () => {
     // console.log('loadCanvas');
     this.heightImgBackground = this.imgBackground.nativeElement.height;
-    const height = this.heightImgBackground;
     this.topPixelesCanvas = this.top * this.heightImgBackground;
     this.widthImgBackground = this.imgBackground.nativeElement.width;
-    const width = this.widthImgBackground;
     this.leftPixelesCanvas = this.left * this.widthImgBackground;
+
     const style = window.getComputedStyle(this.imgBackground.nativeElement);
     const marginLeft = parseInt(style.marginLeft, 10);
     this.imgOffset = marginLeft;
@@ -375,12 +379,12 @@ export class BoardComponent implements OnInit, AfterViewInit, OnChanges {
     this.height =
       (this.product[this.productSide].altoAreaReal /
         this.product[this.productSide].altoReal) *
-      height;
+      this.heightImgBackground;
     // Obtiene el ancho del canvas de fabric
     this.width =
       (this.product[this.productSide].anchoAreaReal /
         this.product[this.productSide].anchoReal) *
-      width;
+      this.widthImgBackground;
     // Calcula el número de columnas para el grid
     this.gridColumn = Math.floor(this.width / 15 / 2);
     // Calcula el número de filas para el grid
@@ -456,6 +460,7 @@ export class BoardComponent implements OnInit, AfterViewInit, OnChanges {
     // Se activa mientras se esta escalando un objeto en el canvas de fabric
     this.canvas.on('object:scaling', (e: fabric.IEvent): void => {
       // console.log('scaling');
+      scaling(e, this.canvas);
     });
     // Se activa cuando se termina de escalar un objeto en el canvas de fabric
     this.canvas.on('object:scaled', (e: fabric.IEvent): void => {
@@ -465,6 +470,8 @@ export class BoardComponent implements OnInit, AfterViewInit, OnChanges {
     // Se activa cuando se termina de rotar un objeto en el canvas de fabric
     this.canvas.on('object:rotated', (e: fabric.IEvent): void => {
       // console.log('rotated');
+      this.isRotating = false;
+      rotated(e, this.canvas);
       this.calculateMaxWidthOfTextbox();
     });
     // Se activa cuando se selecciona un objeto en el canvas de fabric
@@ -650,6 +657,7 @@ export class BoardComponent implements OnInit, AfterViewInit, OnChanges {
    * @param $event Contiene la información de los cambios realizados en el texto
    */
   changeCurveTextProperties = async ($event: any) => {
+    // console.log('changeCurveTextProperties');
     const selectedAndControlled = this.getControlAndObject();
     // Obtiene el objeto controlado y su controlador
     if (!selectedAndControlled) { return null; }
@@ -657,6 +665,7 @@ export class BoardComponent implements OnInit, AfterViewInit, OnChanges {
     // Si el objeto controladado es un texto curveado
     if (controlled.type === 'text-curved') {
       // controlled.pseudoCharSpacing;
+      // Si el texto modificado es un texto normal
       if ($event.type === 'textbox') {
         // console.log("1");
         // Curveado cambio a caja
@@ -692,10 +701,8 @@ export class BoardComponent implements OnInit, AfterViewInit, OnChanges {
           ...$event,
           diameter,
         });
-        // Obtenga las coordenadas y medidas del objeto controlado
+        // Obtiene los límites del objeto
         const box = controlled.getBoundingRect();
-        // Asigna las propiedades del objeto controlado al controlador
-        // para que el controlador tome la posición y tamaño del texto
         selected.set({
           left: box.left,
           top: box.top,
@@ -849,6 +856,7 @@ export class BoardComponent implements OnInit, AfterViewInit, OnChanges {
         this.disableShowColor = false;
         if (window.innerWidth < 960) { return null; }
         this.openSelection.emit('color');
+        // this.updateSelectionMultiDesignEvent.emit(controlled);
       } else if (
         controlled.type === 'polygon' ||
         controlled.type === 'circle' ||
@@ -857,6 +865,7 @@ export class BoardComponent implements OnInit, AfterViewInit, OnChanges {
       ) {
         this.disableShowColor = true;
         if (window.innerWidth < 960) { return null; }
+        this.updateSelectionShapeEvent.emit(controlled);
         this.openSelection.emit('shape');
       }
       this.canvas.requestRenderAll();
@@ -906,6 +915,7 @@ export class BoardComponent implements OnInit, AfterViewInit, OnChanges {
     }
     if (controlled.type === 'group') {
       this.openSelection.emit('color');
+      // this.updateSelectionMultiDesignEvent.emit(controlled);
     }
     if (
       controlled.type === 'polygon' ||
@@ -997,7 +1007,7 @@ export class BoardComponent implements OnInit, AfterViewInit, OnChanges {
     const design = await loadImageFromUrl(urlDesign);
     // Asigna posicion X Y al diseño
     design.set({
-      top: (productImg.clientHeight * this.top) / 100,
+      top: (productImg.clientHeight * this.top),
       left: productImg.clientWidth * this.left,
     });
     // Obtiene el logo de CATO
@@ -1022,6 +1032,166 @@ export class BoardComponent implements OnInit, AfterViewInit, OnChanges {
     if (index === 0) {
       // Emite la url de previsualización para ser usada por el componente padre
       this.previewImageEvent.emit(urlPreview);
+    }
+  }
+  /**
+   * Función que sube el nivel del objeto seleccionado y su controlador
+   * en la pila de objetos en el canvas
+   */
+  moveToUp = (): void => {
+    // console.log('moveToUp');
+    if (this.canvas.getActiveObject()) {
+      const { selected, controlled } = this.getControlAndObject();
+      // Obtiene el nivel en la pila de objetos del controlador
+      const currentIndexSelected = this.canvas.getObjects().indexOf(selected);
+      // Obtiene el nivel en la pila de objetos del objeto controlado
+      const currentIndexControlled = this.canvas.getObjects().indexOf(controlled);
+
+      if (currentIndexControlled <= this.canvas._objects.length - 4) {
+        selected.moveTo(currentIndexSelected + 2);
+        controlled.moveTo(currentIndexControlled + 2);
+      }
+    }
+  }
+  /**
+   * Función que baja el nivel del objeto seleccionado y su controlador
+   * en la pila de objetos en el canvas
+   */
+  moveToDown = (): void => {
+    // console.log('moveToDowm');
+    if (this.canvas.getActiveObject()) {
+      const { selected, controlled } = this.getControlAndObject();
+      // Obtiene el nivel en la pila de objetos del controlador
+      const currentIndexSelected = this.canvas.getObjects().indexOf(selected);
+      // Obtiene el nivel en la pila de objetos del objeto controlado
+      const currentIndexControlled = this.canvas.getObjects().indexOf(controlled);
+      // Mayor o igual a 4 por que esto garantiza que hay un elemento abajo de ellos, [0,1] de conf, [2,3] Primer elemento
+      if (currentIndexControlled >= 4) {
+        controlled.moveTo(currentIndexControlled - 2);
+        selected.moveTo(currentIndexSelected - 2);
+      }
+    }
+  }
+  /**
+   * Función que centra totalmente el objeto en el canvas
+   */
+  centerObject = (): void => {
+    // console.log('centerObject');
+    if (this.canvas.getActiveObject()) {
+      const { selected, controlled } = this.getControlAndObject();
+      selected.center();
+      controlled.center();
+      this.canvas.renderAll();
+    }
+  }
+  /**
+   * Función que mueve el objeto a la izquierda del canvas
+   */
+  alignToLeft = (): void => {
+    // console.log('alignToLeft');
+    if (this.canvas.getActiveObject()) {
+      const { selected, controlled } = this.getControlAndObject();
+      controlled.set({
+        left: (selected.width * selected.scaleX) / 2 + CONTROL_OFFSET,
+      });
+      selected.set({
+        left: (selected.width * selected.scaleX) / 2 + CONTROL_OFFSET,
+      });
+      // moving(null, this.canvas, this.variableControlAction);
+      this.canvas.renderAll();
+    }
+  }
+  /**
+   * Función que centra verticalmente el objeto en el canvas
+   */
+  alignToVerticalCenter = (): void => {
+    // console.log('alignToVerticalCenter');
+    if (this.canvas.getActiveObject()) {
+      const { selected, controlled } = this.getControlAndObject();
+      controlled.set({
+        top: this.canvas.getHeight() / 2,
+      });
+      selected.set({
+        top: this.canvas.getHeight() / 2,
+      });
+      // moving(null, this.canvas, this.variableControlAction);
+      this.canvas.renderAll();
+    }
+  }
+  /**
+   * Función que mueve el objeto a la derecha del canvas
+   */
+  alignToRight = (): void => {
+    // console.log('alignToRight');
+    if (this.canvas.getActiveObject()) {
+      const { selected, controlled } = this.getControlAndObject();
+      controlled.set({
+        left:
+          this.width - (selected.width * selected.scaleX) / 2 - CONTROL_OFFSET,
+      });
+      selected.set({
+        left:
+          this.width - (selected.width * selected.scaleX) / 2 - CONTROL_OFFSET,
+      });
+      // moving(null, this.canvas, this.variableControlAction);
+      this.canvas.renderAll();
+    }
+  }
+  /**
+   * Función que mueve el objeto a la parte superior del canvas
+   */
+  alignToTop = (): void => {
+    // console.log('alignToTop');
+    if (this.canvas.getActiveObject()) {
+      const { selected, controlled } = this.getControlAndObject();
+      controlled.set({
+        top: (selected.height * selected.scaleX) / 2 + CONTROL_OFFSET,
+      });
+      selected.set({
+        top: (selected.height * selected.scaleX) / 2 + CONTROL_OFFSET,
+      });
+      // moving(null, this.canvas, this.variableControlAction);
+      this.canvas.renderAll();
+    }
+  }
+  /**
+   * Función que centra horizontalmente el objeto en el canvas
+   */
+  alignToHorizontalCenter = (): void => {
+    // console.log('alignToHorizontalCenter');
+    if (this.canvas.getActiveObject()) {
+      const { selected, controlled } = this.getControlAndObject();
+      controlled.set({
+        left: this.canvas.getWidth() / 2,
+      });
+      selected.set({
+        left: this.canvas.getWidth() / 2,
+      });
+      // moving(null, this.canvas, this.variableControlAction);
+      this.canvas.renderAll();
+    }
+  }
+  /**
+   * Función que mueve el objeto a la parte inferior del canvas
+   */
+  alignToBottom = (): void => {
+    // console.log('alignToBottom');
+    if (this.canvas.getActiveObject()) {
+      const { selected, controlled } = this.getControlAndObject();
+      controlled.set({
+        top:
+          this.canvas.getHeight() -
+          (selected.height * selected.scaleX) / 2 -
+          CONTROL_OFFSET,
+      });
+      selected.set({
+        top:
+          this.canvas.getHeight() -
+          (selected.height * selected.scaleX) / 2 -
+          CONTROL_OFFSET,
+      });
+      // moving(null, this.canvas, this.variableControlAction);
+      this.canvas.renderAll();
     }
   }
   /**
@@ -1051,6 +1221,70 @@ export class BoardComponent implements OnInit, AfterViewInit, OnChanges {
     this.resetCanvas();
     // Carga al canvas la última modificación realizada
     this.readFromJSON(this.canvas, this.history[this.historyIndex]);
+  }
+  /**
+   * Función que elimina el objeto controlado seleccionado y su controlador
+   */
+  deleteElement = (): void => {
+    // console.log('deleteElement');
+    const { selected, controlled } = this.getControlAndObject();
+    this.canvas.remove(selected);
+    this.canvas.remove(controlled);
+  }
+  /**
+   * Función que permite duplicar un elemento renderizado en el canvas
+   */
+  duplicateElement = (): void => {
+    // console.log('duplicateElement');
+    const { controlled } = this.getControlAndObject();
+    if (
+      controlled.type === 'circle' ||
+      controlled.type === 'polygon' ||
+      controlled.type === 'triangle'
+    ) {
+      createShape(
+        {
+          ...controlled,
+          type: controlled.type,
+        },
+        this.canvas,
+        this.variableControlAction
+      );
+    } else if (controlled.type === 'group') {
+      // const imgs = controlled._objects.map(
+      //   // @ts-ignore
+      //   ({ filters, _originalElement }: TFabricObject) => ({
+      //     url: _originalElement.currentSrc,
+      //     color: filters[0].color,
+      //   })
+      // );
+      // createMultiDesign(
+      //   imgs,
+      //   {
+      //     ...controlled,
+      //   },
+      //   this.canvas,
+      //   this.variableControlAction,
+      //   controlled.idDesign
+      // );
+    } else if (controlled.text) {
+      createTextElement(
+        {
+          ...controlled,
+        },
+        this.canvas,
+        this.variableControlAction
+      );
+    }
+  }
+  /**
+   * Función que permite cambiar el escalado uniforme en todos los lados del objeto
+   */
+  toggleUniformScaling = (): void => {
+    // console.log('toggleUniformScaling');
+    this.uniScaleTransform = !this.uniScaleTransform;
+    this.canvas.uniScaleTransform = this.uniScaleTransform;
+    this.canvas.renderAll();
   }
   /**
    * Función que cambia el estado del grid en el visor
@@ -1174,7 +1408,7 @@ export class BoardComponent implements OnInit, AfterViewInit, OnChanges {
     const last = controlled.type;
     // Si el objeto es un poligono
     if (($event.sides || $event.radio) && controlled.type === 'polygon') {
-      // Obtiene los puntos del poligono
+      // Obtiene los puntos que forman el polígono
       const points = algoritmoPoly(
         $event.sides || controlled.sides,
         $event.radio || controlled.radio

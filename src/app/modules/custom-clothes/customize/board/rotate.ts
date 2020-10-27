@@ -67,7 +67,7 @@ export const rotated = (e: any, canvas: any) => {
   selected.initialAngle = controlled.angle;
 };
 /**
- * Función que asigna las posiciones a los botones del controlador
+ * Función que asigna los límites del objeto controlado y su controlador
  * @param position Posición de los botones del controlador
  * @param bounding Contiene las coordenadas y medidas del objeto controlado
  * @param selected Controlador del objeto seleccionado
@@ -100,7 +100,7 @@ const chooseLimitBorders = (
   }
 };
 /**
- * Función que asigna la posición top-left a los botones del controlador
+ * Función que asigna la posición límite top-left al objeto controlado y su controlador
  * @param bounding Contiene las coordenadas y medidas del objeto controlado
  * @param selected Controlador del objeto seleccionado
  * @param controlled Objeto controlado en el canvas
@@ -125,7 +125,7 @@ const limitTopLeft = (bounding: any, selected: any, controlled: any, canvas: any
   }
 };
 /**
- * Función que asigna la posición top-right a los botones del controlador
+ * Función que asigna la posición límite top-right al objeto controlado y su controlador
  * @param bounding Contiene las coordenadas y medidas del objeto controlado
  * @param selected Controlador del objeto seleccionado
  * @param controlled Objeto controlado en el canvas
@@ -151,7 +151,7 @@ const limitTopRight = (bounding, selected, controlled, canvas) => {
   }
 };
 /**
- * Función que asigna la posición bottom-left a los botones del controlador
+ * Función que asigna la posición límite bottom-left al objeto controlado y su controlador
  * @param bounding Contiene las coordenadas y medidas del objeto controlado
  * @param selected Controlador del objeto seleccionado
  * @param controlled Objeto controlado en el canvas
@@ -178,7 +178,7 @@ const limitBottomLeft = (bounding, selected, controlled, canvas) => {
   }
 };
 /**
- * Función que asigna la posición bottom-right a los botones del controlador
+ * Función que asigna la posición límite bottom-right al objeto controlado y su controlador
  * @param bounding Contiene las coordenadas y medidas del objeto controlado
  * @param selected Controlador del objeto seleccionado
  * @param controlled Objeto controlado en el canvas

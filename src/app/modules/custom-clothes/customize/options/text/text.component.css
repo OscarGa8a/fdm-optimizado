@@ -14,6 +14,12 @@
   /* Asigna margen inferior */
   margin-bottom: 4px;
 }
+
+.option-content {
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  max-height: 0;
+}
 /* Estilos para el párrafo de nota de texto */
 .note {
   /* Asigna tamaño de la fuente */
@@ -28,7 +34,7 @@
   /* No se puede cambiar tamaño del elemento */
   resize: none;
   /* Asigna ancho al máximo */
-  width: 96%;
+  width: 100%;
   /* Asigna altura */
   height: 80px;
   /* Asigna espacio de relleno en los cuatro lados */
@@ -45,6 +51,30 @@
   /* Asigna tamaño de fuente */
   font-size: 1em;
 }
+/* Estilos para la barra horizontal de magnitud de texto curveado */
+::ng-deep .mat-accent .mat-slider-track-fill,
+::ng-deep .mat-accent .mat-slider-thumb,
+::ng-deep .mat-accent .mat-slider-thumb-label {
+  /* Aisgna color de fondo */
+  background: #222;
+}
+/* Estilos para los checkbox del texto curveado */
+::ng-deep label.mat-checkbox-layout {
+  /* Asigna dirección en la que se apilan los elementos */
+  flex-direction: column-reverse;
+  /* Define como los elementos flexibles se a lo largo del eje secundario*/
+  align-items: center;
+}
+/* Estilos para los checkbox del texto curveado */
+::ng-deep label.mat-checkbox-layout .mat-checkbox-inner-container {
+  /* Sin margen en los cuatro lados */
+  margin: 0;
+}
+/* Estilos para el slider horizontal de la magnitud del texto curveado */
+::ng-deep .mat-slider-horizontal {
+  /* Sin espacio de relleno en los cuatro lados */
+  padding: 0 !important;
+} 
 /* Estilos para el contenedor de las opciones del texto */
 .mobile-padding-container {
   /* Asigna display tipo flex */
@@ -90,6 +120,10 @@ input[type="color"] {
   height: 28px;
   /* Asigna ancho y color de bor */
   border: 1px solid gray;
+}
+
+.curved-text ::ng-deep label {
+  margin: 0;
 }
 /* Estilos para el contenedor de los items en el texto */
 .item-container {
@@ -173,9 +207,7 @@ input[type="color"] {
 .format span,
 .align span,
 .fuente span {
-  /* Asigna margen desde la parte inferior */
   margin-bottom: 5px;
-  /* Hace que los span sean un elemento en línea dentro del padre */
   display: inline-flex;
 }
 /* Estilos para los label del formato de texto */
@@ -211,6 +243,7 @@ input[type="color"] {
 }
 /* Para pantallas menores a 960px */
 @media screen and (max-width: 960px) {
+  /* Posiblemente para todos */
   /* Estilos para el contenedor del componente texto */
   .option-container {
     /* Asigna altura */
@@ -241,7 +274,7 @@ input[type="color"] {
   .note {
     display: none;
   }
-  /* Estilos para elemento con la clase fila y el elemento textarea */
+  /* Estilos para elemento con la clase fila y el elemento text area */
   .fila,
   .text-content {
     /* Oculta el elemento */
@@ -273,7 +306,7 @@ input[type="color"] {
     /* Asigna espacio de relleno arriba, izquierda derecha y abajo */
     padding: 12px 10px 5px;
   }
-  /* Estilos para el elemento con la clase mobile padding y gris */
+  /* Estilos para el elemento con la clase mobile-padding y gris */
   .mobile-padding.gris {
     /* Asigna color de fondo */
     background: #f1f1f1;
@@ -330,4 +363,7 @@ input[type="color"] {
     /* Asigna borde inferior y su color */
     border-bottom: 4px solid #c3351a;
   }
+}
+@media screen and (max-width: 450px) {
+
 }

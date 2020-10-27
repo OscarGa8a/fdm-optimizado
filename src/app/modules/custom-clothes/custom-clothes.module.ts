@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, Injectable } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CustomizeComponent } from './customize/customize.component';
 import { BoardComponent } from './customize/board/board.component';
@@ -7,6 +7,19 @@ import { FeatherIconsModule } from '../../shared/components/feather-icons/feathe
 import { HeaderModule } from './customize/header/header.module';
 import { SelectionComponent } from './customize/selection/selection.component';
 import { OptionsModule } from './customize/options/options.module';
+import * as Hammer from 'hammerjs';
+import {
+  HammerModule,
+  HAMMER_GESTURE_CONFIG,
+  HammerGestureConfig,
+} from '@angular/platform-browser';
+
+@Injectable()
+export class HammerConfig extends HammerGestureConfig {
+  overrides = {
+    swipe: { direction: Hammer.DIRECTION_ALL },
+  } as any;
+}
 
 @NgModule({
   declarations: [CustomizeComponent, BoardComponent, SelectionComponent],
@@ -15,10 +28,17 @@ import { OptionsModule } from './customize/options/options.module';
     FileSaverModule,
     FeatherIconsModule,
     HeaderModule,
-    OptionsModule
+    OptionsModule,
+    HammerModule
   ],
   exports: [
     CustomizeComponent
-  ]
+  ],
+  providers: [
+    {
+      provide: HAMMER_GESTURE_CONFIG,
+      useClass: HammerConfig,
+    },
+  ],
 })
 export class CustomClothesModule { }

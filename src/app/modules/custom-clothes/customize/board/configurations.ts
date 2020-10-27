@@ -1,6 +1,9 @@
 import { fabric } from 'fabric';
 import 'fabric-customise-controls';
 
+/**
+ * Función que configura las opciones de texto curveado para ser usado en fabric
+ */
 export default function runConfiguration() {
   (function (fabric) {
     /*
@@ -8,7 +11,7 @@ export default function runConfiguration() {
      * @author Arjan Haverkamp (av01d)
      * @date January 2018
      */
-
+    // Crea una clase para generar el texto curveado en fabric
     fabric.TextCurved = fabric.util.createClass(fabric.Object, {
       type: 'text-curved',
       diameter: 250,
@@ -267,9 +270,14 @@ export default function runConfiguration() {
     };
   })(typeof fabric !== 'undefined' ? fabric : require('fabric').fabric);
 
+  /**
+   * Función que genera un cuadro delimitador de la figura a partir de los puntos
+   * que generan la figura
+   * @param points Contiene los puntos delimitadores de la figura
+   */
   // @ts-ignore
   fabric.util.makeBoundingBoxFromPoints = (points: any) => {
-    // console.log('makeBoundigBoxFromPoints');
+    // console.log('makeBoundigBoxFromPoints config');
     const minX = fabric.util.array.min(points, 'x'),
       maxX = fabric.util.array.max(points, 'x'),
       width = Math.abs(minX - maxX),
@@ -284,8 +292,11 @@ export default function runConfiguration() {
       height: height,
     };
   };
-
+  /**
+   * Función que obtiene los puntos delimitadores del polígono
+   */
   fabric.Polygon.prototype.getBoundingRect = function() {
+    // console.log('getBoundingRect Polygon');
     const matrix = this.calcTransformMatrix();
     // @ts-ignore
     let points = this.points;
@@ -301,8 +312,11 @@ export default function runConfiguration() {
     // @ts-ignore
     return fabric.util.makeBoundingBoxFromPoints(points);
   };
-
+  /**
+   * Función que obtiene los puntos delimitadores del triángulo
+   */
   fabric.Triangle.prototype.getBoundingRect = function name() {
+    // console.log('getBoundingRect Triangle');
     const matrix = this.calcTransformMatrix();
     let points = [
       { x: -this.width / 2, y: this.height / 2 },
@@ -317,8 +331,11 @@ export default function runConfiguration() {
     // @ts-ignore
     return fabric.util.makeBoundingBoxFromPoints(points);
   };
-
+  /**
+   * Función que obtiene los puntos delimitadores del círculo
+   */
   fabric.Circle.prototype.getBoundingRect = function() {
+    // console.log('getBoundingRect Circle');
     const matrix = this.calcTransformMatrix();
     let points = [
       { x: -this.width / 2, y: 0 },
