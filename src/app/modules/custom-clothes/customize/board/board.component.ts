@@ -44,7 +44,7 @@ import {
   TControlAndObject,
 } from '../types';
 /**
- * Componente app-board encagardo de renderizar los objetos en el canvas
+ * Componente encagardo de renderizar los objetos en el canvas
  */
 @Component({
   selector: 'app-board',
@@ -284,10 +284,16 @@ export class BoardComponent implements OnInit, AfterViewInit, OnChanges {
    * Arreglo que almacena las imágenes que han sido cargadas en el fabric
    */
   addedImages: any[] = [];
-
+  /**
+   * Contructor del componente
+   * @param FileSaver Permite la descarga de archivos desde el navegador al dispotivo
+   * @param http Servicio que permite la comunicación con servidores externos
+   */
   constructor(private FileSaver: FileSaverService,
               private http: HttpService) { }
-
+  /**
+   * Función que calcula la posición del canvas en la página
+   */
   ngOnInit(): void {
     // console.log('ngOnInit');
     this.top =
@@ -305,7 +311,10 @@ export class BoardComponent implements OnInit, AfterViewInit, OnChanges {
       this.dataLinks = links;
     });
   }
-
+  /**
+   * Función que detecta el cambio en el producto para calcular la posición del canvas
+   * @param changes Contiene las propiedades cambiadas en el componente
+   */
   ngOnChanges(changes: SimpleChanges): void {
     // console.log('ngOnChanges');
     if ('product' in changes) {
@@ -350,7 +359,10 @@ export class BoardComponent implements OnInit, AfterViewInit, OnChanges {
     this.resizeCanvas();
     this.windowWidth = window.innerWidth;
   }
-
+  /**
+   * Función que crea un evento cuando se termina de cargar la imagen de fondo del
+   * editor para que calcula el tamaño del canvas
+   */
   ngAfterViewInit(): void {
     // console.log('ngAfterViewInit');
     // Cambia el tamaño del canvas cuando se termina de cargar la imagen
@@ -560,6 +572,30 @@ export class BoardComponent implements OnInit, AfterViewInit, OnChanges {
     this.changeHistory();
 
     this.generatePreviews();
+  }
+  /**
+   * Función que maneja el deslizamiento del táctil en móvil para cambiar
+   * la vista del producto en el editor
+   */
+  onSwipe = (evt: any): void => {
+    console.log('onSwipe');
+    const x =
+      Math.abs(evt.deltaX) > 40 ? (evt.deltaX > 0 ? 'right' : 'left') : '';
+    const y = Math.abs(evt.deltaY) > 40 ? (evt.deltaY > 0 ? 'down' : 'up') : '';
+    if (this.windowWidth < 960) {
+      switch (x) {
+        case 'left':
+          if (this.productSide === 0) { return null; }
+          this.updateProductSideEvent.emit(this.productSide - 1);
+          break;
+        case 'right':
+          if (this.productSide === this.product.length - 1) { return null; }
+          this.updateProductSideEvent.emit(this.productSide + 1);
+          break;
+        default:
+          break;
+      }
+    }
   }
   /**
    * Función que crea el objeto de recorte y el objeto de bordes punteados y los agrega al canvas de fabric
@@ -1929,10 +1965,5 @@ export class BoardComponent implements OnInit, AfterViewInit, OnChanges {
     fabric.Image.fromURL(`${this.urlsCDN[2]}?w=200&h=200&text=holamundo nuevo&text_wrap=true`, (img: any) => {
       this.canvas.add(img);
     });
-  }
-
-  createRect(){
-    const rect = new fabric.Rect({width: 50, height: 50, fill: 'red'});
-    this.canvas.add(rect);
   }
 }

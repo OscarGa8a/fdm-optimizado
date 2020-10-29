@@ -566,15 +566,48 @@ export const algoritmoPoly = (lados: any, R: any): any[] => {
  * Interfaz para manejar las opciones de figura del editor
  */
 export interface IShapeOptions {
+  /**
+   * Cadena con el nombre del tipo de figura
+   */
   type?: string;
+  /**
+   * Valor del radio de la figura
+   */
   radio?: number;
+  /**
+   * Valor del número de lados de la figura
+   */
   sides?: number;
+  /**
+   * Color de la figura
+   */
   fill?: string | fabric.Pattern | fabric.Gradient;
+  /**
+   * Cadena con el color de borde de la figura
+   */
   stroke?: string;
+  /**
+   * Valor del ancho de borde de la figura
+   */
   strokeWidth?: number;
+  /**
+   * Valor del ancho de la figura
+   */
   width?: number;
+  /**
+   * Valor de la escala en X en la figura
+   */
   scaleX?: number;
+  /**
+   * Valor de la escala en Y en la figura
+   */
   scaleY?: number;
+  /**
+   * Valor del ángulo de la figura
+   */
   angle?: number;
+  /**
+   * Valor del espacio de relleno de la figura
+   */
   padding?: number;
 }

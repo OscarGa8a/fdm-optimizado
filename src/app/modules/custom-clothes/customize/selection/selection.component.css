@@ -29,7 +29,7 @@
   font-family: Lato, sans-serif, "Segoe UI";
   /* Sin bordes */
   border: none;
-  /* Asigna ancho de la fuente */
+  /* Asigna peso de la fuente */
   font-weight: 600;
   /* Asigna cursor tipo puntero */
   cursor: pointer;
@@ -70,7 +70,7 @@
   display: flex;
   /* Asigna alineación de los elementos dentro del bloque */
   align-items: center;
-  /* Asigna ancho de la fuente */
+  /* Asigna peso de la fuente */
   font-weight: normal;
 }
 /* Estilos para todos los elementos que son hijos directos del contenedor */

@@ -58,7 +58,7 @@
     height: 36px;
     /* Asigna espacio de relleno arriba, derecha, abajo e izquierda */
     padding: 0 15px 0 25px;
-    /* Asigna ancho de fuente */
+    /* Asigna peso de la fuente */
     font-weight: bold;
 }
 /* Estilos para el párrafo en la cabecera de las opciones */
@@ -121,8 +121,308 @@
     /* Asigna inicio y final de la columna */
     grid-column: 1/-1;
 }
+/* Estilos para las pestañas inferiores */
+.tabs {
+    /* Asigna tipo de display */
+    display: flex;
+}
+/* Estilos para las pestañas inferiores de móvil */
+.tabs.mobile {
+    /* Oculta el elemento */
+    display: none;
+}
+/* Estilos para las pestañas inferiores de escritorio */
+.tabs.desktop {
+    /* Asigna tipo de display */
+    display: flex;
+    /* Asigna ancho al máximo */
+    width: 100%;
+    /* Asigna espacio de relleno vertical y horizontal */
+    padding: 9px 20px;
+    /* Asigna color de fondo */
+    background: #eeeeee;
+    /* Dsitribuye items uniformemente, el primero al inicio, el último al final */
+    justify-content: space-between;
+}
+/* Estilos para las opciones de producto y color en las pestañas inferiores */
+.tabs-desktop-controls {
+    /* Asigna tipo de display */
+    display: flex;
+    /* Los elementos se acomodan de arriba a abajo */
+    flex-direction: column;
+    /* Los items tienen el mismo espacio a su alrededor */
+    justify-content: space-around;
+}
+/* Estilos para los productos en las pestañas inferiores */
+.tabs-desktop-product {
+    /* Asigna tipo de display */
+    display: flex;
+    /* Asigna ancho al máximo */
+    width: 100%;
+}
+/* Estilos para el contenedor de la imagen */
+.tabs-desktop-img-container {
+    /* Asigna ancho */
+    width: 55px;
+    /* Asigna espacio de relleno */
+    padding: 5px;
+    /* Asigna color de fondo */
+    background: white;
+    /* Asigna bordes redondos */
+    border-radius: 5px;
+    /* Asigna margen a la derecha */
+    margin-right: 12px;
+}
+/* Estilos para la imagen de la pestaña inferior */
+.tabs-desktop-img-container img {
+    /* Asigna ancho al máximo */
+    width: 100%;
+    /* Asigna color de fondo */
+    background: #eeeeee;
+}
+/* Estilos para cada el item de cambiar producto y color en la pestaña inferior */
+.tabs-desktop-row {
+    /* Asigna tipo de display */
+    display: flex;
+    /* Define como los elementos flexibles se disponen a lo largo del eje secundario*/
+    align-items: center;
+}
+/* Estilos para los párrafos de los items de producto en la pestaña inferior */
+.tabs-desktop-row p {
+    /* Sin margen en los cuatro lados */
+    margin: 0;
+}
+/* Estilos para los span de los párrafos de los items de producto */
+.tabs-desktop-row p span {
+    /* Asigna peso de la fuente */
+    font-weight: bold;
+}
+/* Estilos para los botones de los items de producto en la pestaña inferior */
+.tabs-desktop-row button {
+    /* Asigna margen a la izquierda */
+    margin-left: 15px;
+    /* Asigna tamaño y color de borde */
+    border: 1px solid lightgray;
+    /* Asigna color de fondo */
+    background: white;
+    /* Asigna bordes redondos */
+    border-radius: 8px;
+    /* Asigna espacio de relleno en los cuatro lados */
+    padding: 5px;
+}
+/* Estilos para el contenedor de los botones a la derecha de la pestaña inferior */
+.tabs-buttons {
+    /* Asigna tipo de display */
+    display: flex;
+    /* Asigna ancho al máximo */
+    width: 100%;
+    /* El primer item al inicio, el último al final */
+    justify-content: space-between;
+}
+/* Estilos para los botones a la derecha de la pestaña inferior */
+.tabs-buttons button {
+    /* Asigna tipo de display */
+    display: flex;
+    /* Sin color de fondo */
+    background: none;
+    /* Define como los elementos flexibles se disponen a lo largo del eje secundario*/
+    align-items: center;
+    /* Define como los elementos flexibles se disponen a lo largo del eje principal*/
+    justify-content: center;
+    /* Sin bordes */
+    border: none;
+    /* Asigna ancho */
+    width: 140px;
+    /* Sin borde a la derecha */
+    border-right: none;
+    /* Asigna tamaño de fuente */
+    font-size: 13.5px;
+    /* Asigna peso de la fuente */
+    font-weight: 600;
+    /* Asigna espacio de relleno en los cuatro lados */
+    padding: 15px;
+    /* Asigna alineamiento de texto */
+    text-align: left;
+    /* Asigna color */
+    color: #222;
+}
+/* Estilos para los iconos de cada boton a la derecha */
+.tabs-buttons button i,
+.tabs-buttons button span {
+    /* Asigna tamaño de fuente */
+    font-size: 22px;
+    /* Asigna margen a la derecha */
+    margin-right: 16px;
+}
+/* Estilos para el botón de comprar ahora de la pestaña inferior */
+.tabs-buttons button.buy-now {
+    /* Asigna color de fondo */
+    background: #cccccc;
+    /* Asigna bordes redondos */
+    border-radius: 10px;
+}
 /* En pantallas de 960 px o menos */
 @media screen and (max-width: 960px) {
+    /* Estilos para las pestañas inferiores */
+    .tabs {
+        /* Asigna tipo de posicion */
+        position: fixed;
+        /* Asigna posición inferior */
+        bottom: 0;
+        /* Asigna posición izquierda */
+        left: 0;
+        /* Asigna posición derecha */
+        right: 0;
+        /*El contenido se moverá hacia arriba y abajo*/
+        flex-direction: row;
+        /* Asigna el nivel de pila para que los botones queden por encima de los demás elementos */
+        z-index: 99;
+        /* Asigna ancho al máximo */
+        width: 100%;
+        /* Sin borde inferior */
+        border-bottom: none;
+        /* Sin espacio de relleno superior */
+        padding-top: 0;
+        /* Asigna tamaño de fuente */
+        font-size: 11.5px;
+    }
+    /* Estilos para las pestañas inferiores de escritorio */
+    .tabs.desktop {
+        /* Oculta el elemento */
+        display: none;
+    }
+    /* Estilos para las pestañas inferiores de móvil */
+    .tabs.mobile {
+        /* Renderiza el elemento */
+        display: block;
+    }
+    /* Estilos para el contenedor de los botones principales de la pestaña inferior */
+    .tabs.mobile .tabs-buttons {
+        /* Asigna tipo de display */
+        display: flex;
+        /* Asigna anchos en los cuatro lados y color de sombras al contenedor  */
+        box-shadow: 0px 10px 28px -6px rgba(0, 0, 0, 0.75);
+        /* Escala el contenedor */
+        transform: scale(1);
+    }
+    /* Estilos para el boton de calcular precio de la pestaña inferior */
+    .tabs.mobile .tabs-buttons button.darker {
+        /* Asigna color de fondo */
+        background: #d8d8d8;
+        /* Asigna color del borde inferior */
+        border-bottom-color: #d8d8d8;
+    }
+    /* Estilos para el contenedor de los botones secundarios en la pestaña inferior */
+    .tabs.mobile .tabs-options {
+        /* Asigna tipo de display */
+        display: flex;
+        /* Asigna color de fondo */
+        background: #f3f3f3e6;
+        /* Asigna altura */
+        height: 65px;
+        /* Asigna ancho al máximo */
+        width: 100%;
+        /* Traslada el contenedor al máximo inferior en el eje Y */
+        transform: translateY(100%);
+        /* Realiza una animación al contenedor que lo hace desplazarse de abajo hacia arriba */
+        animation: enter 0.3s ease-out 0s 1 normal forwards;
+    }
+    /* Estilos para la animación del contenedor de los botones secundarios */
+    @keyframes enter {
+        from {
+          transform: translateY(100%);
+        }
+        to {
+          transform: translateY(0);
+        }
+    }
+    /* Estilos para los botones secundarios de la pestaña inferior */
+    .tabs.mobile .tabs-options button {
+        /* Sin color de fondo */
+        background: none;
+        /* Sin bordes inferiores */
+        border-bottom: none;
+    }
+    /* Estilos para los botones de la pestaña inferior */
+    .tabs.mobile button {
+        /* Asigna color de fondo */
+        background: #f3f3f3;
+        /* Sin borde a la derecha */
+        border-right: none;
+        /* Sin borde a la izquierda */
+        border-left: none;
+        /* Sin borde superior */
+        border-top: none;
+        /* Asigna color al borde inferior */
+        border-bottom-color: #f3f3f3;
+    }
+    /* Estilos para los botones activos de la pestaña inferior */
+    .tabs button.active {
+        /* Asigna tamaño y color del borde inferior */
+        border-bottom: 4px solid red;
+        /* Sin borde a la izquierda */
+        border-left: none;
+        /* Asigna color */
+        color: #222;
+    }
+    /* Estilos para cuando el botón de detalle del producto está activado*/
+    .tabs .detail-btn.active {
+        /* Asigna tamaño y color del borde superior */
+        border-top: 1px solid lightgray;
+        /* Si espacio de relleno a la izquierda */
+        padding-left: 0;
+        /* Asigna tamaño y color del borde izquierdo */
+        border-left: 1px solid lightgray;
+        /* Asigna tamaño y color del borde inferior */
+        border-bottom: 4px solid red;
+    }
+    /* Estilos para los botones con la clase space */
+    .tabs button.space {
+        /* Sin margen superior */
+        margin-top: 0;
+    }
+    /* Estilos para los botones de la pestaña inferior */
+    .tabs button {
+        /* Asigna tamaño y color al borde inferior */
+        border-bottom: 4px solid white;
+        /* Asigna ancho al máximo */
+        width: 100%;
+        /* Asigna altura */
+        height: 65px;
+        /* Asigna tamaño de fuente heredada del elemento padre */
+        font-size: inherit;
+        /* Asigna espacio de relleno vertical y horizontal */
+        padding: 10px 0;
+        /* Asigna tipo de display */
+        display: flex;
+        /* Define como los elementos flexibles se disponen a lo largo del eje secundario*/
+        align-items: center;;
+        /*El contenido se moverá hacia arriba y abajo*/
+        flex-direction: column;
+        /* Asigna alineamiento al texto */
+        text-align: center;
+        outline: none;
+    }
+    /* Estilos para los iconos de los botones de la pestaña inferior */
+    .tabs button i,
+    .tabs button span {
+        /* Asigna tamaño de fuente */
+        font-size: 24px;
+        /* Asigna margen inferior */
+        margin-bottom: 3px;
+        /* Asigna margen a la derecha */
+        margin-right: 0;
+    }
+    /* Estilos para los botones de la pestaña inferior con la clase action */
+    .tabs button.action {
+        /* Asigna tamaño y color del borde inferior */
+        border-bottom: 4px solid red;
+    }
+    /* Estilos para los botones de la pestaña inferior con la clase action y black */
+    .tabs button.action.black {
+        /* Asigna color al borde inferior */
+        border-bottom-color: #333;
+    }
     /*Estilos para el panel del editor*/
     .panel {
         /* Aisgna ancho al máximo */

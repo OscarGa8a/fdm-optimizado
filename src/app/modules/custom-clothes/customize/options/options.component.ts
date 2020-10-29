@@ -1,13 +1,15 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { CurrentIndexes, TextCurved } from '../customize.component';
 import { IShapeOptions } from '../board/elements';
-
+/**
+ * Componente encargado de manejar la información de la opción seleccionada en el editor
+ */
 @Component({
   selector: 'app-options',
   templateUrl: './options.component.html',
   styleUrls: ['./options.component.css']
 })
-export class OptionsComponent implements OnInit {
+export class OptionsComponent {
   /**
    * Almacena la información del texto de fabric
    */
@@ -33,10 +35,9 @@ export class OptionsComponent implements OnInit {
    */
   @Input() whatIsOpen: string;
 
-  constructor() { }
+  // constructor() { }
 
-  ngOnInit(): void {
-  }
+  // ngOnInit(): void {}
   /**
    * Función que detecta un cambio en el texto del canvas y emite el evento al padre
    * @param $event Contiene la información del texto modificado en el canvas

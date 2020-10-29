@@ -11,14 +11,15 @@ import {
 } from '@angular/core';
 import { IShapeOptions } from '../../board/elements';
 import Pickr from '@simonwep/pickr';
-
+/**
+ * Componente que maneja las opciones de figura del editor
+ */
 @Component({
   selector: 'app-shape',
   templateUrl: './shape.component.html',
   styleUrls: ['./shape.component.css']
 })
-export class ShapeComponent implements OnInit, OnChanges, AfterViewInit {
-
+export class ShapeComponent implements OnChanges, AfterViewInit {
   /**
    * Emite los cambios realizados a la figura en el editor
    */
@@ -44,11 +45,13 @@ export class ShapeComponent implements OnInit, OnChanges, AfterViewInit {
    */
   @ViewChild('borderColor', { static: true }) inputBorderColor: ElementRef;
 
-  constructor() { }
+  // constructor() { }
 
-  ngOnInit(): void {
-  }
-
+  // ngOnInit(): void {}
+  /**
+   * Función que detecta el cambio de color de los pickers
+   * y actualiza la información en la página
+   */
   ngOnChanges(): void {
     if (!this.fillColor || !this.borderColor) { return null; }
     // console.log(this.shape.fill);
@@ -57,7 +60,10 @@ export class ShapeComponent implements OnInit, OnChanges, AfterViewInit {
     this.fillColor.setColor(this.shape.fill);
     this.borderColor.setColor(this.shape.stroke);
   }
-
+  /**
+   * Función que crea los pickers de colores y agrega eventos
+   * para cada cambio de color en los pickers
+   */
   ngAfterViewInit(): void {
     this.fillColor = Pickr.create({
       el: this.inputFillColor.nativeElement,

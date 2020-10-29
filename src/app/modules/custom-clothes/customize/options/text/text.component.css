@@ -62,7 +62,7 @@
 ::ng-deep label.mat-checkbox-layout {
   /* Asigna dirección en la que se apilan los elementos */
   flex-direction: column-reverse;
-  /* Define como los elementos flexibles se a lo largo del eje secundario*/
+  /* Define como los elementos flexibles se dispoanen a lo largo del eje secundario*/
   align-items: center;
 }
 /* Estilos para los checkbox del texto curveado */
@@ -93,7 +93,7 @@
 }
 /* Estilos para el contenedor de los checbox de material */
 .fila.no-margin {
-  /* Define como los elementos flexibles se a lo largo del eje secundario*/
+  /* Define como los elementos flexibles se disponen a lo largo del eje secundario*/
   align-items: center;
 }
 /* Estilos para cada segundo elemento hermanos dentro del elemento de la clase fila */
@@ -353,7 +353,7 @@ input[type="color"] {
     padding: 10px 0;
     /* Asigna tamaño de fuente */
     font-size: 13.5px;
-    /* Asigna ancho de la fuente */
+    /* Asigna peso de la fuente */
     font-weight: 600;
     /* Asigna color */
     color: #222;

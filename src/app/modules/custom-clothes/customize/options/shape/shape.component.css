@@ -69,7 +69,7 @@
 .shape-types-item span {
   /* Asigna margen inferior */
   margin-bottom: 5px;
-  /* Asigna ancho de fuente */
+  /* Asigna peso de la fuente */
   font-weight: 600;
 }
 /* Estilos para los párrafos y label en el contenedor de las opciones de figura */

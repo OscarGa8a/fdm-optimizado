@@ -1,11 +1,13 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-
+/**
+ * Componente que maneja el texto mostrado en la cabecera de las opciones del editor
+ */
 @Component({
   selector: 'app-top-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent {
   /**
    * Almacena el título de la opción seleccionada en el editor
    */
@@ -20,10 +22,9 @@ export class HeaderComponent implements OnInit {
    */
   @Output() eventClose = new EventEmitter<boolean>();
 
-  constructor() { }
+  // constructor() { }
 
-  ngOnInit(): void {
-  }
+  // ngOnInit(): void {}
 
   /**
    * Función que emite un evento cuando se cierra la opción seleccionada en el editor

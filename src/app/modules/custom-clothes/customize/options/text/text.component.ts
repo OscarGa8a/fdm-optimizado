@@ -14,13 +14,15 @@ import {
 import { TextCurved } from '../../customize.component';
 import Pickr from '@simonwep/pickr';
 import { TFabricObject } from '../../types';
-
+/**
+ * Componente que maneja las opciones de texto del editor
+ */
 @Component({
   selector: 'app-text',
   templateUrl: './text.component.html',
   styleUrls: ['./text.component.css'],
 })
-export class TextComponent implements OnInit, AfterViewInit, OnChanges {
+export class TextComponent implements AfterViewInit, OnChanges {
   /**
    * Almacena la información del texto de fabric
    */
@@ -125,10 +127,13 @@ export class TextComponent implements OnInit, AfterViewInit, OnChanges {
    */
   currentOptions = 'texto';
 
-  constructor() {}
+  // constructor() {}
 
-  ngOnInit(): void {}
-
+  // ngOnInit(): void {}
+  /**
+   * Función que detecta el cambios de texto y color para actualizarlos en la página
+   * @param changes Contiene las propiedades cambiadas en el componente
+   */
   ngOnChanges(changes: SimpleChanges): void {
     this.changeTextAreaStyles();
     this.textValue = this.text.text;
@@ -137,7 +142,10 @@ export class TextComponent implements OnInit, AfterViewInit, OnChanges {
     this.textShadowColor.setColor(this.text.shadow.color);
     this.textColor.setColor(this.text.fill);
   }
-
+  /**
+   * Función que actualiza las fuentes, crea los pickers de colores y agrega eventos
+   * para cada cambio de color en los pickers
+   */
   ngAfterViewInit(): void {
     // console.log('ngAfterViewInit');
     const fuentes = this.select.nativeElement.querySelectorAll('option');

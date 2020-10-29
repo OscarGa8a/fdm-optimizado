@@ -16,10 +16,9 @@
         (previewImageEvent)="updatePreviewImg($event)"
         (textClearedEvent)="handleTextCleared()"
         [product]="
-            productsPerCategory[currentIndexes.category]
-            .products[currentIndexes.product]
-            .sizes[currentIndexes.size]
-            .colors[currentIndexes.color].sides
+          productsPerCategory[currentIndexes.category].products[
+            currentIndexes.product
+          ].sizes[currentIndexes.size].colors[currentIndexes.color].sides
         "
         [productVariant]="
           productsPerCategory[currentIndexes.category].products[
@@ -28,11 +27,10 @@
         "
         [productSide]="currentIndexes.side"
         [canvasSides]="canvasSides"
-        >
-      </app-board>
+      ></app-board>
     </div>
     <!-- Permite la visulización de las opciones en el editor -->
-    <div class="options-container">
+    <div class="options-container" [class.active]="optionsIsOpen">
       <div class="options-container-header">
         <ng-container *ngIf="!optionsIsOpen; else elseTemplate">
           <div class="options-container-default-title">
@@ -41,7 +39,16 @@
         </ng-container>
         <ng-template #elseTemplate>
           <ng-container [ngSwitch]="whatIsOpen">
-            <!-- Cabecera para la opción de figura -->
+            <!-- Design -->
+            <app-top-header
+              [showMessage]="showMessage"
+              *ngSwitchCase="'design'"
+              title="Elige diseño"
+              (eventClose)="handleClose()"
+            >
+              <i class="icomoon-image"></i>
+            </app-top-header>
+            <!-- Shape -->
             <app-top-header
               [showMessage]="showMessage"
               *ngSwitchCase="'shape'"
@@ -50,14 +57,41 @@
             >
               <app-feather-icons icon="hexagon"></app-feather-icons>
             </app-top-header>
-            <!-- Cabecera para la opción de texto -->
+            <!-- Text -->
             <app-top-header
               [showMessage]="showMessage"
               *ngSwitchCase="'text'"
-              [title]="'añadir texto personalizado'"
+              title="añadir texto personalizado"
               (eventClose)="handleClose()"
             >
               <i class="fa fa-font" aria-hidden="true"></i>
+            </app-top-header>
+            <!-- Image -->
+            <app-top-header
+              [showMessage]="showMessage"
+              *ngSwitchCase="'image'"
+              title="añadir una imagen desde archivo"
+              (eventClose)="handleClose()"
+            >
+              <span class="material-icons"> add_photo_alternate </span>
+            </app-top-header>
+            <!-- Color -->
+            <app-top-header
+              [showMessage]="showMessage"
+              *ngSwitchCase="'color'"
+              title="diseño"
+              (eventClose)="handleClose()"
+            >
+              <i class="icomoon-palette"></i>
+            </app-top-header>
+            <!-- Save -->
+            <app-top-header
+              [showMessage]="showMessage"
+              *ngSwitchCase="'save'"
+              title="guardar"
+              (eventClose)="handleClose()"
+            >
+              <span class="material-icons notranslate"> save </span>
             </app-top-header>
           </ng-container>
         </ng-template>
@@ -73,6 +107,7 @@
             [whatIsOpen]="whatIsOpen"
             [text]="text"
             [shape]="shape"
+            (closeEvent)="handleClose()"
             (eventTextChanges)="handleTextChanges($event)"
             (eventShapeChanges)="handleShapeChanges($event)"
             (eventShowMessage)="handleShowMessage($event)"
@@ -81,5 +116,101 @@
       </div>
     </div>
   </div>
+  <div class="tabs desktop">
+    <div class="tabs-desktop-product">
+      <div class="tabs-desktop-img-container">
+        <img [src]="productPreview" alt="" />
+      </div>
+      <div class="tabs-desktop-controls">
+        <div class="tabs-desktop-row">
+          <p><span>Mujer:</span> Camiseta cuello v</p>
+          <button>Cambiar producto</button>
+        </div>
+        <div class="tabs-desktop-row">
+          <p><span>Color:</span> Gris</p>
+          <button>Cambiar color</button>
+        </div>
+      </div>
+    </div>
+    <div class="tabs-buttons">
+      <button class="detail-btn" (click)="handleOpenDetail()">
+        <span class="material-icons"> info_outline </span>
+        Detalle del producto
+      </button>
+      <button class=""><i class="icomoon-heart"></i> Agregar a deseos</button>
+      <button class="">
+        <i class="fa fa-shopping-cart"></i>Agregar al carrito
+      </button>
+      <button class="buy-now">
+        <i class="icomoon-credit-card"></i>Comprar ahora
+      </button>
+    </div>
+  </div>
+  <div class="tabs mobile">
+    <div [ngSwitch]="menuMobileOption">
+      <div class="tabs-options" *ngSwitchCase="'ADD'">
+        <button (click)="handleSelection('color')">
+          <span class="material-icons notranslate"> perm_media </span>Diseño
+        </button>
+        <button (click)="handleSelection('text')">
+          <span class="material-icons notranslate"> text_fields </span>Texto
+        </button>
+        <button (click)="handleSelection('shape')">
+          <app-feather-icons icon="hexagon"> </app-feather-icons>Figura
+        </button>
+        <button (click)="handleSelection('image')">
+          <span class="material-icons notranslate"> backup </span>Cargar
+        </button>
+      </div>
+      <div class="tabs-options" *ngSwitchCase="'PRODUCT'">
+        <button>
+          <span class="material-icons notranslate"> invert_colors </span>Color
+        </button>
+        <button>
+          <span class="material-icons notranslate"> cached </span>Cambiar
+        </button>
+        <button>
+          <span class="material-icons notranslate"> info_outline </span>Detalles
+        </button>
+      </div>
+      <div class="tabs-options" *ngSwitchCase="'SAVE'">
+        <button>
+          <span class="material-icons notranslate"> add_photo_alternate </span
+          >Guardar borrador
+        </button>
+        <button>
+          <span class="material-icons notranslate">perm_media</span>Mis
+          borradores
+        </button>
+        <button><i class="icomoon-heart"></i>Añadir a deseos</button>
+        <button>
+          <span class="material-icons notranslate">share</span>Compartir
+        </button>
+      </div>
+    </div>
+    <div class="tabs-buttons">
+      <button
+        (click)="changeMenuMobile('ADD')"
+        [class.active]="menuMobileOption == 'ADD'"
+      >
+        <span class="material-icons notranslate"> add </span>
+        Añadir
+      </button>
+      <button
+        (click)="changeMenuMobile('PRODUCT')"
+        [class.active]="menuMobileOption == 'PRODUCT'"
+      >
+        <i class="icomoon-product"></i> Producto
+      </button>
+      <button
+        (click)="changeMenuMobile('SAVE')"
+        [class.active]="menuMobileOption == 'SAVE'"
+      >
+        <span class="material-icons"> save </span>Guardar
+      </button>
+      <button class="darker">
+        <i class="icomoon-credit-card"></i>Calcular precio
+      </button>
+    </div>
+  </div>
 </div>
-

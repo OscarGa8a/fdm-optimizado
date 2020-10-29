@@ -68,7 +68,7 @@
 /* Estilos para la clase active para la vista actual en el editor */
 .left-controls button.active {
   /* background: #e8e8e8; */
-  /* Asigna ancho de la fuente del botón */
+  /* Asigna peso de la fuente del botón */
   font-weight: 600;
 }
 /* Estilos para la imagen en el bóton */
@@ -447,7 +447,7 @@
   margin-top: -25px;
   /* Asigna ancho de fuente */
   font-size: 1.2em;
-  /* Asigna altura de la fuente */
+  /* Asigna peso de la fuente */
   font-weight: 600;
   /* Asigna alineamiento al texto */
   text-align: center;

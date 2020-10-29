@@ -11,7 +11,10 @@ import {
 } from './types';
 
 import drafts from './draft.json';
-
+/**
+ * Componente padre encargado de compartir la información entre sus componentes
+ * hijos
+ */
 @Component({
   selector: 'app-customize',
   templateUrl: './customize.component.html',
@@ -246,12 +249,25 @@ export class CustomizeComponent implements OnInit {
    */
   whatIsOpen = 'product';
   /**
+   * Indica si se está en el editor de la página
+   */
+  isInEditor = true;
+  /**
    * ID del borrador del canas con los objetos que se desean renderizar
    */
   draftId: number;
-
+  /**
+   * Cadena con el nombre de la opción móvil seleccionada
+   */
+  menuMobileOption = '';
+  /**
+   * Contructor del componente
+   * @param route Permite obtener los parámetros ingresados en la url
+   */
   constructor(private route: ActivatedRoute) { }
-
+  /**
+   * Función obtiene el borrador creado previamente del canvas
+   */
   ngOnInit(): void {
     // console.log('ngOnInit');
     const length = this.productsPerCategory[this.currentIndexes.category]
@@ -282,11 +298,25 @@ export class CustomizeComponent implements OnInit {
         this.getIndexesFromProductVariant(draftStored.productVariant);
       }
     } else {
-      // Obtiene el borrador del canvas del local storage
-      const draftStored = JSON.parse(localStorage.getItem('DRAFT_FDM'));
-      // Asigna los borradores de los canvas
-      this.canvasSides = draftStored.sides;
-      this.getIndexesFromProductVariant(draftStored.productVariant);
+      if (localStorage.getItem('DRAF_FDM')) {
+        // Obtiene el borrador del canvas del local storage
+        const draftStored = JSON.parse(localStorage.getItem('DRAFT_FDM'));
+        // Asigna los borradores de los canvas
+        this.canvasSides = draftStored.sides;
+        this.getIndexesFromProductVariant(draftStored.productVariant);
+      }
+    }
+  }
+  /**
+   * Función que cambia la opción móvil seleccionada
+   * @param tab Cadena con el nombre de la opción móvil seleccionada
+   */
+  changeMenuMobile(tab: string): void {
+    // console.log('changeMenuMobile');
+    if (tab === this.menuMobileOption) {
+      this.menuMobileOption = '';
+    } else {
+      this.menuMobileOption = tab;
     }
   }
   /**
@@ -340,6 +370,13 @@ export class CustomizeComponent implements OnInit {
   handleShowMessage = ($event: boolean): void => {
     // console.log('handleShowMessage');
     this.showMessage = $event;
+  }
+  /**
+   * Función que indica si se está en el editor de la página
+   */
+  handleOpenDetail = (): void => {
+    // console.log('handleOpenDetail');
+    this.isInEditor = false;
   }
   /**
    * Función que maneja la opción escogida en el editor
@@ -526,38 +563,103 @@ export class CustomizeComponent implements OnInit {
   }
 }
 
-
 /**
  * Interfaz que almacena los indices actuales de categoria, producto,
  * tallas, color y vista
  */
 export interface CurrentIndexes {
+  /**
+   * Indice de la categoría del producto
+   */
   category: number;
+  /**
+   * Indice del producto
+   */
   product: number;
+  /**
+   * Indice de la talla del producto
+   */
   size: number;
+  /**
+   * Indice del color del producto
+   */
   color: number;
+  /**
+   * Indice de la vista del producto
+   */
   side: number;
 }
 /**
  * Interfaz que almacena la información del texto de fabric
  */
 export interface TextCurved {
+  /**
+   * Cadena con el texto
+   */
   text?: string;
+  /**
+   * Cadena con la fuente del texto
+   */
   fontFamily?: string;
+  /**
+   * Valor del tamaño de la fuente del texto
+   */
   fontSize?: number;
+  /**
+   * Cadena con el color del texto
+   */
   fill?: string;
+  /**
+   * Valor del diámetro del texto
+   */
   diameter?: number;
+  /**
+   * Indica si el texto está invertido
+   */
   flipped?: boolean;
+  /**
+   * Valor del pseudo-espaciado de los caracteres
+   */
   pseudoCharSpacing?: number;
+  /**
+   * Valor del espaciado de los caracteres
+   */
   charSpacing?: number;
+  /**
+   * Cadena con el tipo del texto
+   */
   type?: string;
+  /**
+   * Valor del ancho del texto
+   */
   width?: number;
+  /**
+   * Cadena con el peso de la fuente en el texto
+   */
   fontWeight?: string;
+  /**
+   * Cadena con el estilo de la fuente en el texto
+   */
   fontStyle?: string;
+  /**
+   * Valor del ancho máximo del texto
+   */
   maxWidth?: number;
+  /**
+   * Valor de la escala en X en el texto
+   */
   scaleX?: number;
+  /**
+   * Valor de la escala en Y en el texto
+   */
   scaleY?: number;
+  /**
+   * Cadena con el alineamiento del texto
+   */
   textAlign?: string;
+  /**
+   * Objeto con los opciones de sombra en el texto
+   */
   shadow?: {
     color?: string;
     blur?: number;
@@ -565,5 +667,8 @@ export interface TextCurved {
     offsetY?: number;
     opacity?: number;
   };
+  /**
+   * Objeto con las propiedades de un objeto de tipo fabric
+   */
   element?: TFabricObject;
 }

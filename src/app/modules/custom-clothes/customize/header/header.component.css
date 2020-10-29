@@ -48,7 +48,7 @@ h5 {
 }
 /* Estilos para los hijos directos de la cabecera h5 */
 h5 > span {
-  /* Asigna ancho de la fuente */
+  /* Asigna peso de la fuente */
   font-weight: bold;
 }
 /* Asigna estilos a los objetos agregados desde el padre */

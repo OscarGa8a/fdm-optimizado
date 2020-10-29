@@ -5,13 +5,15 @@ import {
   OnInit,
   Output
 } from '@angular/core';
-
+/**
+ * Componente que maneja las entradas numéricas en la página
+ */
 @Component({
   selector: 'app-input-number',
   templateUrl: './input-number.component.html',
   styleUrls: ['./input-number.component.css'],
 })
-export class InputNumberComponent implements OnInit {
+export class InputNumberComponent {
   /**
    * Valor ingresado por el usuario
    */
@@ -25,9 +27,9 @@ export class InputNumberComponent implements OnInit {
    */
   @Output() valueChange = new EventEmitter<number>();
 
-  constructor() {}
+  // constructor() {}
 
-  ngOnInit(): void {}
+  // ngOnInit(): void {}
   /**
    * Función que emite el valor actual en el input al realizar un cambio en ese valor
    * @param $event Contiene el valor actual en el input

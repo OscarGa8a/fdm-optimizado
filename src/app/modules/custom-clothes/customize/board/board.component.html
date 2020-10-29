@@ -154,7 +154,7 @@
         </div>
     </div>
     <div class="canvas" #container>
-        <div class="img-container">
+        <div class="img-container" (swipe)="onSwipe($event)">
             <span
                 class="rotating-number"
                 [ngStyle]="{ 'top.px': heightImgBackground * top }"
